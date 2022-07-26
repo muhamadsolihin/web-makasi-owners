@@ -11,25 +11,10 @@ interface StoreInfo {
   initial: LayoutConfig;
 }
 
-export interface UserType {
-  uuid: string;
-  userName: string,
-  signatureId: string,
-  outletName: string,
-  image: string | null,
-  userType: number,
-  userTypeName: string,
-  accessToken: string,
-  outletUUID: string,
-  isActiveRecapCash?: number,
-  authUse?: number,
-  verified?: number,
-  isWaitingVerified?: number
-}
-
 @Module
 export default class ConfigModule extends VuexModule implements StoreInfo {
-  user: UserType = {} as UserType;
+  /* eslint-disable */
+  access_token: string = "";
   config: LayoutConfig = layoutConfig;
   initial: LayoutConfig = layoutConfig;
 
@@ -44,25 +29,12 @@ export default class ConfigModule extends VuexModule implements StoreInfo {
   }
 
   get getTokenIdConfig() {
-    return JwtService.getToken() ? JwtService.getToken() : this.user.accessToken;
+    return JwtService.getToken() ? JwtService.getToken() : this.access_token;
   }
 
   @Mutation
-  SET_USER(payload) {
-    this.user.uuid = payload.uuid;
-    this.user.userName = payload.user_name;
-    this.user.signatureId = payload.signature_id;
-    this.user.outletName = payload.outlet_name;
-    this.user.outletUUID = payload.outlet_uuid;
-    this.user.image = payload.image;
-    this.user.userType = payload.user_type;
-    this.user.userTypeName = payload.user_type_name;
-    this.user.outletName = payload.outlet_name;
-    this.user.accessToken = payload.access_token;
-    this.user.isActiveRecapCash = payload.is_active_recap_cash;
-    this.user.authUse = payload.auth_use;
-    this.user.verified = payload.verified;
-    this.user.isWaitingVerified = payload.is_waiting_verified;
+  SET_ACCESS_TOKEN(payload) {
+    this.access_token = payload;
   }
 
   @Mutation

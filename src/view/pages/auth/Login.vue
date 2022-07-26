@@ -119,7 +119,18 @@ export default defineComponent({
     const Login = getModule(LoginModule);
 
     const submit = (): void => {
-      console.log(true);
+      loading.value = true;
+      Login.postLogin({ email: email.value, password: password.value })
+        .catch((err) => {
+          ElNotification({
+            title: "Error",
+            type: "error",
+            duration: 2000,
+            customClass: "errorNotif",
+            message: "Terjadi kesalahan server",
+          });
+        })
+        .finally(() => (loading.value = false));
     };
 
     return {

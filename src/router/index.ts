@@ -724,42 +724,6 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/view/pages/auth/Login.vue"),
   },
   {
-    path: "/login/pin",
-    name: "pin",
-    component: () => import("@/view/pages/auth/Pin.vue"),
-  },
-  {
-    path: "/login/enter-pin",
-    name: "enter-pin",
-    component: () => import("@/view/pages/auth/EnterPin.vue"),
-  },
-  {
-    path: "/login/confirm-code",
-    name: "login-confirm-code",
-    component: () => import("@/view/pages/auth/ConfirmationCodeLogin.vue"),
-  },
-  {
-    path: "/login/reset-pin",
-    name: "reset-pin",
-    component: () => import("@/view/pages/auth/ResetPin.vue"),
-  },
-
-  {
-    path: "/registration",
-    name: "registration",
-    component: () => import("@/view/pages/auth/Registration.vue"),
-  },
-  {
-    path: "/registration/step",
-    name: "stepper",
-    component: () => import("@/view/pages/auth/RegistrationStepper.vue"),
-  },
-  {
-    path: "/registration/form-data-outlet",
-    name: "form-data-outlet",
-    component: () => import("@/view/pages/auth/FormDataOutlet.vue"),
-  },
-  {
     path: "/logout",
     name: "logout",
     component: () => import("@/view/pages/auth/Logout.vue"),

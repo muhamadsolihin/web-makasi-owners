@@ -4,6 +4,8 @@ import router from "@/router/index"
 import JwtService from "@/core/services/JwtService"
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 
+const CORE_URL = "/toucan"
+
 export interface UserType {
   uuid: string;
   userName: string,
@@ -125,86 +127,15 @@ export default class LoginModule extends VuexModule implements StoreInfo {
     this.user.accessToken = payload
   }
 
-  @Mutation
-  SET_USER_TYPE_LOGIN(payload) {
-    this.userTypeLogin = payload
-  }
-
-  @Mutation
-  SET_RESET_PIN_STEP(payload) {
-    this.resetPinStep = payload
-  }
-
-  @Mutation
-  SET_IS_RESET_PIN(payload) {
-    this.isResetPin = payload
-  }
-
-  @Mutation
-  SET_LOADING(payload) {
-    this.loading = payload;
-  }
-
-  @Action
-  checkAccountAvailable(payload) {
-    return http.post("/owl/v1/check-account", payload)
-    .then(res => {
-      // if (res.data.status) {
-      //   // eslint-disable-next-line
-      //   this.context.commit("SET_USER_STATE", { email: payload.get("email"), phone: payload.get("phone"), token_fcm: window.sessionStorage.getItem("token_fcm") });
-      //   router.push("/login/enter-pin");
-      // }
-      return res.data
-    })
-    .finally(() => this.context.commit("SET_LOADING", false));
-  }
-
-  @Action
-  checkLoginEmailOTP(payload): Promise<any> {
-    return http.post("/owl/v1/check-account/check-otp", payload)
-    .then(res => {
-      return res.data
-    });
-  }
-
-  @Action
-  sendOTPWhenResetPIN(payload: { email: string, phone: string }): Promise<any> {
-    return http.post("/owl/v1/reset-pin/send-otp", payload)
-    .then(res => {
-      return res.data
-    })
-    .catch(err => console.log(err));
-  }
-
-  @Action
-  checkOTPResetEmail(payload: { email: string, code: string }): Promise<any> {
-    return http.post("/owl/v1/reset-pin/check-otp", payload)
-    .then(res => {
-      return res.data
-    })
-    .catch(err => console.log(err));
-  }
-
-  @Action
-  resetPin(payload: { email: string, phone: string, pin: string, pin_confirmation: string }): Promise<any> {
-    return http.post("/owl/v1/reset-pin", payload)
-    .then(res => {
-      return res.data
-    })
-    .catch(err => console.log(err));
-  }
-
   @Action
   postLogin(payload): Promise<any> {
-    return http.post("/owl/v1/login", payload)
+    return http.post(`${CORE_URL}/v1/login`, payload)
     .then(async res => {
       if (res.data.status) {
-        this.context.commit("SET_USER", res.data.data);
         this.context.commit("SET_TOKEN_ID", res.data.data.access_token);
+        store.commit("SET_ACCESS_TOKEN", res.data.data.access_token);
         JwtService.saveToken(res.data.data.access_token);
-        store.commit("SET_USER", res.data.data);
         router.push('/');
-        this.context.commit("SET_LOADING", false);
       } else {
         // 
       }
