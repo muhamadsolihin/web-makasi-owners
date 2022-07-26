@@ -1,0 +1,75 @@
+//
+// Theme style
+//
+
+// Initialize
+@import "init";
+
+// Components
+@import "./core/components/components";
+@import "components/components";
+@import "./components/variables.custom";
+
+// Layout
+@import "layout/layout";
+
+$primary: #E60023;
+$primary-light: #FFF1EA;
+$grey: #b7bed3;
+$grey-light: #F9FAFD;
+
+* {
+  font-family: Poppins !important;
+}
+
+.background__wrapper {
+  background-color: #f1f5ff;
+}
+
+.text__grey {
+  color: $grey !important;
+}
+
+.bg__color_grey {
+  background-color: $grey;
+}
+
+.bg__color_grey_light {
+  background-color: $grey-light;
+}
+
+.clear__search {
+  display: none;
+}
+
+.border-right-default {
+  border-right: 1px solid #e4e6ef !important;
+}
+
+.border-left-white {
+  border-left-color: white;
+}
+
+.border-right-white {
+  border-right-color: white;
+}
+
+.border-bottom-default {
+  border-bottom: 1px solid #e4e6ef !important;
+}
+
+.successNotif {
+  background-color: $success-light !important;
+
+  .el-notification__content p {
+    text-align: left !important;
+  }
+
+  i.el-icon-success {
+    color: $success !important;
+  }
+}
+
+.errorNotif {
+  background-color: $danger-light !important;
+}
