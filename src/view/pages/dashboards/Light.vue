@@ -350,7 +350,7 @@ export default defineComponent({
       setCurrentPageBreadcrumbs("Dashboards", "Dashboards");
       DrawerComponent.reinitialization();
 
-      if (window.sessionStorage.getItem("UNIQ_ID")) {
+      if (window.localStorage.getItem("UNIQ_ID")) {
         getDataForDashboard();
       }
     });

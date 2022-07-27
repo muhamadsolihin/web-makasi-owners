@@ -76,7 +76,7 @@ export default class AuthModule extends VuexModule {
   }
 
   get getMyOutletId() {
-    return this.me.outlet_id ? this.me.outlet_id : window.sessionStorage.getItem("UNIQ_ID");
+    return this.me.outlet_id ? this.me.outlet_id : window.localStorage.getItem("UNIQ_ID");
   }
 
   get getErrorPinStatus() {

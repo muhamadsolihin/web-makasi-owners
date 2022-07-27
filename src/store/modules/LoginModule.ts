@@ -150,8 +150,8 @@ export default class LoginModule extends VuexModule implements StoreInfo {
       if (res.data.status) {
         this.context.commit("SET_USER", {});
         JwtService.destroyToken();
-        window.sessionStorage.removeItem("token_fcm")
-        window.sessionStorage.removeItem("UNIQ_ID")
+        window.localStorage.removeItem("token_fcm")
+        window.localStorage.removeItem("UNIQ_ID")
         router.push('/login');
       } 
       return res.data

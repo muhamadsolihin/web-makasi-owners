@@ -118,7 +118,7 @@ export default defineComponent({
         auth.getUserMe().then((res) => {
           if (res.status) {
             const outletId = res.data.outlet_id;
-            window.sessionStorage.setItem("UNIQ_ID", outletId);
+            window.localStorage.setItem("UNIQ_ID", outletId);
 
             if (route.path === "/dashboard") {
               const dateFrom = moment()
