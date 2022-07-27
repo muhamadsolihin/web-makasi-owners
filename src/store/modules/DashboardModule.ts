@@ -1,34 +1,11 @@
 import store from "@/store"
 import http from "@/http-common"
+import { Chart } from "@/types/dashboard/Chart";
+import { Widget } from "@/types/dashboard/Widget";
+import { Demografi } from "@/types/dashboard/Demografi";
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 
 /* eslint-disable */
-interface Widget {
-  omset: number;
-  all_transaction: number;
-  profit: number;
-  total_product: number;
-  transaction_online: number;
-  transaction_cash: number;
-  transaction_non_cash: number;
-  customer: number;
-}
-
-interface Chart {
-  series: any[];
-  categories: string[];
-}
-
-interface Demografi {
-  id: number;
-  uuid: string;
-  name: string;
-  price: number;
-  total_price: number;
-  qty: number;
-  percentage: number;
-}
-
 @Module({ name: "DashboardModule", dynamic: true, store })
 export default class DashboardModule extends VuexModule {
   widgets: Widget[] = [];
