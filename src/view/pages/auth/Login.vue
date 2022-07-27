@@ -121,6 +121,17 @@ export default defineComponent({
     const submit = (): void => {
       loading.value = true;
       Login.postLogin({ email: email.value, password: password.value })
+        .then((res) => {
+          if (!res.status) {
+            ElNotification({
+              title: "Error",
+              type: "error",
+              duration: 2000,
+              customClass: "errorNotif",
+              message: res.message,
+            });
+          }
+        })
         .catch((err) => {
           ElNotification({
             title: "Error",
