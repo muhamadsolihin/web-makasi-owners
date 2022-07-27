@@ -347,10 +347,7 @@ export default defineComponent({
       setCurrentPageBreadcrumbs("Dashboards", "Dashboards");
       DrawerComponent.reinitialization();
 
-      if (window.localStorage.getItem("UNIQ_ID")) {
-        getDataForDashboard();
-        console.log("get data for dashboard");
-      }
+      getDataForDashboard();
     });
 
     return {

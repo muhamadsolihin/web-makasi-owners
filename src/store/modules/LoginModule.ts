@@ -4,7 +4,7 @@ import router from "@/router/index"
 import JwtService from "@/core/services/JwtService"
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 
-const CORE_URL = "/toucan"
+const SERVICE_API = "/toucan"
 
 export interface UserType {
   uuid: string;
@@ -129,7 +129,7 @@ export default class LoginModule extends VuexModule implements StoreInfo {
 
   @Action
   postLogin(payload): Promise<any> {
-    return http.post(`${CORE_URL}/v1/login`, payload)
+    return http.post(`${SERVICE_API}/v1/login`, payload)
     .then(async res => {
       if (res.data.status) {
         this.context.commit("SET_TOKEN_ID", res.data.data.access_token);
@@ -145,11 +145,11 @@ export default class LoginModule extends VuexModule implements StoreInfo {
 
   @Action
   postLogout(): Promise<any> {
-    return http.post("/owl/v1/logout")
+    return http.post(`${SERVICE_API}/v1/logout`)
     .then(res => {
       if (res.data.status) {
-        this.context.commit("SET_USER", {});
         JwtService.destroyToken();
+        this.context.commit("SET_USER", {});
         window.localStorage.removeItem("token_fcm")
         window.localStorage.removeItem("UNIQ_ID")
         router.push('/login');
