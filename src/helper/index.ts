@@ -8,6 +8,33 @@ export function formatCurrency(val: string | number): string {
   }
 }
 
+export function formatCurrencyKilo(val: string | number) {
+  if (val !== undefined && val !== null) {
+    const toString = val.toString()
+    const formatted = formatCurrency(val)
+    const splitted = formatted.split(",")
+
+    switch (toString.length) {
+      case 4:
+        return `${splitted[0]}K`;
+        break;
+      case 5:
+        return `${splitted[0]}K`;
+        break;
+      case 6:
+        return `${splitted[0]}K`;
+        break;
+      case 7:
+        return `${splitted[0]}M`;
+        break;
+      default:
+        break;
+    }
+  } else {
+    return '-'
+  }
+}
+
 export function handleNull(val: string): boolean {
   if (val == null || val == 'null') return false
   return true

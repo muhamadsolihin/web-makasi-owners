@@ -29,7 +29,7 @@ getToken(messaging, { vapidKey: 'BLkYaJKQf2MdrmEwMofkfizo9C3TEFz2a2LCRwpmq0qJRYI
   if (currentToken) {
     // Send the token to your server and update the UI if necessary
     console.log("current token fcm", currentToken)
-    window.sessionStorage.setItem("token_fcm", currentToken)
+    window.localStorage.setItem("token_fcm", currentToken)
   } else {
     // Show permission request UI
     console.log('No registration token available. Request permission to generate one.');

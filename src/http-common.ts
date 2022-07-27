@@ -16,10 +16,10 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
-    const token = tokenId.value;
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    // const token = tokenId.value;
+    // if (token) {
+      config.headers.Authorization = `Bearer ${tokenId.value}`;
+    // }
     return config;
   },
   (err) => {

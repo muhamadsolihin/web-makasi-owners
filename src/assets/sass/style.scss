@@ -73,3 +73,10 @@ $grey-light: #F9FAFD;
 .errorNotif {
   background-color: $danger-light !important;
 }
+
+/** Login Pages */
+.login__page_illustration {
+  width: 600px;
+  height: auto;
+  object-fit: cover;
+}

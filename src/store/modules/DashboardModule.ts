@@ -1,34 +1,13 @@
 import store from "@/store"
 import http from "@/http-common"
+import { Chart } from "@/types/dashboard/Chart";
+import { Widget } from "@/types/dashboard/Widget";
+import { Demografi } from "@/types/dashboard/Demografi";
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 
+const CORE_URL_API = "/toucan"
+
 /* eslint-disable */
-interface Widget {
-  omset: number;
-  all_transaction: number;
-  profit: number;
-  total_product: number;
-  transaction_online: number;
-  transaction_cash: number;
-  transaction_non_cash: number;
-  customer: number;
-}
-
-interface Chart {
-  series: any[];
-  categories: string[];
-}
-
-interface Demografi {
-  id: number;
-  uuid: string;
-  name: string;
-  price: number;
-  total_price: number;
-  qty: number;
-  percentage: number;
-}
-
 @Module({ name: "DashboardModule", dynamic: true, store })
 export default class DashboardModule extends VuexModule {
   widgets: Widget[] = [];
@@ -85,7 +64,7 @@ export default class DashboardModule extends VuexModule {
   @Action
   getWidgetSummary(payload): Promise<any> {
     return http.get(
-      `/owl/v1/dashboard/?outlet_id=${payload.outletId}&date=${payload.typeFilter}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
+      `${CORE_URL_API}/v1/dashboard/?outlet_id=${payload.outletId}&date=${payload.typeFilter}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
     )
     .then(res => {
       if (res.data.status) {
@@ -121,7 +100,7 @@ export default class DashboardModule extends VuexModule {
   @Action
   getChartSelling(payload): Promise<any> {
     return http.get(
-      `/owl/v1/dashboard/sales-chart?outlet_id=${payload.outletId}&date=${payload.typeFilter}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
+      `${CORE_URL_API}/v1/dashboard/sales-chart?outlet_id=${payload.outletId}&date=${payload.typeFilter}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
     )
     .then(res => {
       if (res.data.status) {
@@ -156,7 +135,7 @@ export default class DashboardModule extends VuexModule {
   @Action
   getChartOmsetProfit(payload): Promise<any> {
     return http.get(
-      `/owl/v1/dashboard/profit-omset-chart?outlet_id=${payload.outletId}&date=${payload.typeFilter}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
+      `${CORE_URL_API}/v1/dashboard/profit-omset-chart?outlet_id=${payload.outletId}&date=${payload.typeFilter}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
     )
     .then(res => {
       if (res.data.status) {
@@ -188,7 +167,7 @@ export default class DashboardModule extends VuexModule {
   @Action
   getDemografi(payload): Promise<any> {
     return http.get(
-      `/owl/v1/dashboard/product-demograph?outlet_id=${payload.outletId}&date=${payload.typeFilter}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
+      `${CORE_URL_API}/v1/dashboard/product-demograph?outlet_id=${payload.outletId}&date=${payload.typeFilter}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
     )
     .then(res => {
       if (res.data.status) {
