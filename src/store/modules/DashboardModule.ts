@@ -5,6 +5,8 @@ import { Widget } from "@/types/dashboard/Widget";
 import { Demografi } from "@/types/dashboard/Demografi";
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 
+const CORE_URL_API = "/toucan"
+
 /* eslint-disable */
 @Module({ name: "DashboardModule", dynamic: true, store })
 export default class DashboardModule extends VuexModule {
@@ -62,7 +64,7 @@ export default class DashboardModule extends VuexModule {
   @Action
   getWidgetSummary(payload): Promise<any> {
     return http.get(
-      `/owl/v1/dashboard/?outlet_id=${payload.outletId}&date=${payload.typeFilter}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
+      `${CORE_URL_API}/v1/dashboard/?outlet_id=${payload.outletId}&date=${payload.typeFilter}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
     )
     .then(res => {
       if (res.data.status) {
@@ -98,7 +100,7 @@ export default class DashboardModule extends VuexModule {
   @Action
   getChartSelling(payload): Promise<any> {
     return http.get(
-      `/owl/v1/dashboard/sales-chart?outlet_id=${payload.outletId}&date=${payload.typeFilter}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
+      `${CORE_URL_API}/v1/dashboard/sales-chart?outlet_id=${payload.outletId}&date=${payload.typeFilter}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
     )
     .then(res => {
       if (res.data.status) {
@@ -133,7 +135,7 @@ export default class DashboardModule extends VuexModule {
   @Action
   getChartOmsetProfit(payload): Promise<any> {
     return http.get(
-      `/owl/v1/dashboard/profit-omset-chart?outlet_id=${payload.outletId}&date=${payload.typeFilter}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
+      `${CORE_URL_API}/v1/dashboard/profit-omset-chart?outlet_id=${payload.outletId}&date=${payload.typeFilter}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
     )
     .then(res => {
       if (res.data.status) {
@@ -165,7 +167,7 @@ export default class DashboardModule extends VuexModule {
   @Action
   getDemografi(payload): Promise<any> {
     return http.get(
-      `/owl/v1/dashboard/product-demograph?outlet_id=${payload.outletId}&date=${payload.typeFilter}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
+      `${CORE_URL_API}/v1/dashboard/product-demograph?outlet_id=${payload.outletId}&date=${payload.typeFilter}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
     )
     .then(res => {
       if (res.data.status) {

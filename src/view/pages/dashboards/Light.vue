@@ -158,7 +158,6 @@
 <script lang="ts">
 import moment from "moment";
 import { inject } from "vue";
-import JwtService from "@/core/services/JwtService";
 import { computed, defineComponent, onMounted, ref } from "vue";
 // import StatsWidget3 from "@/view/content/widgets/stats/Widget3.vue";
 // import StatsWidget4 from "@/view/content/widgets/stats/Widget4.vue";
@@ -188,7 +187,6 @@ import WidgetDemografi from "@/view/content/widgets/stats/WidgetDemografi.vue";
 import WidgetTable from "@/view/content/widgets/stats/WidgetTable.vue";
 
 import { getModule } from "vuex-module-decorators";
-import AuthModule from "@/store/modules/AuthModule";
 import DashboardModule from "@/store/modules/DashboardModule";
 
 export default defineComponent({
@@ -219,6 +217,7 @@ export default defineComponent({
     WidgetTable,
   },
   setup() {
+    const filteredOutlet = ref<string>("");
     const typeFilter = ref<number>(1);
     const filterType = [
       {
@@ -258,10 +257,8 @@ export default defineComponent({
     const loadingChartDemografi = ref<boolean>(false);
     const loadingListDemografi = ref<boolean>(false);
 
-    const AuthState = getModule(AuthModule);
     const DashboardState = getModule(DashboardModule);
 
-    const myOutletId = computed(() => AuthState.getMyOutletId);
     const widgets = computed(() => DashboardState.getterWidgets);
     const chartSelling = computed(() => DashboardState.getterChartSelling);
     const chartOmsetProfit = computed(
@@ -287,7 +284,7 @@ export default defineComponent({
       const filterDate = getValueToFilterDate();
 
       DashboardState.getWidgetSummary({
-        outletId: myOutletId.value,
+        outletId: filteredOutlet.value,
         typeFilter: typeFilter.value,
         dateFrom: filterDate[0],
         dateTo: filterDate[1],
@@ -295,7 +292,7 @@ export default defineComponent({
 
       loadingChartSelling.value = true;
       DashboardState.getChartSelling({
-        outletId: myOutletId.value,
+        outletId: filteredOutlet.value,
         typeFilter: typeFilter.value,
         dateFrom: filterDate[0],
         dateTo: filterDate[1],
@@ -303,7 +300,7 @@ export default defineComponent({
 
       loadingChartOmsetProfit.value = true;
       DashboardState.getChartOmsetProfit({
-        outletId: myOutletId.value,
+        outletId: filteredOutlet.value,
         typeFilter: typeFilter.value,
         dateFrom: filterDate[0],
         dateTo: filterDate[1],
@@ -312,7 +309,7 @@ export default defineComponent({
       loadingChartDemografi.value = true;
       loadingListDemografi.value = true;
       DashboardState.getDemografi({
-        outletId: myOutletId.value,
+        outletId: filteredOutlet.value,
         typeFilter: typeFilter.value,
         dateFrom: filterDate[0],
         dateTo: filterDate[1],
@@ -352,6 +349,7 @@ export default defineComponent({
 
       if (window.localStorage.getItem("UNIQ_ID")) {
         getDataForDashboard();
+        console.log("get data for dashboard");
       }
     });
 

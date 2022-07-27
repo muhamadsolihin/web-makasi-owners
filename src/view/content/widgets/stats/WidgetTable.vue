@@ -26,14 +26,15 @@
             <table class="table table-borderless align-middle">
               <thead>
                 <tr>
-                  <th class="p-0 w-150px fw-bolder text__grey">Nama</th>
+                  <th class="p-0 min-w-50px fw-bolder text__grey">Nama</th>
+                  <th class="p-0 min-w-50px fw-bolder text__grey">Outlet</th>
                   <th class="p-0 min-w-50px fw-bolder text__grey">
                     Jumlah
                   </th>
-                  <th class="p-0 min-w-150px text-end fw-bolder text__grey">
-                    Harga Satuan
+                  <th class="p-0 min-w-50px text-end fw-bolder text__grey">
+                    Satuan
                   </th>
-                  <th class="p-0 min-w-150px text-end fw-bolder text__grey">
+                  <th class="p-0 min-w-50px text-end fw-bolder text__grey">
                     Total
                   </th>
                   <!-- <th class="p-0 min-w-70px"></th> -->
@@ -62,9 +63,14 @@
                         item.desc
                       }}</span>
                     </td> -->
-                    <td class="w-100">
+                    <td class="px-0">
                       <span class="text-gray-800 fw-bolder fs-6">
                         {{ item.name }}
+                      </span>
+                    </td>
+                    <td class="px-0">
+                      <span class="text-gray-800 fw-bolder fs-6">
+                        {{ item.outlet_name }}
                       </span>
                     </td>
                     <td class="px-0">
@@ -77,7 +83,7 @@
                     </td>
                     <td class="text-end px-0">
                       <span class="text-gray-800 fw-bolder d-block fs-6">
-                        Rp {{ formatCurrency(item.price) }}
+                        {{ formatCurrencyKilo(item.price) }}
                       </span>
                       <!-- <span :class="`text-${item.status}`" class="fw-bolder">
                         {{ item.profit }}
@@ -85,7 +91,7 @@
                     </td>
                     <td class="text-end">
                       <span class="text-gray-800 fw-bolder d-block fs-6">
-                        Rp {{ formatCurrency(item.total_price) }}
+                        {{ formatCurrencyKilo(item.total_price) }}
                       </span>
                       <!-- <a
                         href="#"
@@ -282,7 +288,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { formatCurrency } from "@/helper";
+import { formatCurrencyKilo } from "@/helper";
 
 export default defineComponent({
   name: "WidgetTable",
@@ -425,7 +431,7 @@ export default defineComponent({
       // day,
       // week,
       // month,
-      formatCurrency,
+      formatCurrencyKilo,
     };
   },
 });

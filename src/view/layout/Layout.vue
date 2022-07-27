@@ -115,49 +115,49 @@ export default defineComponent({
 
       // Simulate the delay page loading
       setTimeout(async () => {
-        auth.getUserMe().then((res) => {
-          if (res.status) {
-            const outletId = res.data.outlet_id;
-            window.localStorage.setItem("UNIQ_ID", outletId);
+        //   auth.getUserMe().then((res) => {
+        //     if (res.status) {
+        //       const outletId = res.data.outlet_id;
+        //       window.localStorage.setItem("UNIQ_ID", outletId);
 
-            if (route.path === "/dashboard") {
-              const dateFrom = moment()
-                .subtract(7, "days")
-                .format("YYYY-MM-DD");
-              const dateTo = moment().format("YYYY-MM-DD");
+        //       if (route.path === "/dashboard") {
+        //         const dateFrom = moment()
+        //           .subtract(7, "days")
+        //           .format("YYYY-MM-DD");
+        //         const dateTo = moment().format("YYYY-MM-DD");
 
-              DashboardState.getWidgetSummary({
-                outletId: outletId,
-                typeFilter: 1,
-                dateFrom: dateFrom,
-                dateTo: dateTo,
-              });
+        //         DashboardState.getWidgetSummary({
+        //           outletId: outletId,
+        //           typeFilter: 1,
+        //           dateFrom: dateFrom,
+        //           dateTo: dateTo,
+        //         });
 
-              DashboardState.getChartSelling({
-                outletId: outletId,
-                typeFilter: 1,
-                dateFrom: dateFrom,
-                dateTo: dateTo,
-              });
+        //         DashboardState.getChartSelling({
+        //           outletId: outletId,
+        //           typeFilter: 1,
+        //           dateFrom: dateFrom,
+        //           dateTo: dateTo,
+        //         });
 
-              DashboardState.getChartOmsetProfit({
-                outletId: outletId,
-                typeFilter: 1,
-                dateFrom: dateFrom,
-                dateTo: dateTo,
-              });
+        //         DashboardState.getChartOmsetProfit({
+        //           outletId: outletId,
+        //           typeFilter: 1,
+        //           dateFrom: dateFrom,
+        //           dateTo: dateTo,
+        //         });
 
-              DashboardState.getDemografi({
-                outletId: outletId,
-                typeFilter: 1,
-                dateFrom: dateFrom,
-                dateTo: dateTo,
-              });
-            }
-          }
-        });
+        //         DashboardState.getDemografi({
+        //           outletId: outletId,
+        //           typeFilter: 1,
+        //           dateFrom: dateFrom,
+        //           dateTo: dateTo,
+        //         });
+        //       }
+        //     }
+        //   });
 
-        // Remove page loader after some time
+        //   // Remove page loader after some time
         store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "page-loading");
       }, 1000);
     });
