@@ -6,9 +6,12 @@
       <div class="d-flex align-items-center">
         <!--begin::Symbol-->
         <div class="symbol symbol-60px me-5">
-          <span class="symbol-label bg-light-primary">
-            <span class="svg-icon svg-icon-2x svg-icon-primary">
-              <i class="bi bi-cash text-primary" style="font-size: 1.75rem"></i>
+          <span class="symbol-label bg-light-success">
+            <span class="svg-icon svg-icon-2x svg-icon-success">
+              <i
+                class="bi bi-person-plus-fill  text-success"
+                style="font-size: 3rem"
+              ></i>
             </span>
           </span>
         </div>
@@ -16,9 +19,9 @@
 
         <!--begin::Title-->
         <div>
-          <a href="#" class="fs-4 text-gray-800 fw-bolder">Omset</a>
+          <a href="#" class="fs-4 text-gray-800 fw-bolder">User Mendaftar</a>
           <div class="fs-1 text-gray-800 fw-bolder mt-1">
-            Rp {{ formatCurrency(value) }}
+            {{ formatCurrency(value) }}
           </div>
         </div>
         <!--end::Title-->
@@ -34,7 +37,7 @@ import { defineComponent } from "vue";
 import { formatCurrency } from "@/helper";
 
 export default defineComponent({
-  name: "WidgetOmset",
+  name: "WidgetCustomer",
   props: {
     value: {
       type: [String, Number],
@@ -48,10 +51,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scope lang="scss">
-.fs-1{
-  font-size: 1.5em !important;
-}
-
-</style>

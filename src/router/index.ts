@@ -16,6 +16,20 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/view/pages/dashboards/Light.vue"),
       },
       {
+        path: "/otletlist",
+        name: "otletlist",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/otletlist/ListUser.vue"),
+      },
+
+      {
+        path: "otletlist/update/:uuid",
+        name: "otletlist-update",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/otletlist/Update.vue"),
+      },
+
+      {
         path: "/my-profile",
         name: "my-profile",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },

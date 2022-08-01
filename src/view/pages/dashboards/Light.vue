@@ -100,6 +100,7 @@
       <WidgetCustomer :value="widgets.customer" />
       <!-- <StatsWidget4></StatsWidget4> -->
     </div>
+
     <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
       <WidgetTransactionCash :value="widgets.transaction_cash" />
       <!-- <StatsWidget5></StatsWidget5> -->
@@ -107,6 +108,10 @@
     <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
       <WidgetTransactionNonCash :value="widgets.transaction_non_cash" />
       <!-- <StatsWidget5></StatsWidget5> -->
+    </div>
+            <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
+      <WidgetUserList :value="widgets.user_register" />
+      <!-- <StatsWidget4></StatsWidget4> -->
     </div>
   </div>
 
@@ -180,6 +185,8 @@ import WidgetProductSelled from "@/view/content/widgets/stats/WidgetProductSelle
 import WidgetCustomer from "@/view/content/widgets/stats/WidgetCustomer.vue";
 import WidgetTransactionCash from "@/view/content/widgets/stats/WidgetTransactionCash.vue";
 import WidgetTransactionNonCash from "@/view/content/widgets/stats/WidgetTransactionNonCash.vue";
+import WidgetUserList from "@/view/content/widgets/stats/WidgetUserList.vue";
+
 
 import WidgetChartSelling from "@/view/content/widgets/stats/WidgetChartSelling.vue";
 import WidgetChartOmsetProfit from "@/view/content/widgets/stats/WidgetChartOmsetProfit.vue";
@@ -210,7 +217,7 @@ export default defineComponent({
     WidgetCustomer,
     WidgetTransactionCash,
     WidgetTransactionNonCash,
-
+    WidgetUserList ,
     WidgetChartSelling,
     WidgetChartOmsetProfit,
     WidgetDemografi,

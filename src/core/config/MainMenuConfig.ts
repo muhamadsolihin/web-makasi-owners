@@ -3,7 +3,7 @@ const MainMenuConfig = [
     heading: "Dashboards",
     pages: [
       {
-        heading: "Dashboard",
+        heading: "Beranda",
         icon: require('@/assets/icons/aside/cashier.svg'),
         route: "/dashboard"
       },
@@ -23,9 +23,9 @@ const MainMenuConfig = [
       //   // ]
       // },
       {
-        heading: "Product",
+        heading: "Pengguna",
         icon: require('@/assets/icons/aside/produk.svg'),
-        route: "/product/list",
+        route: "/otletlist"
         // sub: [
         //   {
         //     heading: "Product List",
@@ -60,95 +60,95 @@ const MainMenuConfig = [
       //   //   },
       //   // ]
       // },
-      {
-        heading: "Employee",
-        icon: require('@/assets/icons/aside/employee.svg'),
-        route: "/employee/list",
-        // sub: [
-        //   {
-        //     heading: "List Employee",
-        //     route: "/employee/list"
-        //   },
-        //   {
-        //     heading: "Add Employee",
-        //     route: "/employee/add"
-        //   },
-        // ]
-      },
-      {
-        heading: "Transaction",
-        icon: require('@/assets/icons/aside/transaction.svg'),
-        route: "/transaction/list",
-        // sub: [
-        //   {
-        //     heading: "Transaction List",
-        //     route: "/transaction/list"
-        //   },
-        //   {
-        //     heading: "Detail Transaction",
-        //     route: "/transaction/detail"
-        //   },
-        // ]
-      },
       // {
-      //   sectionTitle: "Report",
-      //   icon: require('@/assets/icons/aside/recap-kas.svg'),
-      //   route: "/report",
+      //   heading: "Employee",
+      //   icon: require('@/assets/icons/aside/employee.svg'),
+      //   route: "/employee/list",
+      //   // sub: [
+      //   //   {
+      //   //     heading: "List Employee",
+      //   //     route: "/employee/list"
+      //   //   },
+      //   //   {
+      //   //     heading: "Add Employee",
+      //   //     route: "/employee/add"
+      //   //   },
+      //   // ]
+      // },
+      // {
+      //   heading: "Transaction",
+      //   icon: require('@/assets/icons/aside/transaction.svg'),
+      //   route: "/transaction/list",
+      //   // sub: [
+      //   //   {
+      //   //     heading: "Transaction List",
+      //   //     route: "/transaction/list"
+      //   //   },
+      //   //   {
+      //   //     heading: "Detail Transaction",
+      //   //     route: "/transaction/detail"
+      //   //   },
+      //   // ]
+      // },
+      // // {
+      // //   sectionTitle: "Report",
+      // //   icon: require('@/assets/icons/aside/recap-kas.svg'),
+      // //   route: "/report",
+      // //   sub: [
+      // //     {
+      // //       heading: "Selling",
+      // //       route: "/report/selling"
+      // //     },
+      // //     {
+      // //       heading: "Product",
+      // //       route: "/report/product"
+      // //     },
+      // //     {
+      // //       heading: "Customer",
+      // //       route: "/report/customer"
+      // //     },
+      // //     {
+      // //       heading: "Outlet",
+      // //       route: "/report/outlet"
+      // //     },
+      // //     {
+      // //       heading: "Employee",
+      // //       route: "/report/employee"
+      // //     },
+      // //   ]
+      // // },
+      
+      // {
+      //   sectionTitle: "Settings",
+      //   icon: require('@/assets/icons/aside/setting.svg'),
+      //   route: "/setting",
       //   sub: [
       //     {
-      //       heading: "Selling",
-      //       route: "/report/selling"
+      //       heading: "Banner",
+      //       route: "/banner/list"
       //     },
       //     {
-      //       heading: "Product",
-      //       route: "/report/product"
+      //       heading: "Category",
+      //       route: "/category/list"
       //     },
       //     {
-      //       heading: "Customer",
-      //       route: "/report/customer"
+      //       heading: "Type Order",
+      //       route: "/type-order/list"
       //     },
       //     {
-      //       heading: "Outlet",
-      //       route: "/report/outlet"
+      //       heading: "Voucher",
+      //       route: "/voucher/list"
       //     },
       //     {
-      //       heading: "Employee",
-      //       route: "/report/employee"
+      //       heading: "Debit",
+      //       route: "/debit/list"
+      //     },
+      //     {
+      //       heading: "E-Wallet",
+      //       route: "/e-wallet/list"
       //     },
       //   ]
       // },
-      
-      {
-        sectionTitle: "Settings",
-        icon: require('@/assets/icons/aside/setting.svg'),
-        route: "/setting",
-        sub: [
-          {
-            heading: "Banner",
-            route: "/banner/list"
-          },
-          {
-            heading: "Category",
-            route: "/category/list"
-          },
-          {
-            heading: "Type Order",
-            route: "/type-order/list"
-          },
-          {
-            heading: "Voucher",
-            route: "/voucher/list"
-          },
-          {
-            heading: "Debit",
-            route: "/debit/list"
-          },
-          {
-            heading: "E-Wallet",
-            route: "/e-wallet/list"
-          },
-        ]
-      },
       // {
       //   heading: "Help",
       //   icon: require('@/assets/icons/aside/help.svg'),
