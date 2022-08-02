@@ -20,7 +20,7 @@
               <div class="col">
                 <p class="fw-bold">
                   
-                 {{ handleNullToString($props.name) }}
+                 {{ handleNullToString(employee.name) }}
                 </p>
               </div>
             </div>
@@ -30,7 +30,7 @@
               </div>
               <div class="col">
                 <p class="fw-bold">
-                  {{ handleNullToString(Employeedetail.village_name) }}
+                  {{ handleNullToString(employee.village_name) }}
                 </p>
               </div>
             </div>
@@ -40,7 +40,7 @@
               </div>
               <div class="col">
                 <p class="fw-bold">
-                  {{ handleNullToString(Employeedetail.outlet_sum) }}
+                  {{ handleNullToString(employee.outlet_sum) }}
                 </p>
               </div>
             </div>
@@ -50,10 +50,45 @@
               </div>
               <div class="col">
                 <p class="fw-bold">
-                  {{ handleNullToString(Employeedetail.village_name) }}
+                  {{ handleNullToString(employee.outlet_name) }}
                 </p>
               </div>
             </div>
+
+              <div class="row">
+              <div class="col">
+                <p class="fw-bold">Bank Account :</p>
+              </div>
+              <div class="col">
+                <p class="fw-bold">
+                  {{ handleNullToString(employee.bank_code) }}
+
+                  
+
+
+                </p>
+              </div>
+            </div>
+
+
+
+              <div class="row">
+              <div class="col">
+                <p class="fw-bold">Verified :</p>
+              </div>
+              <div class="col">
+                <p class="fw-bold">
+                  {{ handleNullToString(employee.verified) }}
+                  <template>
+                    v-if="type === 'A'">
+                    A 
+                  </template>
+
+                </p>
+              </div>
+            </div>
+
+
 
 
           </div>
@@ -98,20 +133,20 @@ export default defineComponent({
   setup() {
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);
-       const AuthState = getModule(AuthModule);
-       const loadingDatatable = ref(false);
+    const AuthState = getModule(AuthModule);
+
     const store = useStore();
     const route = useRoute();
     const EmployeeState = getModule(EmployeeModule);
-    const employees = computed(() => EmployeeState.getEmployees);
-    const myOutletId = computed(() => AuthState.getMyOutletId);
+    const employee = computed(() => EmployeeState.getEmployee);
+
       onMounted(() => {
       setCurrentPageBreadcrumbs("Dashboard", "Detail Pengguna");
 
       store.dispatch(Actions.ADD_BODY_CLASSNAME, "page-loading");
       EmployeeState.getDetailEmployee(route.params.uuid)
         .then(() => {
-          const employees = EmployeeState.getEmployees;
+          const employee = EmployeeState.getEmployee;
           
           
 
@@ -121,24 +156,14 @@ export default defineComponent({
         );
     });
 
-        onMounted(() => {
-      setCurrentPageBreadcrumbs("Dashboard", "Daftar Pengguna");
-      loadingDatatable.value = true;
-      EmployeeState.SET_EMPLOYEES([]);
-      EmployeeState.getEmployeesAPI({
-        outletId: myOutletId.value,
-
-      }).finally(() => (loadingDatatable.value = false));
-    });
 
 
 
     return {
       Employeedetail,
       loading,
-      employees,
+      employee,
       moment,
-      loadingDatatable,
       EmployeeModule,
       route,
       store,

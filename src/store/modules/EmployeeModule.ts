@@ -16,6 +16,7 @@ export interface Employee {
   outlet_name :string | null,
   village_name: string | null,
   image: string | null,
+  bank: string | null,
   user_type: number | null
 }
 
@@ -25,6 +26,7 @@ export default class EmployeeModule extends VuexModule {
     {
       uuid: "",
       name: null,
+      bank: null,
       outlet_id: "",
       outlet_sum: null,
       verified: null,
@@ -41,6 +43,7 @@ export default class EmployeeModule extends VuexModule {
       outlet_sum: null,
       outlet_id: "",
       verified: null,
+      bank: null,
       village_name: null,
       outlet_name: null,
       signature_id: null,
@@ -91,7 +94,7 @@ export default class EmployeeModule extends VuexModule {
 
   @Action
   getEmployeesAPI(payload) {
-    return http.get(`/dusky_lory/v1/?perpage=10&search=&is_submission=0`)
+    return http.get(`/dusky_lory/v1/?perpage=10&search=${payload.search}&is_submission=&cursor=${payload.cursor}`)
     .then(res => {
       if (res.data.status) {
         this.context.commit("SET_EMPLOYEES", res.data.data);

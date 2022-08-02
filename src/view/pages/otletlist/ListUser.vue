@@ -219,6 +219,7 @@ export default defineComponent({
 
     const searchData = () => {
       loadingDatatable.value = true;
+      cursor.value="";
       EmployeeState.SET_EMPLOYEES([]);
       EmployeeState.getEmployeesAPI({
         outletId: myOutletId.value,
