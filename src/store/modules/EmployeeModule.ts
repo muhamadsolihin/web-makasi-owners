@@ -73,6 +73,10 @@ export default class EmployeeModule extends VuexModule {
     this.employees = payload
   }
 
+  @Mutation
+  ADD_VERIFIED(payload) {
+    this.employee = payload
+  }
 
   @Mutation
   SET_META_PAGINATION(payload) {
@@ -104,7 +108,17 @@ export default class EmployeeModule extends VuexModule {
     .catch(err => console.log(err));
   }
 
-  
+  @Action
+  addverified(payload): Promise<any> {
+    return http.post(`/dusky_lory/v1/oklahoma/verification/${payload.uuid}`)
+    .then(res => {
+      if (res.data.status) {
+        this.context.commit("ADD_VERIFIED", res.data.data);
+      }
+      return res;
+    })
+    .catch(err => console.log(err));
+  }
 
   @Action
   getDetailEmployee(payload): Promise<any> {

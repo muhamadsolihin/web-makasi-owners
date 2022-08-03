@@ -1,54 +1,91 @@
 <template>
   <div>
     <Loader />
-    <div class="row">
+        <div class="row ">
+                <!-- <div class="col ">
+             <button class="btn btn-sm btn-primary ms-2" @click="onSubmit">
+              Verify
+            </button>
+            </div> -->
+      <div class="col d-flex justify-content-end ">
+        <button class="btn btn-secondary" @click="$router.back">
+          Kembali
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+    <div class="row mt-5">
       <div class="col">
         <div class="card">
           <div class="card-body">
             <div class="row mb-5">
-              <div class="col">
-                <h2>Detail Pengguna</h2>
-              </div>
-
             </div>
-
-
             <div class="row">
-              <div class="col">
+              <div class="col-md-3">
                 <p class="fw-bold">Nama :</p>
               </div>
-              <div class="col">
+              <div class="col-md-3">
+                
                 <p class="fw-bold">
                   
                  {{ handleNullToString(employee.name) }}
+                 <span v-if="employee.verified == '0'"></span>
+                 <span v-else-if="employee.verified == '1'"><i
+          class="bi bi-patch-check-fill text-danger me-3"
+          style="font-size: 1.3rem" 
+          prop="verified"
+        >
+        </i></span>
+                </p>
+              </div>
+              <div class="col-md-2 pl-5">
+                <p class="fw-bold">Tanggal Mendaftar:</p>
+              </div>
+                <div class="col-md-2">
+                <p class="fw-bold"> 
+                  
+                 {{ epochToDateTime(employee.created_at) }}
                 </p>
               </div>
             </div>
-            <div class="row">
+               <!-- <div class="row">
               <div class="col">
-                <p class="fw-bold">Kelurahan/Alamat :</p>
+                <p class="fw-bold">Tanggal Mendaftar :</p>
               </div>
               <div class="col">
+                <p class="fw-bold">
+                  {{ handleNullToString(employee.created_at) }}
+                </p>
+              </div>
+            </div> -->
+            <div class="row">
+              <div class="col-md-3">
+                <p class="fw-bold">Kelurahan/Alamat :</p>
+              </div>
+              <div class="col-md-3">
                 <p class="fw-bold">
                   {{ handleNullToString(employee.village_name) }}
                 </p>
               </div>
-            </div>
+                  
+            </div> 
             <div class="row">
-              <div class="col">
+              <div class="col-md-3">
                 <p class="fw-bold">Jumlah Outlet :</p>
               </div>
-              <div class="col">
+              <div class="col-md-3">
                 <p class="fw-bold">
                   {{ handleNullToString(employee.outlet_sum) }}
                 </p>
               </div>
             </div>
                 <div class="row">
-              <div class="col">
+              <div class="col-md-3">
                 <p class="fw-bold">Nama Outlet :</p>
               </div>
-              <div class="col">
+              <div class="col-md-3">
                 <p class="fw-bold">
                   {{ handleNullToString(employee.outlet_name) }}
                 </p>
@@ -56,56 +93,38 @@
             </div>
 
               <div class="row">
-              <div class="col">
+              <div class="col-md-3">
                 <p class="fw-bold">Bank Account :</p>
               </div>
-              <div class="col">
+              <div class="col-md-3">
                 <p class="fw-bold">
-                  {{ handleNullToString(employee.bank_code) }}
-
+                  {{ handleNullToString(employee.bank?.bank_code) }}
+                   - {{ handleNullToString(employee.bank?.bank_account_number) }}
+                </p>
+              </div>
+                    <div class="col-md-2 pl-5">
+                <p class="fw-bold">No KTP:</p>
+              </div>
+                <div class="col-md-2">
+                  <p class="fw-bold">
+                  {{ handleNullToString(employee.identity_number) }}
+                </p>
+                <p class="fw-bold"> 
                   
-
-
+                    <img
+                style="width: 250px; height: 150px"
+                class="rounded"
+                :src="employee.identity_image"
+              />
                 </p>
               </div>
             </div>
-
-
-
-              <div class="row">
-              <div class="col">
-                <p class="fw-bold">Verified :</p>
-              </div>
-              <div class="col">
-                <p class="fw-bold">
-                  {{ handleNullToString(employee.verified) }}
-                  <template>
-                    v-if="type === 'A'">
-                    A 
-                  </template>
-
-                </p>
-              </div>
-            </div>
-
-
-
-
           </div>
         </div>
-      </div>
-     
-        
+      </div>   
     </div>
 
-    <div class="row mt-5">
-      <div class="col d-flex justify-content-end mt-5">
-        <button class="btn btn-secondary" @click="$router.back">
-          Kembali
-        </button>
-      </div>
-    </div>
-  </div>
+
 </template>
 
 <script lang="ts">
@@ -125,6 +144,7 @@ import {
   formatCurrency,
   formatDate, 
   epochToDateTime,
+  handleNull,
 } from "@/helper";
 
 export default defineComponent({
@@ -139,6 +159,16 @@ export default defineComponent({
     const route = useRoute();
     const EmployeeState = getModule(EmployeeModule);
     const employee = computed(() => EmployeeState.getEmployee);
+    
+
+     const onSubmit = () => {
+      EmployeeState.SET_EMPLOYEES([]);
+      EmployeeState.addverified({
+
+      }) .finally(() => {
+          loading.value = false;
+        });
+    };
 
       onMounted(() => {
       setCurrentPageBreadcrumbs("Dashboard", "Detail Pengguna");
@@ -167,7 +197,10 @@ export default defineComponent({
       EmployeeModule,
       route,
       store,
+      
+      onSubmit,
       formatDate,
+      handleNull,
       formatCurrency,
       epochToDateTime,
       handleNullToString,

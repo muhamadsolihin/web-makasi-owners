@@ -3,9 +3,9 @@
     <div class="card">
       <div class="card-body">
         <div
-          class="mb-5 d-flex justify-content-between align-items-center md:flex-row md:justiify-content-between"
+          class="mb-5 justity-content-right d-flex justify-content-between align-items-center md:flex-row md:justiify-content-between"
         >
-          <div class="d-flex">
+          <div class="d-flex ">
             <div class="input-group input-group-sm">
               <input
                 type="text"
@@ -51,35 +51,30 @@
             table-layout="fixed"
           >
             <el-table-column  label="Nama" width="220">
+              
            <template #default="scope">
             {{  scope.row.name }}
-        
-
-
           <span v-if="scope.row.verified == '0'"></span>  
-
-
-
           <span v-else-if="scope.row.verified == '1'">
                       <i
           class="bi bi-patch-check-fill text-danger me-3"
           style="font-size: 1.5rem" 
           prop="verified"
         >
-        
-        
         </i>
         </span>
-
-
-           
-          
       </template>
               
               </el-table-column>              
-            <el-table-column prop="outlet_sum" label="Jumlah Outlet"/>
+            <!-- <el-table-column prop="outlet_sum" label="Jumlah Outlet"/> -->
             <el-table-column prop="village_name" label="Kelurahan"/>
             <el-table-column prop="outlet_name" label="Nama Outlet" />
+            <el-table-column label="Tgl Mendaftar" >
+            <template #default="scope">
+            {{ epochToDateTime  (scope.row.unix_time) }}
+             </template>
+
+             </el-table-column>
              
 
             <el-table-column label="Aksi" align="center">
@@ -166,9 +161,10 @@ import EmployeeModule from "@/store/modules/EmployeeModule";
 import AuthModule from "@/store/modules/AuthModule";
 import { getModule } from "vuex-module-decorators";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
-import { handleNull } from "@/helper";
+import { handleNull, epochToDateTime } from "@/helper";
 
 import { ElNotification } from "element-plus";
+
 
 export default defineComponent({
   name: "employee",
@@ -274,6 +270,7 @@ export default defineComponent({
       clearable,
       metaPagination,
 
+      epochToDateTime,
       textSearch,
       clearSearch,
       searchData,
