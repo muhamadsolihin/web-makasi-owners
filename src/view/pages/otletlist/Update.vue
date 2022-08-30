@@ -1,18 +1,20 @@
 <template>
   <div>
     <Loader />
-        <div class="row ">
-                <!-- <div class="col ">
-             <button class="btn btn-sm btn-primary ms-2" @click="onSubmit">
-              Verify
-            </button>
-            </div> -->
+    <div class="row ">
+      <div class="col ">
+        <span v-if="employee.verified == '0'">
+          <button class="btn btn-sm btn-primary ms-2" @click="onSubmit">
+            Verify
+          </button></span
+        >
+        <span v-else-if="employee.verified == '1'"> </span>
+      </div>
       <div class="col d-flex justify-content-end ">
         <button class="btn btn-secondary" @click="$router.back">
           Kembali
         </button>
       </div>
-
     </div>
   </div>
 

@@ -40,6 +40,13 @@
               Search
             </button>
           </div>
+          <el-select v-model="employee" clearable placeholder="Select">
+    <el-option
+      v-for="item in employees"
+      :key="item"
+      :value="item.employee"
+    />
+  </el-select>
         </div>
 
         <div class="rounded border border-1 p-2">
@@ -50,45 +57,39 @@
             style="width: 100%"
             table-layout="fixed"
           >
-            <el-table-column  label="Nama" width="220">
-              
-           <template #default="scope">
-            {{  scope.row.name }}
-          <span v-if="scope.row.verified == '0'"></span>  
-          <span v-else-if="scope.row.verified == '1'">
-                      <i
-          class="bi bi-patch-check-fill text-danger me-3"
-          style="font-size: 1.5rem" 
-          prop="verified"
-        >
-        </i>
-        </span>
-      </template>
-              
-              </el-table-column>              
+            <el-table-column label="Nama" width="220">
+              <template #default="scope">
+                {{ scope.row.name }}
+                <span v-if="scope.row.verified == '0'"></span>
+                <span v-else-if="scope.row.verified == '1'">
+                  <i
+                    class="bi bi-patch-check-fill text-danger me-3"
+                    style="font-size: 1.5rem"
+                    prop="verified"
+                  >
+                  </i>
+                </span>
+              </template>
+            </el-table-column>
             <!-- <el-table-column prop="outlet_sum" label="Jumlah Outlet"/> -->
-            <el-table-column prop="village_name" label="Kelurahan"/>
+            <el-table-column prop="village_name" label="Kelurahan" />
             <el-table-column prop="outlet_name" label="Nama Outlet" />
-            <el-table-column label="Tgl Mendaftar" >
-            <template #default="scope">
-            {{ epochToDateTime  (scope.row.unix_time) }}
-             </template>
-
-             </el-table-column>
-             
+            <el-table-column label="Tgl Mendaftar">
+              <template #default="scope">
+                {{ epochToDateTime(scope.row.unix_time) }}
+              </template>
+            </el-table-column>
 
             <el-table-column label="Aksi" align="center">
-                            <template #default="scope">
+              <template #default="scope">
                 <div class="d-flex justify-content-center my-3">
                   <el-button
                     @click="$router.push(`/otletlist/update/${scope.row.uuid}`)"
                     type="danger"
                     size="small"
-                    
                   >
                     <i class="bi bi-eye-fill text-white"></i>
                   </el-button>
-
                 </div>
               </template>
             </el-table-column>
@@ -165,7 +166,6 @@ import { handleNull, epochToDateTime } from "@/helper";
 
 import { ElNotification } from "element-plus";
 
-
 export default defineComponent({
   name: "employee",
   components: {},
@@ -215,7 +215,7 @@ export default defineComponent({
 
     const searchData = () => {
       loadingDatatable.value = true;
-      cursor.value="";
+      cursor.value = "";
       EmployeeState.SET_EMPLOYEES([]);
       EmployeeState.getEmployeesAPI({
         outletId: myOutletId.value,
@@ -224,7 +224,6 @@ export default defineComponent({
         perPage: perPage.value,
       }).finally(() => (loadingDatatable.value = false));
     };
-
 
     const prevPage = () => {
       loadingDatatable.value = true;
