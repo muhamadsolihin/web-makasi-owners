@@ -40,13 +40,13 @@
               Search
             </button>
           </div>
-          <el-select v-model="employee" clearable placeholder="Select">
+          <!-- <el-select v-model="employee" clearable placeholder="Select">
     <el-option
       v-for="item in employees"
       :key="item"
       :value="item.employee"
     />
-  </el-select>
+  </el-select> -->
         </div>
 
         <div class="rounded border border-1 p-2">
