@@ -40,13 +40,40 @@
               Search
             </button>
           </div>
-          <!-- <el-select v-model="employee" clearable placeholder="Select">
-    <el-option
-      v-for="item in employees"
-      :key="item"
-      :value="item.employee"
-    />
-  </el-select> -->
+
+          <div class="d-flex ">
+            <div class="input-group input-group-sm">
+              <el-select
+                v-model="filter"
+                clearable
+                placeholder="Select"
+              >
+                <el-option
+                  v-for="o in FilterSubmission"
+                  :key="o"
+                  :value="o.value"
+                >
+                  <span v-if="o.value == '1'">Sudah Mengajukan</span>
+                  <span v-else-if="o.value == '0'">Belum Mengajukan</span>
+                </el-option>
+              </el-select>
+              <span
+                class="input-group-text"
+                :class="{
+                  'border-left-white': clearable,
+                  'd-inline-block': clearable,
+                  'd-none': !clearable,
+                }"
+                style="background-color: white;"
+              >
+                <i class="bi bi-x-lg fw-bold" style="cursor: pointer"></i>
+              </span>
+            </div>
+            <button class="btn btn-sm btn-primary ms-2" @click="searchSubs">
+              Go
+            </button>
+          </div>
+
         </div>
 
         <div class="rounded border border-1 p-2">
@@ -173,8 +200,20 @@ export default defineComponent({
     const deleteDialog = ref(false);
     const loadingBtnDialog = ref(false);
     const loadingDatatable = ref(false);
+    const employee = ref("");
+    const FilterSubmission = ref([
+      {
+        name: "active",
+        value: "1",
+      },
+      {
+        name: "inactive",
+        value: "0",
+      },
+    ]);
 
-    const search = ref<string>("");
+    const filter = ref("");
+    const search = ref<string | null>("");
     const cursor = ref<string | null>("");
     const perPage = ref<number>(15);
     const clearable = ref<boolean>(false);
@@ -199,6 +238,19 @@ export default defineComponent({
       else clearable.value = false;
     };
 
+    const searchSubs = () => {
+      loadingDatatable.value = true;
+      cursor.value = "";
+      EmployeeState.SET_EMPLOYEES([]);
+      EmployeeState.getEmployeesAPI({
+        outletId: myOutletId.value,
+        search: search.value,
+        filter: filter.value,
+        cursor: cursor.value,
+        perPage: perPage.value,
+      }).finally(() => (loadingDatatable.value = false));
+    };
+
     const clearSearch = () => {
       search.value = "";
       cursor.value = "";
@@ -209,6 +261,7 @@ export default defineComponent({
         outletId: myOutletId.value,
         search: search.value,
         cursor: cursor.value,
+        filter: filter.value,
         perPage: perPage.value,
       }).finally(() => (loadingDatatable.value = false));
     };
@@ -232,6 +285,7 @@ export default defineComponent({
         outletId: myOutletId.value,
         search: search.value,
         cursor: cursor.value,
+        filter: filter.value,
         perPage: perPage.value,
       }).finally(() => (loadingDatatable.value = false));
     };
@@ -254,6 +308,7 @@ export default defineComponent({
       EmployeeState.getEmployeesAPI({
         outletId: myOutletId.value,
         search: search.value,
+        filter: filter.value,
         cursor: cursor.value,
         perPage: perPage.value,
       }).finally(() => (loadingDatatable.value = false));
@@ -261,15 +316,18 @@ export default defineComponent({
 
     return {
       employees,
+      FilterSubmission,
       deleteDialog,
       loadingBtnDialog,
       loadingDatatable,
       selectedItem,
+      filter,
       search,
       clearable,
       metaPagination,
-
+      employee,
       epochToDateTime,
+      searchSubs,
       textSearch,
       clearSearch,
       searchData,
