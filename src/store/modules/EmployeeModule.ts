@@ -11,7 +11,6 @@ export interface Employee {
   signature_id: number | null,
   name: string | null,
   outlet_sum: string | null,
-  is_submission: string | null,
   outlet_id: string,
   verified: string | null,
   outlet_name :string | null,
@@ -30,7 +29,6 @@ export default class EmployeeModule extends VuexModule {
       bank: null,
       outlet_id: "",
       outlet_sum: null,
-      is_submission: null,
       verified: null,
       village_name: null,
       outlet_name: null,
@@ -47,7 +45,6 @@ export default class EmployeeModule extends VuexModule {
       verified: null,
       bank: null,
       village_name: null,
-      is_submission: null,
       outlet_name: null,
       signature_id: null,
       image: null,
@@ -78,7 +75,7 @@ export default class EmployeeModule extends VuexModule {
 
   @Mutation
   ADD_VERIFIED(payload) {
-    this.employees = payload
+    this.employee = payload
   }
 
   @Mutation
@@ -101,20 +98,19 @@ export default class EmployeeModule extends VuexModule {
 
   @Action
   getEmployeesAPI(payload) {
-    return http.get(`/dusky_lory/v1/?perpage=10&search=${payload.search}&is_submission=${payload.filter}&cursor=${payload.cursor}`)
+    return http.get(`/dusky_lory/v1/?perpage=10&search=${payload.search}&is_submission=&cursor=${payload.cursor}`)
     .then(res => {
       if (res.data.status) {
         this.context.commit("SET_EMPLOYEES", res.data.data);
         this.context.commit("SET_META_PAGINATION", res.data.meta);
       }
-   
     })
     .catch(err => console.log(err));
   }
 
   @Action
   addverified(payload): Promise<any> {
-    return http.post(`/dusky_lory/v1/oklahoma/verification/${payload.uuid} `)
+    return http.post(`/dusky_lory/v1/oklahoma/verification/${payload}`)
     .then(res => {
       if (res.data.status) {
         this.context.commit("ADD_VERIFIED", res.data.data);
@@ -126,12 +122,12 @@ export default class EmployeeModule extends VuexModule {
 
   @Action
   getDetailEmployee(payload): Promise<any> {
-    return http.get(`/dusky_lory/v1/hawaii/${payload.uuid}`)
+    return http.get(`/dusky_lory/v1/hawaii/${payload}`)
     .then(res => {
       if (res.data.status) {
         this.context.commit("SET_EMPLOYEE", res.data.data);
       }
-      return res;
+      return res.data;
     })
     .catch(err => console.log(err));
   }

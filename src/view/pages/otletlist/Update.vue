@@ -6,9 +6,8 @@
         <span v-if="employee.verified == '0'">
           <button class="btn btn-sm btn-primary ms-2" @click="onSubmit">
             Verify
-          </button>
-        </span>
-
+          </button></span
+        >
         <span v-else-if="employee.verified == '1'"> </span>
       </div>
       <div class="col d-flex justify-content-end ">
@@ -18,7 +17,6 @@
       </div>
     </div>
   </div>
-  <CardDetail />
 
   <div class="row mt-5">
     <div class="col">
@@ -52,7 +50,16 @@
               </p>
             </div>
           </div>
-
+          <!-- <div class="row">
+              <div class="col">
+                <p class="fw-bold">Tanggal Mendaftar :</p>
+              </div>
+              <div class="col">
+                <p class="fw-bold">
+                  {{ handleNullToString(employee.created_at) }}
+                </p>
+              </div>
+            </div> -->
           <div class="row">
             <div class="col-md-3">
               <p class="fw-bold">Kelurahan/Alamat :</p>
@@ -91,7 +98,7 @@
             <div class="col-md-3">
               <p class="fw-bold">
                 {{ handleNullToString(employee.bank?.bank_code) }}
-                {{ handleNullToString(employee.bank?.bank_account_number) }}
+                - {{ handleNullToString(employee.bank?.bank_account_number) }}
               </p>
             </div>
             <div class="col-md-2 pl-5">
@@ -102,14 +109,11 @@
                 {{ handleNullToString(employee.identity_number) }}
               </p>
               <p class="fw-bold">
-                <span v-if="employee.identity_image == null"> </span>
-                <span v-else>
-                  <img
-                    style="width: 250px; height: 150px"
-                    class="rounded"
-                    :src="employee.identity_image"
-                  />
-                </span>
+                <img
+                  style="width: 250px; height: 150px"
+                  class="rounded"
+                  :src="employee.identity_image"
+                />
               </p>
             </div>
           </div>
@@ -117,9 +121,6 @@
       </div>
     </div>
   </div>
-
-  <DetailUser />
-
 </template>
 
 <script lang="ts">
@@ -133,6 +134,7 @@ import moment from "moment";
 import { Actions } from "@/store/enums/store.enums";
 import Loader from "@/view/content/Loader.vue";
 import AuthModule from "@/store/modules/AuthModule";
+import { ElMessage } from 'element-plus'
 
 import {
   handleNullToString,
@@ -141,16 +143,10 @@ import {
   epochToDateTime,
   handleNull,
 } from "@/helper";
-import DetailUser from "./DetailUser.vue";
-import CardDetail from "./CardDetail.vue";
 
 export default defineComponent({
   name: "detail-pengguna",
-  components: {
-    Loader,
-    DetailUser,
-    CardDetail,
-  },
+  components: { Loader },
   setup() {
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);
@@ -163,9 +159,14 @@ export default defineComponent({
 
     const onSubmit = () => {
       EmployeeState.SET_EMPLOYEES([]);
-      EmployeeState.addverified({}).finally(() => {
-        loading.value = false;
-      });
+      ElMessage('Success Verified. ' );
+      EmployeeState.addverified(route.params.uuid)
+        .then(() => {
+          const employee = EmployeeState.getEmployee;
+        })
+        .finally(() => {
+          loading.value = false;
+        });
     };
 
     onMounted(() => {
