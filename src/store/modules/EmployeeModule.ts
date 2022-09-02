@@ -114,12 +114,12 @@ export default class EmployeeModule extends VuexModule {
 
   @Action
   addverified(payload): Promise<any> {
-    return http.post(`/dusky_lory/v1/oklahoma/verification/${payload.uuid}`)
+    return http.post(`/dusky_lory/v1/oklahoma/verification/${payload.uuid} `)
     .then(res => {
       if (res.data.status) {
         this.context.commit("ADD_VERIFIED", res.data.data);
       }
-      return res;
+      return res.data;
     })
     .catch(err => console.log(err));
   }

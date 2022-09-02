@@ -56,7 +56,8 @@
                   <span v-if="o.value == '1'">Sudah Mengajukan</span>
                   <span v-else-if="o.value == '0'">Belum Mengajukan</span>
                 </el-option>
-              </el-select>
+               
+              </el-select> 
               <span
                 class="input-group-text"
                 :class="{
@@ -111,7 +112,7 @@
               <template #default="scope">
                 <div class="d-flex justify-content-center my-3">
                   <el-button
-                    @click="$router.push(`/otletlist/update/${scope.row.uuid}`)"
+                    @click="$router.push(`/otletlist/user/${scope.row.uuid}`)"
                     type="danger"
                     size="small"
                   >

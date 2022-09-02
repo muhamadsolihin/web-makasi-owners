@@ -19,6 +19,7 @@
       </div>
     </div>
   </div>
+  <CardDetail />
 
   <div class="row mt-5">
     <div class="col">
@@ -52,16 +53,7 @@
               </p>
             </div>
           </div>
-          <!-- <div class="row">
-              <div class="col">
-                <p class="fw-bold">Tanggal Mendaftar :</p>
-              </div>
-              <div class="col">
-                <p class="fw-bold">
-                  {{ handleNullToString(employee.created_at) }}
-                </p>
-              </div>
-            </div> -->
+
           <div class="row">
             <div class="col-md-3">
               <p class="fw-bold">Kelurahan/Alamat :</p>
@@ -111,17 +103,14 @@
                 {{ handleNullToString(employee.identity_number) }}
               </p>
               <p class="fw-bold">
-                <span v-if="employee.identity_image == null">
-
-              </span>
-              <span v-else>
-                <img
-                  style="width: 250px; height: 150px"
-                  class="rounded"
-                  :src="employee.identity_image"
-                />
-              </span>
-  
+                <span v-if="employee.identity_image == null"> </span>
+                <span v-else>
+                  <img
+                    style="width: 250px; height: 150px"
+                    class="rounded"
+                    :src="employee.identity_image"
+                  />
+                </span>
               </p>
             </div>
           </div>
@@ -129,6 +118,9 @@
       </div>
     </div>
   </div>
+
+  <DetailUser />
+
 </template>
 
 <script lang="ts">
@@ -150,10 +142,16 @@ import {
   epochToDateTime,
   handleNull,
 } from "@/helper";
+import DetailUser from "./DetailUser.vue";
+import CardDetail from "./CardDetail.vue";
 
 export default defineComponent({
   name: "detail-pengguna",
-  components: { Loader },
+  components: {
+    Loader,
+    DetailUser,
+    CardDetail,
+  },
   setup() {
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);

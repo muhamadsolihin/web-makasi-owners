@@ -23,10 +23,29 @@ const routes: Array<RouteRecordRaw> = [
       },
 
       {
-        path: "otletlist/update/:uuid",
+        path: "otletlist/user/:uuid",
         name: "otletlist-update",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
         component: () => import("@/view/pages/otletlist/Update.vue"),
+      },
+
+      {
+        path: "otletlist/DetailUser",
+        name: "DetailUser",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/otletlist/DetailUser.vue"),
+      },
+      {
+        path: "otletlist/CardDetail",
+        name: "CardDetail",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/otletlist/CardDetail.vue"),
+      },
+      {
+        path: "otletlist/DetailOutlet",
+        name: "DetailOutlet",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/otletlist/DetailOutlet.vue"),
       },
 
       {
