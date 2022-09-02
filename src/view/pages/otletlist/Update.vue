@@ -10,7 +10,6 @@
         </span>
 
         <span v-else-if="employee.verified == '1'"> </span>
-        <span v-else-if="employee.is_submission == '0'"></span>
       </div>
       <div class="col d-flex justify-content-end ">
         <button class="btn btn-secondary" @click="$router.back">

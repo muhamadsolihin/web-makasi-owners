@@ -78,7 +78,7 @@ export default class EmployeeModule extends VuexModule {
 
   @Mutation
   ADD_VERIFIED(payload) {
-    this.employee = payload
+    this.employees = payload
   }
 
   @Mutation
@@ -126,12 +126,12 @@ export default class EmployeeModule extends VuexModule {
 
   @Action
   getDetailEmployee(payload): Promise<any> {
-    return http.get(`/dusky_lory/v1/hawaii/${payload}`)
+    return http.get(`/dusky_lory/v1/hawaii/${payload.uuid}`)
     .then(res => {
       if (res.data.status) {
         this.context.commit("SET_EMPLOYEE", res.data.data);
       }
-      return res.data;
+      return res;
     })
     .catch(err => console.log(err));
   }
