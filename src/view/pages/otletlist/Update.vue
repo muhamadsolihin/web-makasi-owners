@@ -11,12 +11,22 @@
         <span v-else-if="employee.verified == '1'"> </span>
       </div>
       <div class="col d-flex justify-content-end ">
+        <span v-if="employee.jwt_token_mbl == '1'">
+          <button class="btn btn-sm btn-primary ms-2" @click="Submit">
+            Pindah
+          </button></span
+        >
+        <span v-else-if="employee.jwt_token_mbl == '0'"> </span>
+      </div>
+      <div class="col d-flex justify-content-end ">
         <button class="btn btn-secondary" @click="$router.back">
           Kembali
         </button>
       </div>
     </div>
   </div>
+
+  <CardDetail />
 
   <div class="row mt-5">
     <div class="col">
@@ -50,16 +60,6 @@
               </p>
             </div>
           </div>
-          <!-- <div class="row">
-              <div class="col">
-                <p class="fw-bold">Tanggal Mendaftar :</p>
-              </div>
-              <div class="col">
-                <p class="fw-bold">
-                  {{ handleNullToString(employee.created_at) }}
-                </p>
-              </div>
-            </div> -->
           <div class="row">
             <div class="col-md-3">
               <p class="fw-bold">Kelurahan/Alamat :</p>
@@ -121,6 +121,7 @@
       </div>
     </div>
   </div>
+  <DetailUser />
 </template>
 
 <script lang="ts">
@@ -134,7 +135,9 @@ import moment from "moment";
 import { Actions } from "@/store/enums/store.enums";
 import Loader from "@/view/content/Loader.vue";
 import AuthModule from "@/store/modules/AuthModule";
-import { ElMessage } from 'element-plus'
+import { ElMessage } from "element-plus";
+import CardDetail from "@/view/pages/otletlist/CardDetail.vue";
+import DetailUser from "@/view/pages/otletlist/DetailUser.vue";
 
 import {
   handleNullToString,
@@ -146,7 +149,7 @@ import {
 
 export default defineComponent({
   name: "detail-pengguna",
-  components: { Loader },
+  components: { Loader, CardDetail, DetailUser },
   setup() {
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);
@@ -159,8 +162,28 @@ export default defineComponent({
 
     const onSubmit = () => {
       EmployeeState.SET_EMPLOYEES([]);
-      ElMessage('Success Verified. ' );
+      ElMessage("Success Verified. ");
       EmployeeState.addverified(route.params.uuid)
+        .then(() => {
+          const employee = EmployeeState.getEmployee;
+        })
+        .finally(() => {
+          loading.value = false;
+        });
+    };
+
+    const Submit = (userID) => {
+      EmployeeState.SET_EMPLOYEES([]);
+      // ElMessage('Success Logout.' );
+      const formData = new FormData();
+      formData.append("id", userID.value as any);
+      formData.append("_method", "GET");
+      loading.value = true;
+      window.location.reload();
+      EmployeeState.forceLogout({
+        id: userID,
+        formData: formData,
+      })
         .then(() => {
           const employee = EmployeeState.getEmployee;
         })
@@ -173,7 +196,8 @@ export default defineComponent({
       setCurrentPageBreadcrumbs("Dashboard", "Detail Pengguna");
 
       store.dispatch(Actions.ADD_BODY_CLASSNAME, "page-loading");
-      EmployeeState.getDetailEmployee(route.params.uuid)
+      EmployeeState.getDetailEmployee(route.params.uuid);
+      EmployeeState.forceLogout(route.params.id)
         .then(() => {
           const employee = EmployeeState.getEmployee;
         })
@@ -192,6 +216,7 @@ export default defineComponent({
       store,
 
       onSubmit,
+      Submit,
       formatDate,
       handleNull,
       formatCurrency,

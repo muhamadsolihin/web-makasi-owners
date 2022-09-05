@@ -1,6 +1,7 @@
 import store from "@/store"
 import http from "@/http-common"
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import { number } from "yup";
 
 
 const CORE_URL_API = "/dusky_lory/"
@@ -12,6 +13,7 @@ export interface Employee {
   name: string | null,
   outlet_sum: string | null,
   outlet_id: string,
+  id: string,
   verified: string | null,
   outlet_name :string | null,
   village_name: string | null,
@@ -27,6 +29,7 @@ export default class EmployeeModule extends VuexModule {
       uuid: "",
       name: null,
       bank: null,
+      id: "" ,
       outlet_id: "",
       outlet_sum: null,
       verified: null,
@@ -42,6 +45,7 @@ export default class EmployeeModule extends VuexModule {
       name: null,
       outlet_sum: null,
       outlet_id: "",
+      id: "",
       verified: null,
       bank: null,
       village_name: null,
@@ -76,6 +80,12 @@ export default class EmployeeModule extends VuexModule {
   @Mutation
   ADD_VERIFIED(payload) {
     this.employee = payload
+  }
+
+  @Mutation
+  FORCE_LOGOUT(payload) {
+    this.employee = payload
+
   }
 
   @Mutation
@@ -115,10 +125,23 @@ export default class EmployeeModule extends VuexModule {
       if (res.data.status) {
         this.context.commit("ADD_VERIFIED", res.data.data);
       }
+    })
+    .catch(err => console.log(err));
+  }
+
+  
+  @Action
+  forceLogout(payload): Promise<any> {
+    return http.get(`/dusky_lory/v1/nevada/session/${payload}` , payload.formData)
+    .then(res => {
+      if (res.data.status) {
+        this.context.commit("FORCE_LOGOUT", res.data.data);
+      }
       return res.data;
     })
     .catch(err => console.log(err));
   }
+
 
   @Action
   getDetailEmployee(payload): Promise<any> {
