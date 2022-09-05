@@ -23,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
       },
 
       {
-        path: "otletlist/user/:uuid",
+        path: "otletlist/user/:uuid/:id",
         name: "otletlist-update",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
         component: () => import("@/view/pages/otletlist/Update.vue"),

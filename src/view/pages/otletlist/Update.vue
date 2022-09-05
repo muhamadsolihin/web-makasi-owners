@@ -109,11 +109,14 @@
                 {{ handleNullToString(employee.identity_number) }}
               </p>
               <p class="fw-bold">
-                <img
-                  style="width: 250px; height: 150px"
-                  class="rounded"
-                  :src="employee.identity_image"
-                />
+                <span v-if="employee.identity_image === null"> </span>
+                <span v-else>
+                  <img
+                    style="width: 250px; height: 150px"
+                    class="rounded"
+                    :src="employee.identity_image"
+                  />
+                </span>
               </p>
             </div>
           </div>
@@ -154,7 +157,7 @@ export default defineComponent({
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);
     const AuthState = getModule(AuthModule);
-
+    const userID = ref<string>("");
     const store = useStore();
     const route = useRoute();
     const EmployeeState = getModule(EmployeeModule);
@@ -172,18 +175,11 @@ export default defineComponent({
         });
     };
 
-    const Submit = (userID) => {
+    const Submit = () => {
       EmployeeState.SET_EMPLOYEES([]);
-      // ElMessage('Success Logout.' );
-      const formData = new FormData();
-      formData.append("id", userID.value as any);
-      formData.append("_method", "GET");
-      loading.value = true;
-      window.location.reload();
-      EmployeeState.forceLogout({
-        id: userID,
-        formData: formData,
-      })
+      EmployeeState.forceLogout(route.params.id)
+        // ElMessage('Success Logout.' );
+ 
         .then(() => {
           const employee = EmployeeState.getEmployee;
         })
@@ -213,7 +209,9 @@ export default defineComponent({
       moment,
       EmployeeModule,
       route,
+      AuthState,
       store,
+      userID,
 
       onSubmit,
       Submit,

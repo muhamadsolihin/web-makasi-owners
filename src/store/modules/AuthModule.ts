@@ -22,7 +22,9 @@ export default class AuthModule extends VuexModule {
   get getErrorPinStatus() {
     return this.errorPinStatus;
   }
- 
+
+
+
   @Mutation
   SET_ME(payload) {
     this.me = payload;
