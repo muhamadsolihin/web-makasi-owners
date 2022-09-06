@@ -10,14 +10,7 @@
         >
         <span v-else-if="employee.verified == '1'"> </span>
       </div>
-      <div class="col d-flex justify-content-end ">
-        <span v-if="employee.jwt_token_mbl == '1'">
-          <button class="btn btn-sm btn-primary ms-2" @click="Submit">
-            Pindah
-          </button></span
-        >
-        <span v-else-if="employee.jwt_token_mbl == '0'"> </span>
-      </div>
+
       <div class="col d-flex justify-content-end ">
         <button class="btn btn-secondary" @click="$router.back">
           Kembali
@@ -120,6 +113,14 @@
               </p>
             </div>
           </div>
+          <div class="col d-flex justify-content-end ">
+            <span v-if="employee.jwt_token_mbl == '1'">
+              <button class="btn btn-sm btn-primary ms-2" @click="Submit">
+                Unlink
+              </button></span
+            >
+            <span v-else-if="employee.jwt_token_mbl == '0'"> </span>
+          </div>
         </div>
       </div>
     </div>
@@ -177,9 +178,10 @@ export default defineComponent({
 
     const Submit = () => {
       EmployeeState.SET_EMPLOYEES([]);
+       ElMessage("Success Logout. "
+
+       );
       EmployeeState.forceLogout(route.params.id)
-        // ElMessage('Success Logout.' );
- 
         .then(() => {
           const employee = EmployeeState.getEmployee;
         })
@@ -192,8 +194,7 @@ export default defineComponent({
       setCurrentPageBreadcrumbs("Dashboard", "Detail Pengguna");
 
       store.dispatch(Actions.ADD_BODY_CLASSNAME, "page-loading");
-      EmployeeState.getDetailEmployee(route.params.uuid);
-      EmployeeState.forceLogout(route.params.id)
+      EmployeeState.getDetailEmployee(route.params.uuid)
         .then(() => {
           const employee = EmployeeState.getEmployee;
         })
