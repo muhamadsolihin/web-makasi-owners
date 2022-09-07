@@ -43,32 +43,22 @@
 
           <div class="d-flex ">
             <div class="input-group input-group-sm">
-              <el-select
-                v-model="filter"
-                clearable
-                placeholder="Select"
-                
-              >
+              <el-select v-model="filter" clearable placeholder="Select">
                 <el-option
                   v-for="o in FilterSubmission"
                   :key="o"
                   :value="o.value"
                   :label="o.name"
                 >
-                  <span v-if="o.value == '1'"
-                  >Sudah Mengajukan</span>
+                  <span v-if="o.value == '1'">Sudah Mengajukan</span>
                   <span v-else-if="o.value == '0'">Belum Mengajukan</span>
                 </el-option>
-               
-              </el-select> 
-        
-
+              </el-select>
             </div>
             <button class="btn btn-sm btn-primary ms-2" @click="searchSubs">
               Go
             </button>
           </div>
-
         </div>
 
         <div class="rounded border border-1 p-2">
@@ -106,7 +96,11 @@
               <template #default="scope">
                 <div class="d-flex justify-content-center my-3">
                   <el-button
-                    @click="$router.push(`/userlist/user/${scope.row.uuid}/${scope.row.id}`)"
+                    @click="
+                      $router.push(
+                        `/users/user/${scope.row.uuid}/${scope.row.id}`
+                      )
+                    "
                     type="danger"
                     size="small"
                   >

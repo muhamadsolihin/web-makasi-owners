@@ -13,7 +13,7 @@
                     <span v-else>
                       <el-button
                         style="border:none"
-                        @click="$router.push(`/userlist/DetailOutlet/`)"
+                        @click="$router.push(`/Outletlist/outlet`)"
                       >
                         <img
                           style="width: 15rem; height: 180px; border: none;"

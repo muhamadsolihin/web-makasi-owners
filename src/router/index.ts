@@ -16,36 +16,36 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/view/pages/dashboards/Light.vue"),
       },
       {
-        path: "/userlist",
+        path: "/users",
         name: "otletlist",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/userlist/ListUser.vue"),
+        component: () => import("@/view/pages/users/ListUser.vue"),
       },
 
       {
-        path: "userlist/user/:uuid/:id/",
+        path: "users/user/:uuid/:id/",
         name: "otletlist-update",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/userlist/Update.vue"),
+        component: () => import("@/view/pages/users/Update.vue"),
       },
 
       {
-        path: "userlist/DetailUser",
+        path: "users/DetailUser",
         name: "DetailUser",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/userlist/DetailUser.vue"),
+        component: () => import("@/view/pages/users/DetailUser.vue"),
       },
       {
-        path: "userlist/CardDetail",
+        path: "users/CardDetail",
         name: "CardDetail",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/userlist/CardDetail.vue"),
+        component: () => import("@/view/pages/users/CardDetail.vue"),
       },
       {
-        path: "userlist/DetailOutlet",
+        path: "users/DetailOutlet",
         name: "DetailOutlet",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/userlist/DetailOutlet.vue"),
+        component: () => import("@/view/pages/users/DetailOutlet.vue"),
       },
 
 

@@ -140,8 +140,8 @@ import { Actions } from "@/store/enums/store.enums";
 import Loader from "@/view/content/Loader.vue";
 import AuthModule from "@/store/modules/AuthModule";
 import { ElMessage } from "element-plus";
-import CardDetail from "@/view/pages/userlist/CardDetail.vue";
-import DetailUser from "@/view/pages/userlist/DetailUser.vue";
+import CardDetail from "@/view/pages/users/CardDetail.vue";
+import DetailUser from "@/view/pages/users/DetailUser.vue";
 
 import {
   handleNullToString,
@@ -153,7 +153,7 @@ import {
 
 export default defineComponent({
   name: "detail-pengguna",
-  components: { Loader },
+  components: { Loader},
   setup() {
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);
@@ -178,9 +178,7 @@ export default defineComponent({
 
     const Submit = () => {
       EmployeeState.SET_EMPLOYEES([]);
-       ElMessage("Success Logout. "
-
-       );
+      ElMessage("Success Logout. ");
       EmployeeState.forceLogout(route.params.id)
         .then(() => {
           const employee = EmployeeState.getEmployee;

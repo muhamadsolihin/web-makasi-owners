@@ -8,6 +8,14 @@ export function formatCurrency(val: string | number): string {
   }
 }
 
+export function formatCurrencyVoucher(val: string | number): string {
+  if (val !== undefined && val !== null) {
+    return val.toString().replace(/(\d)(?=(\d\d\d))/g, '$1')
+  } else {
+    return '-'
+  }
+}
+
 export function formatCurrencyKilo(val: string | number) {
   if (val !== undefined && val !== null) {
     const toString = val.toString()

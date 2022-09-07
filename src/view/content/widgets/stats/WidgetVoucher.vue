@@ -6,28 +6,17 @@
   >
     <!--begin::Body-->
 
-    <span v-if="o.value == '1'" style="background-color: #EAEFFB;">
-      <div class="card-body" style="border-radius:16px; ">
-        
-
-
+    <span
+      v-if="o.value == '1'"
+      style="background-color: #EAEFFB; border-radius:8px;"
+    >
+      <div class="card-body" style="border-radius:16px;">
         <!--begin::Section-->
         <div class="d-flex align-items-center">
-          <!--begin::Symbol-->
-          <!-- <div class="symbol symbol-60px me-5">
-            <span class="symbol-label bg-light-primary">
-              <span class="svg-icon svg-icon-2x svg-icon-primary">
-                <i class="bi bi-cash text-primary" style="font-size: 1.9rem"></i>
-              </span>
-            </span>
-          </div> -->
-          <!--end::Symbol-->
-
-          <!--begin::Title-->
           <div>
-            <a href="#" class="fs-4 text-gray-800 fw-bolder">{{o.name}}</a>
+            <a href="#" class="fs-4 text-gray-800 fw-bolder">{{ o.name }}</a>
             <div class="fs-1 text-gray-800 fw-bolder mt-1">
-              {{o.value}}
+              {{ formatCurrencyVoucher(value) }}
             </div>
           </div>
           <!--end::Title-->
@@ -42,7 +31,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { formatCurrency } from "@/helper";
+import { formatCurrencyVoucher } from "@/helper";
 
 export default defineComponent({
   name: "WidgetOmset",
@@ -50,7 +39,7 @@ export default defineComponent({
     value: {
       type: [String, Number],
       required: false,
-      default: 121218317,
+      default: 12121831734,
     },
   },
   components: {},
@@ -58,17 +47,17 @@ export default defineComponent({
     const FilterSubmission = ref([
       {
         name: "Voucher",
-        value: "1",
-      },
+        value:"1",
+    },
       {
         name: "Voucher Off",
-        value: "0",
-      },
+        value:"0",
+    },
     ]);
 
     return {
       FilterSubmission,
-      formatCurrency,
+      formatCurrencyVoucher,
     };
   },
 });
@@ -76,6 +65,6 @@ export default defineComponent({
 
 <style scope lang="scss">
 .fs-1 {
-  font-size: 1.2em !important;
+  font-size: 1em !important;
 }
 </style>
