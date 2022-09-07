@@ -313,7 +313,7 @@ export default defineComponent({
       return valueFilterDate.value;
     };
 
-    const tableData: User[] = [
+    const tableData: [] = [
       {
         date: "2016-05-03",
         name: "Tom",
