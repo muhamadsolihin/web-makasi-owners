@@ -25,7 +25,7 @@ const MainMenuConfig = [
       {
         heading: "Pengguna",
         icon: require('@/assets/icons/aside/produk.svg'),
-        route: "/otletlist"
+        route: "/userlist"
         // sub: [
         //   {
         //     heading: "Product List",
@@ -55,7 +55,7 @@ const MainMenuConfig = [
 
 
     
-      
+
       // {
       //   heading: "Customer",
       //   icon: require('@/assets/icons/aside/customer.svg'),

@@ -16,36 +16,36 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/view/pages/dashboards/Light.vue"),
       },
       {
-        path: "/otletlist",
+        path: "/userlist",
         name: "otletlist",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/otletlist/ListUser.vue"),
+        component: () => import("@/view/pages/userlist/ListUser.vue"),
       },
 
       {
-        path: "otletlist/user/:uuid/:id/",
+        path: "userlist/user/:uuid/:id/",
         name: "otletlist-update",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/otletlist/Update.vue"),
+        component: () => import("@/view/pages/userlist/Update.vue"),
       },
 
       {
-        path: "otletlist/DetailUser",
+        path: "userlist/DetailUser",
         name: "DetailUser",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/otletlist/DetailUser.vue"),
+        component: () => import("@/view/pages/userlist/DetailUser.vue"),
       },
       {
-        path: "otletlist/CardDetail",
+        path: "userlist/CardDetail",
         name: "CardDetail",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/otletlist/CardDetail.vue"),
+        component: () => import("@/view/pages/userlist/CardDetail.vue"),
       },
       {
-        path: "otletlist/DetailOutlet",
+        path: "userlist/DetailOutlet",
         name: "DetailOutlet",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/otletlist/DetailOutlet.vue"),
+        component: () => import("@/view/pages/userlist/DetailOutlet.vue"),
       },
 
 
@@ -61,6 +61,13 @@ const routes: Array<RouteRecordRaw> = [
       //   name: "add-voucher",
       //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
       //   component: () => import("@/view/pages/voucher/Add.vue"),
+      // },
+
+      // {
+      //   path: "/voucher/Detail",
+      //   name: "detail-voucher",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/voucher/Detail.vue"),
       // },
 
 

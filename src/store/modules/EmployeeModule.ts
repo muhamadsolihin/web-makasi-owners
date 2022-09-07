@@ -105,7 +105,7 @@ export default class EmployeeModule extends VuexModule {
   getEmployeesAPI(payload) {
     return http
       .get(
-        `/dusky_lory/v1/?perpage=10&search=${payload.search}&is_submission=&cursor=${payload.cursor}`
+        `/dusky_lory/v1/?perpage=100&search=${payload.search}&is_submission=${payload.FilterSubmission}&cursor=${payload.cursor}`
       )
       .then((res) => {
         if (res.data.status) {

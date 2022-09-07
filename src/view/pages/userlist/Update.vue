@@ -140,8 +140,8 @@ import { Actions } from "@/store/enums/store.enums";
 import Loader from "@/view/content/Loader.vue";
 import AuthModule from "@/store/modules/AuthModule";
 import { ElMessage } from "element-plus";
-import CardDetail from "@/view/pages/otletlist/CardDetail.vue";
-import DetailUser from "@/view/pages/otletlist/DetailUser.vue";
+import CardDetail from "@/view/pages/userlist/CardDetail.vue";
+import DetailUser from "@/view/pages/userlist/DetailUser.vue";
 
 import {
   handleNullToString,

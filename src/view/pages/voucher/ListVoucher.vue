@@ -109,7 +109,7 @@
   </div>
   <el-table
     ref="multipleTableRef"
-    :data="tableData"
+    :data="employees"
     style="width: 100%"
     @selection-change="handleSelectionChange"
   >
@@ -138,11 +138,11 @@
       show-overflow-tooltip
     />
     <el-table-column label="Aksi" align="center">
-      <template #default="scope">
+
         <div class="d-flex justify-content-center my-3">
           <el-button
             @click="
-              $router.push(`/otletlist/user/${scope.row.uuid}/${scope.row.id}`)
+              $router.push(`/voucher/Detail/`)
             "
             type="danger"
             size="small"
@@ -150,7 +150,7 @@
             <i class="bi bi-eye-fill text-white"></i>
           </el-button>
         </div>
-      </template>
+
     </el-table-column>
   </el-table>
   <!-- <div style="margin-top: 20px">
@@ -313,43 +313,7 @@ export default defineComponent({
       return valueFilterDate.value;
     };
 
-    const tableData: [] = [
-      {
-        date: "2016-05-03",
-        name: "Tom",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        date: "2016-05-02",
-        name: "Tom",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        date: "2016-05-04",
-        name: "Tom",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        date: "2016-05-01",
-        name: "Tom",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        date: "2016-05-08",
-        name: "Tom",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        date: "2016-05-06",
-        name: "Tom",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        date: "2016-05-07",
-        name: "Tom",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-    ];
+
 
     onMounted(() => {
       setCurrentPageBreadcrumbs("Dashboard", "Daftar Pengguna");
@@ -389,7 +353,6 @@ export default defineComponent({
       handleNull,
 
       getValueToFilterDate,
-      tableData,
       typeFilter,
       filterRangeDate,
       filterRangeMonth,
