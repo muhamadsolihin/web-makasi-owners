@@ -53,6 +53,13 @@ const MainMenuConfig = [
       //   route: "/voucher"
       // },
 
+      // {
+      //   heading: "Outletlist",
+      //   icon: require('@/assets/icons/aside/Voucher.svg'),
+      //   route: "/OutletList"
+      // },
+
+
 
     
 

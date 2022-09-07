@@ -70,6 +70,20 @@ const routes: Array<RouteRecordRaw> = [
       //   component: () => import("@/view/pages/voucher/Detail.vue"),
       // },
 
+      // {
+      //   path: "/Outletlist",
+      //   name: "outlet-list",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/outletlist/ListOutlet.vue"),
+      // },
+      
+      // {
+      //   path: "Outletlist/outlet",
+      //   name: "outlet-detail",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailOutlet.vue"),),
+      // },
+
 
       {
         path: "/my-profile",

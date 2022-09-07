@@ -1,9 +1,16 @@
 <template>
-    <div class="card card-custom mb-5 mb-xxl-8">
-      <!--begin::Body-->
-      <div class="card-body"
-      style="border-radius:16px; background-color: #EAEFFB;"
-      >
+  <div
+    class="card card-custom mb-5 mb-xxl-8"
+    v-for="o in FilterSubmission"
+    :key="o"
+  >
+    <!--begin::Body-->
+
+    <span v-if="o.value == '1'" style="background-color: #EAEFFB;">
+      <div class="card-body" style="border-radius:16px; ">
+        
+
+
         <!--begin::Section-->
         <div class="d-flex align-items-center">
           <!--begin::Symbol-->
@@ -15,12 +22,12 @@
             </span>
           </div> -->
           <!--end::Symbol-->
-  
+
           <!--begin::Title-->
           <div>
-            <a href="#" class="fs-4 text-gray-800 fw-bolder">Rabu asik</a>
+            <a href="#" class="fs-4 text-gray-800 fw-bolder">{{o.name}}</a>
             <div class="fs-1 text-gray-800 fw-bolder mt-1">
-             {{ formatCurrency(value) }}
+              {{o.value}}
             </div>
           </div>
           <!--end::Title-->
@@ -28,32 +35,47 @@
         <!--end::Section-->
       </div>
       <!--end::Body-->
-    </div>
-  </template>
-  
-  <script lang="ts">
-  import { defineComponent } from "vue";
-  import { formatCurrency } from "@/helper";
-  
-  export default defineComponent({
-    name: "WidgetOmset",
-    props: {
-      value: {
-        type: [String, Number],
-        required: false,
-        default: 121218317,
+    </span>
+    <!-- <span v-else-if="o.value == '0'" style="background-color: #E60023;">insactif</span> -->
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref } from "vue";
+import { formatCurrency } from "@/helper";
+
+export default defineComponent({
+  name: "WidgetOmset",
+  props: {
+    value: {
+      type: [String, Number],
+      required: false,
+      default: 121218317,
+    },
+  },
+  components: {},
+  setup() {
+    const FilterSubmission = ref([
+      {
+        name: "Voucher",
+        value: "1",
       },
-    },
-    components: {},
-    setup() {
-      return { formatCurrency };
-    },
-  });
-  </script>
-  
-  <style scope lang="scss">
-  .fs-1{
-    font-size: 1.2em !important;
-  }
-  
-  </style>
+      {
+        name: "Voucher Off",
+        value: "0",
+      },
+    ]);
+
+    return {
+      FilterSubmission,
+      formatCurrency,
+    };
+  },
+});
+</script>
+
+<style scope lang="scss">
+.fs-1 {
+  font-size: 1.2em !important;
+}
+</style>
