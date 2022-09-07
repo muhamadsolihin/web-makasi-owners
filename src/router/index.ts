@@ -49,19 +49,19 @@ const routes: Array<RouteRecordRaw> = [
       },
 
 
-      {
-        path: "/voucher",
-        name: "voucher",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/voucher/ListVoucher.vue"),
-      },
+      // {
+      //   path: "/voucher",
+      //   name: "voucher",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/voucher/ListVoucher.vue"),
+      // },
 
-      {
-        path: "/voucher/Add",
-        name: "add-voucher",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/voucher/Add.vue"),
-      },
+      // {
+      //   path: "/voucher/Add",
+      //   name: "add-voucher",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/voucher/Add.vue"),
+      // },
 
 
       {

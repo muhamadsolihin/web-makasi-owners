@@ -47,15 +47,15 @@ const MainMenuConfig = [
       },
 
 
-      {
-        heading: "Voucher",
-        icon: require('@/assets/icons/aside/Voucher.svg'),
-        route: "/voucher"
-      },
+      // {
+      //   heading: "Voucher",
+      //   icon: require('@/assets/icons/aside/Voucher.svg'),
+      //   route: "/voucher"
+      // },
 
 
     
-
+      
       // {
       //   heading: "Customer",
       //   icon: require('@/assets/icons/aside/customer.svg'),
