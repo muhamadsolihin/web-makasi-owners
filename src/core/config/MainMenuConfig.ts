@@ -54,9 +54,9 @@ const MainMenuConfig = [
       // },
 
       // {
-      //   heading: "Outlet",
-      //   icon: require('@/assets/icons/aside/Voucher.svg'),
-      //   route: "/OutletList"
+      //   heading: "outlet",
+      //   icon: require('@/assets/icons/aside/outlet.svg'),
+      //   route: "/outlets"
       // },
 
 

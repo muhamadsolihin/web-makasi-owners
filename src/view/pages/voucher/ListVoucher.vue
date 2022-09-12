@@ -41,14 +41,6 @@
     <div class="row g-5 g-xxl-8">
       <div class="col-12 d-flex justify-content-end ">
         <div class="d-flex align-items-center">
-          <el-button
-            @click="$router.push(`/voucher/Add`)"
-            type="danger"
-            size="small"
-            style="margin-right:10px"
-          >
-            <span>Add</span>
-          </el-button>
           <!-- begin::filter date -->
           <el-date-picker
             v-if="typeFilter == 1"
@@ -103,54 +95,76 @@
           <!-- end::filter month -->
 
           <!-- <button class="btn btn-sm btn-primary"></button> -->
+          <el-button
+            @click="$router.push(`/voucher/Add`)"
+            type="danger"
+            size="small"
+            style="margin-right:10px; margin-left: 10px;"
+          >
+            <span>Add</span>
+          </el-button>
+          <div class="col-md-2 ">
+            <el-upload
+              v-model:file-list="fileList"
+              class="upload-demo"
+              action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+              multiple
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :before-remove="beforeRemove"
+              :limit="3"
+              :on-exceed="handleExceed"
+            >
+              <el-button type="danger" size="small">Export Data</el-button>
+            </el-upload>
+          </div>
+          <div class="col-md-2">
+            <el-button type="danger" style="margin-left:0.5em" size="small">Hapus</el-button>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <el-table
     ref="multipleTableRef"
-    :data="employees"
+    :data="FilterSubmission"
     style="width: 100%"
     @selection-change="handleSelectionChange"
   >
     <el-table-column type="selection" width="55" />
     <el-table-column property="name" label="Nama Voucher" width="130" />
     <el-table-column
-      property="address"
+      property="tipe"
       label="Tipe Voucher"
       show-overflow-tooltip
     />
     <el-table-column
-      property="address"
+      property="percentage"
       label="Percentage"
       show-overflow-tooltip
     />
-    <el-table-column property="address" label="Value" show-overflow-tooltip />
+    <el-table-column property="value" label="Value" show-overflow-tooltip />
     <!-- <el-table-column
       property="address"
       label="Max Value"
       show-overflow-tooltip
     /> -->
-    <el-table-column property="address" label="QTY" show-overflow-tooltip />
+    <el-table-column property="qty" label="QTY" show-overflow-tooltip />
     <el-table-column
-      property="address"
+      property="expired"
       label="Expired Date"
       show-overflow-tooltip
     />
     <el-table-column label="Aksi" align="center">
-
-        <div class="d-flex justify-content-center my-3">
-          <el-button
-            @click="
-              $router.push(`/voucher/Detail/`)
-            "
-            type="danger"
-            size="small"
-          >
-            <i class="bi bi-eye-fill text-white"></i>
-          </el-button>
-        </div>
-
+      <div class="d-flex justify-content-center my-3">
+        <el-button
+          @click="$router.push(`/voucher/Detail/`)"
+          type="danger"
+          size="small"
+        >
+          <i class="bi bi-eye-fill text-white"></i>
+        </el-button>
+      </div>
     </el-table-column>
   </el-table>
   <!-- <div style="margin-top: 20px">
@@ -182,12 +196,28 @@ export default defineComponent({
     const employee = ref("");
     const FilterSubmission = ref([
       {
-        name: "active",
-        value: "1",
+        name: "Rabu asik",
+        tipe: "%",
+        percentage: "20%",
+        value: "9218738127431467",
+        qty: "20",
+        expired: "21-09-2021",
       },
       {
-        name: "inactive",
-        value: "0",
+        name: "Rabu asik",
+        tipe: "%",
+        percentage: "20%",
+        value: "9218738127431467",
+        qty: "20",
+        expired: "21-09-2021",
+      },
+      {
+        name: "Rabu asik",
+        tipe: "%",
+        percentage: "20%",
+        value: "9218738127431467",
+        qty: "20",
+        expired: "21-09-2021",
       },
     ]);
 
@@ -312,8 +342,6 @@ export default defineComponent({
       }
       return valueFilterDate.value;
     };
-
-
 
     onMounted(() => {
       setCurrentPageBreadcrumbs("Dashboard", "Daftar Pengguna");

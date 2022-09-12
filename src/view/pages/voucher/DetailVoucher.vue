@@ -4,13 +4,15 @@
       <div class="card">
         <div class="card-body">
           <div class="row mb-5"></div>
-          <div class="row">
+          <div class="row"
+          v-for="o in FilterSubmission" :key="o"
+          >
             <div class="col-md-3">
               <p class="fw-bold">Nama Voucher :</p>
             </div>
             <div class="col-md-3">
-              <p class="fw-bold">
-                {{ handleNullToString(employee.name) }}
+              <p class="fw-bold" >
+                {{o.name}}
                 <span v-if="employee.verified == '0'"></span>
                 <span v-else-if="employee.verified == '1'"
                   ><i
@@ -27,7 +29,7 @@
             </div>
             <div class="col-md-2">
               <p class="fw-bold">
-                {{ epochToDateTime(employee.created_at) }}
+                {{ o.tipe }}
               </p>
             </div>
           </div>
@@ -72,32 +74,6 @@
                 - {{ handleNullToString(employee.bank?.bank_account_number) }}
               </p>
             </div>
-            <!--  <div class="col-md-2 pl-5">
-                <p class="fw-bold">No KTP:</p>
-              </div>
-              <div class="col-md-2">
-                <p class="fw-bold">
-                  {{ handleNullToString(employee.identity_number) }}
-                </p>
-                <p class="fw-bold">
-                  <span v-if="employee.identity_image === null"> </span>
-                  <span v-else>
-                    <img
-                      style="width: 250px; height: 150px"
-                      class="rounded"
-                      :src="employee.identity_image"
-                    />
-                  </span>
-                </p>
-              </div> -->
-          </div>
-          <div class="col d-flex justify-content-end ">
-            <span v-if="employee.jwt_token_mbl == '1'">
-              <button class="btn btn-sm btn-primary ms-2" @click="Submit">
-                Unlink
-              </button></span
-            >
-            <span v-else-if="employee.jwt_token_mbl == '0'"> </span>
           </div>
         </div>
       </div>
@@ -137,6 +113,19 @@ export default defineComponent({
     const route = useRoute();
     const EmployeeState = getModule(EmployeeModule);
     const employee = computed(() => EmployeeState.getEmployee);
+
+    const FilterSubmission = ref([
+      {
+        name: "Rabu asik",
+        tipe: "%",
+        percentage: "20%",
+        value: "9218738127431467",
+        qty: "20",
+        expired: "21-09-2021"
+
+      },
+
+    ]);
 
     const onSubmit = () => {
       EmployeeState.SET_EMPLOYEES([]);
@@ -184,6 +173,7 @@ export default defineComponent({
       route,
       AuthState,
       store,
+      FilterSubmission,
       userID,
 
       onSubmit,

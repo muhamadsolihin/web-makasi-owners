@@ -2,47 +2,28 @@
   <div>
     <div class="card">
       <div class="card-body">
-        <div
-          class="mb-5 justity-content-right d-flex justify-content-between align-items-center md:flex-row md:justiify-content-between"
-        >
-          <div class="d-flex ">
-            <div class="input-group input-group-sm">
-              <input
-                type="text"
-                v-model="search"
-                @keyup="textSearch"
-                class="form-control form-control-sm"
-                :class="{
-                  'border-right-white': clearable,
-                  'border-right-default': !clearable,
-                  'rounded-end': !clearable,
-                }"
-                placeholder="Search..."
-                style="border-right-color: white"
-              />
-              <span
-                class="input-group-text"
-                :class="{
-                  'border-left-white': clearable,
-                  'd-inline-block': clearable,
-                  'd-none': !clearable,
-                }"
-                style="background-color: white;"
-              >
-                <i
-                  class="bi bi-x-lg fw-bold"
-                  style="cursor: pointer"
-                  @click="clearSearch"
-                ></i>
-              </span>
-            </div>
-            <button class="btn btn-sm btn-primary ms-2" @click="searchData">
-              Search
-            </button>
-          </div>
-        </div>
-
         <div class="rounded border border-1 p-2">
+          <div class="col-12 d-flex flex-column justify-content-end" id="chart">
+            <!-- begin::filter date -->
+            <el-date-picker
+              v-model="filterRangeDate"
+              @change="changeFilterDateRange"
+              start-placeholder="Start date"
+              end-placeholder="End date"
+              value-format="YYYY-MM-DD"
+              class="form-control mb-3 ms-auto"
+              type="daterange"
+              unlink-panels
+              size="large"
+            />
+            
+            <!-- end::filter date -->
+
+            <!-- begin::chart -->
+
+            <!-- end::chart -->
+          </div>
+
           <el-table
             :data="Outlets"
             style="width: 100%"
@@ -50,17 +31,13 @@
             v-loading="loadingDatatable"
             table-layout="fixed"
           >
-            <el-table-column property="name" label="Nama Pemilik" width="140">
+            <el-table-column property="no" label="No Transaksi" width="140">
             </el-table-column>
             <!-- <el-table-column prop="outlet_sum" label="Jumlah Outlet"/> -->
-            <el-table-column prop="namaoutlet" label="Nama Outlet" width="140" />
-            <el-table-column prop="phone" label="Phone" width="140" />
-            <el-table-column prop="kategori" label="Kategori" />
-            <el-table-column prop="tipetoko" label="Tipe" />
-            <el-table-column prop="address"  label="Address">
-            </el-table-column>
-            <el-table-column prop="deskripsi" label="Deskripsi" width="140" />
-            <el-table-column prop="lokasi" label="Lokasi" />
+            <el-table-column prop="jumlah" label="Jumlah Dibeli" width="140" />
+            <el-table-column prop="status" label="Status" width="140"></el-table-column>
+            <el-table-column prop="total" label="Total Pembayaran" />
+            <el-table-column prop="tanggal" label="Tanggal Pembayaran" />
 
             <el-table-column label="Aksi" align="center">
               <div class="d-flex justify-content-center my-3">
@@ -140,6 +117,7 @@
 import { defineComponent, ref, reactive, onMounted, computed } from "vue";
 import EmployeeModule from "@/store/modules/EmployeeModule";
 import AuthModule from "@/store/modules/AuthModule";
+import moment from "moment";
 import { getModule } from "vuex-module-decorators";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
 import { handleNull, epochToDateTime } from "@/helper";
@@ -148,7 +126,7 @@ import { ElNotification } from "element-plus";
 
 export default defineComponent({
   name: "outlet-list",
-  components: {},
+  components: {  },
   setup() {
     const deleteDialog = ref(false);
     const loadingBtnDialog = ref(false);
@@ -181,37 +159,22 @@ export default defineComponent({
     );
     const myOutletId = computed(() => AuthState.getMyOutletId);
 
+    const filterRangeDate = ref<any[]>([
+      moment()
+        .subtract(7, "days")
+        .format("YYYY-MM-DD"),
+      moment().format("YYYY-MM-DD"),
+    ]);
+
     const Outlets = ref([
       {
-        name: "Asep Saepudin",
-        namaoutlet: "Jabrigs",
-        phone: "0897678987",
-        kategori: "retail",
-        tipetoko: "online",
-        address: "bogor",
-        deskripsi: "kebutuhan ",
-        lokasi:"bogors"
+        no: "1",
+        jumlah: "200",
+        status: "online",
+        total: "Rp. 40.000.000",
+        tanggal: "21-09-22",
       },
-      {
-        name: "Asep Saepuloh",
-        namaoutlet: "Jabrigs",
-        phone: "0897678987",
-        kategori: "retail",
-        tipetoko: "online",
-        address: "bogor",
-        deskripsi: "kebutuhan ",
-        lokasi:"bogors"
-      },
-      {
-        name: "Asep Samsudin",
-        namaoutlet: "Jabrigs",
-        phone: "0897678987",
-        kategori: "retail",
-        tipetoko: "online",
-        address: "bogor",
-        deskripsi: "kebutuhan ",
-        lokasi:"bogors"
-      },
+
     ]);
 
     const selectItem = (item) => {
@@ -311,6 +274,7 @@ export default defineComponent({
       filter,
       Outlets,
       search,
+      filterRangeDate,
       clearable,
       metaPagination,
       employee,

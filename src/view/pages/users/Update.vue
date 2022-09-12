@@ -4,7 +4,7 @@
     <div class="row ">
       <div class="col ">
         <span v-if="employee.verified == '0'">
-          <button class="btn btn-sm btn-primary ms-2" @click="onSubmit">
+          <button class="btn btn-sm btn-primary ms-2" @click="SelectItem">
             Verify
           </button></span
         >
@@ -18,8 +18,8 @@
       </div>
     </div>
   </div>
-
-  <!-- <CardDetail /> -->
+<!-- 
+  <CardDetail /> -->
 
   <div class="row mt-5">
     <div class="col">
@@ -115,7 +115,7 @@
           </div>
           <div class="col d-flex justify-content-end ">
             <span v-if="employee.jwt_token_mbl == '1'">
-              <button class="btn btn-sm btn-primary ms-2" @click="Submit">
+              <button class="btn btn-sm btn-primary ms-2" @click="selectItem">
                 Unlink
               </button></span
             >
@@ -124,6 +124,67 @@
         </div>
       </div>
     </div>
+    <el-dialog title="Konfirmasi" v-model="unlinkDialog" width="30%">
+      <div class="mb-5">
+        <i
+          class="bi bi-exclamation-triangle text-danger me-3"
+          style="font-size: 1.5rem"
+        ></i>
+        <span>Are you sure you want to proceed?</span>
+      </div>
+      <template #footer>
+        <button @click="unlinkDialog = false" class="btn btn-sm btn-secondary">
+          No
+        </button>
+        <button
+          @click="Submit"
+          class="btn btn-sm btn-primary ms-3"
+          :disabled="loadingBtnDialog"
+          :data-kt-indicator="!loadingBtnDialog ? 'off' : 'on'"
+        >
+          <span v-if="!loadingBtnDialog" class="indicator-label">
+            Yes
+          </span>
+          <span v-else class="indicator-progress">
+            Please wait...
+            <span
+              class="spinner-border spinner-border-sm align-middle ms-2"
+            ></span>
+          </span>
+        </button>
+      </template>
+    </el-dialog>
+
+    <el-dialog title="Konfirmasi" v-model="verifyDialog" width="30%">
+      <div class="mb-5">
+        <i
+          class="bi bi-exclamation-triangle text-danger me-3"
+          style="font-size: 1.5rem"
+        ></i>
+        <span>Are you sure you want to proceed?</span>
+      </div>
+      <template #footer>
+        <button @click="verifyDialog = false" class="btn btn-sm btn-secondary">
+          No
+        </button>
+        <button
+          @click="onSubmit"
+          class="btn btn-sm btn-primary ms-3"
+          :disabled="loadingBtnDialog"
+          :data-kt-indicator="!loadingBtnDialog ? 'off' : 'on'"
+        >
+          <span v-if="!loadingBtnDialog" class="indicator-label">
+            Yes
+          </span>
+          <span v-else class="indicator-progress">
+            Please wait...
+            <span
+              class="spinner-border spinner-border-sm align-middle ms-2"
+            ></span>
+          </span>
+        </button>
+      </template>
+    </el-dialog>
   </div>
   <!-- <DetailUser /> -->
 </template>
@@ -131,7 +192,7 @@
 <script lang="ts">
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import { defineComponent, onMounted, ref, computed } from "vue";
+import { defineComponent, onMounted, ref, computed, reactive } from "vue";
 import { getModule } from "vuex-module-decorators";
 import EmployeeModule from "@/store/modules/EmployeeModule";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
@@ -153,7 +214,7 @@ import {
 
 export default defineComponent({
   name: "detail-pengguna",
-  components: { Loader},
+  components: { Loader, },
   setup() {
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);
@@ -163,8 +224,22 @@ export default defineComponent({
     const route = useRoute();
     const EmployeeState = getModule(EmployeeModule);
     const employee = computed(() => EmployeeState.getEmployee);
+    const selectedItem: any = reactive({});
+    const unlinkDialog = ref(false);
+    const verifyDialog = ref(false);
+    const loadingBtnDialog = ref(false);
+
+    const selectItem = (item) => {
+      selectedItem.value = item;
+      unlinkDialog.value = true;
+    };
+    const SelectItem = (item) => {
+      selectedItem.value = item;
+      verifyDialog.value = true;
+    };
 
     const onSubmit = () => {
+      loadingBtnDialog.value = true;
       EmployeeState.SET_EMPLOYEES([]);
       ElMessage("Success Verified. ");
       EmployeeState.addverified(route.params.uuid)
@@ -172,11 +247,14 @@ export default defineComponent({
           const employee = EmployeeState.getEmployee;
         })
         .finally(() => {
+          verifyDialog.value = false;
+          loadingBtnDialog.value = false;
           loading.value = false;
         });
     };
 
     const Submit = () => {
+      loadingBtnDialog.value = true;
       EmployeeState.SET_EMPLOYEES([]);
       ElMessage("Success Logout. ");
       EmployeeState.forceLogout(route.params.id)
@@ -184,6 +262,8 @@ export default defineComponent({
           const employee = EmployeeState.getEmployee;
         })
         .finally(() => {
+          unlinkDialog.value = false;
+          loadingBtnDialog.value = false;
           loading.value = false;
         });
     };
@@ -203,19 +283,25 @@ export default defineComponent({
 
     return {
       Employeedetail,
+      unlinkDialog,
       loading,
       employee,
       moment,
       EmployeeModule,
+      verifyDialog,
+      loadingBtnDialog,
       route,
       AuthState,
       store,
+      selectedItem,
       userID,
 
       onSubmit,
       Submit,
+      SelectItem,
       formatDate,
       handleNull,
+      selectItem,
       formatCurrency,
       epochToDateTime,
       handleNullToString,

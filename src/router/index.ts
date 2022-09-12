@@ -71,14 +71,14 @@ const routes: Array<RouteRecordRaw> = [
       // },
 
       // {
-      //   path: "/Outletlist",
+      //   path: "/outlets",
       //   name: "outlet-list",
       //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
       //   component: () => import("@/view/pages/outletlist/ListOutlet.vue"),
       // },
       
       // {
-      //   path: "Outletlist/outlet",
+      //   path: "outlets/outlet",
       //   name: "outlet-detail",
       //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
       //   component: () => import(("@/view/pages/outletlist/DetailOutlet.vue"),),
