@@ -2,13 +2,19 @@
   <div>
     <Loader />
     <div class="row ">
-      <div class="col ">
+      <div class="col-md-4 ">
         <span v-if="employee.verified == '0'">
           <button class="btn btn-sm btn-primary ms-2" @click="SelectItem">
             Verify
           </button></span
         >
         <span v-else-if="employee.verified == '1'"> </span>
+
+
+          <button class="btn btn-sm btn-primary ms-2" @click="showItems">
+            Active
+          </button>
+
       </div>
 
       <div class="col d-flex justify-content-end ">
@@ -18,8 +24,8 @@
       </div>
     </div>
   </div>
-<!-- 
-  <CardDetail /> -->
+
+  <CardDetail />
 
   <div class="row mt-5">
     <div class="col">
@@ -62,6 +68,14 @@
                 {{ handleNullToString(employee.village_name) }}
               </p>
             </div>
+            <div class="col-md-2 pl-5">
+              <p class="fw-bold">Expired Date:</p>
+            </div>
+            <div class="col-md-2">
+              <p class="fw-bold">
+                {{ epochToDateTime(employee.expired_date) }}
+              </p>
+            </div>
           </div>
           <div class="row">
             <div class="col-md-3">
@@ -70,6 +84,14 @@
             <div class="col-md-3">
               <p class="fw-bold">
                 {{ handleNullToString(employee.outlet_sum) }}
+              </p>
+            </div>
+            <div class="col-md-2">
+              <p class="fw-bold">Tipe Akun :</p>
+            </div>
+            <div class="col-md-3">
+              <p class="fw-bold">
+                {{ handleNullToString(employee.subscribe_name) }}
               </p>
             </div>
           </div>
@@ -82,22 +104,11 @@
                 {{ handleNullToString(employee.outlet_name) }}
               </p>
             </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-3">
-              <p class="fw-bold">Bank Account :</p>
-            </div>
-            <div class="col-md-3">
-              <p class="fw-bold">
-                {{ handleNullToString(employee.bank?.bank_code) }}
-                - {{ handleNullToString(employee.bank?.bank_account_number) }}
-              </p>
-            </div>
             <div class="col-md-2 pl-5">
               <p class="fw-bold">No KTP:</p>
             </div>
-            <div class="col-md-2">
+
+                        <div class="col-md-2">
               <p class="fw-bold">
                 {{ handleNullToString(employee.identity_number) }}
               </p>
@@ -112,6 +123,21 @@
                 </span>
               </p>
             </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <p class="fw-bold">Bank Account :</p>
+            </div>
+            <div class="col-md-3">
+              <p class="fw-bold">
+                {{ handleNullToString(employee.bank?.bank_code) }}
+                - {{ handleNullToString(employee.bank?.bank_account_number) }}
+              </p>
+            </div>
+
+
+
           </div>
           <div class="col d-flex justify-content-end ">
             <span v-if="employee.jwt_token_mbl == '1'">
@@ -185,8 +211,53 @@
         </button>
       </template>
     </el-dialog>
+
+    <el-dialog title="Konfirmasi" v-model="subscriptionDialog" width="30%">
+      <div class="row">
+        <div class="col-md-6">
+          <el-select v-model="subsValue" clearable placeholder="Subscribe">
+            <el-option
+              v-for="o in options"
+              autosize
+              :key="o"
+              :label="o.label"
+              :value="o.Value"
+            />
+          </el-select>
+        </div>
+
+        <div class="col-md-6">
+          <el-input
+            v-model="period"
+            autosize
+            type="number"
+            style="width:90%;"
+            placeholder="Priode"
+          />
+        </div>
+      </div>
+
+      <div class="col-md-4 mt-5">
+        <button
+          @click="SubmitActive"
+          class="btn btn-sm btn-primary ms-3"
+          :disabled="loadingBtnDialog"
+          :data-kt-indicator="!loadingBtnDialog ? 'off' : 'on'"
+        >
+          <span v-if="!loadingBtnDialog" class="indicator-label">
+            Aktifkan
+          </span>
+          <span v-else class="indicator-progress">
+            Please wait...
+            <span
+              class="spinner-border spinner-border-sm align-middle ms-2"
+            ></span>
+          </span>
+        </button>
+      </div>
+    </el-dialog>
   </div>
-  <!-- <DetailUser /> -->
+  <DetailUser />
 </template>
 
 <script lang="ts">
@@ -200,7 +271,7 @@ import moment from "moment";
 import { Actions } from "@/store/enums/store.enums";
 import Loader from "@/view/content/Loader.vue";
 import AuthModule from "@/store/modules/AuthModule";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElNotification } from "element-plus";
 import CardDetail from "@/view/pages/users/CardDetail.vue";
 import DetailUser from "@/view/pages/users/DetailUser.vue";
 
@@ -214,7 +285,7 @@ import {
 
 export default defineComponent({
   name: "detail-pengguna",
-  components: { Loader, },
+  components: { Loader, CardDetail, DetailUser },
   setup() {
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);
@@ -224,11 +295,26 @@ export default defineComponent({
     const route = useRoute();
     const EmployeeState = getModule(EmployeeModule);
     const employee = computed(() => EmployeeState.getEmployee);
+    const employees = computed(() => EmployeeState.getEmployees);
     const selectedItem: any = reactive({});
     const unlinkDialog = ref(false);
     const verifyDialog = ref(false);
+    const subscriptionDialog = ref(false);
     const loadingBtnDialog = ref(false);
+    const period = ref<string | Blob>("");
 
+    const subsValue = ref<string | Blob>("");
+    const Value = ref("");
+    const options = ref([
+      {
+        Value: "0",
+        label: "Gratis",
+      },
+      {
+        Value: "1",
+        label: "Berbayar",
+      },
+    ]);
     const selectItem = (item) => {
       selectedItem.value = item;
       unlinkDialog.value = true;
@@ -237,17 +323,75 @@ export default defineComponent({
       selectedItem.value = item;
       verifyDialog.value = true;
     };
+    const showItems = (item) => {
+      selectedItem.value = item;
+      subscriptionDialog.value = true;
+    };
 
     const onSubmit = () => {
       loadingBtnDialog.value = true;
       EmployeeState.SET_EMPLOYEES([]);
       ElMessage("Success Verified. ");
+
       EmployeeState.addverified(route.params.uuid)
         .then(() => {
           const employee = EmployeeState.getEmployee;
         })
         .finally(() => {
           verifyDialog.value = false;
+          loadingBtnDialog.value = false;
+          loading.value = false;
+        });
+    };
+
+    const SubmitActive = () => {
+      loadingBtnDialog.value = true;
+      const formData = new FormData();
+      formData.append("is_free", subsValue.value);
+      formData.append("period", period.value);
+      EmployeeState.activesubscription({
+        uuid: route.params.uuid,
+        formData: formData,
+      })
+        .then((res) => {
+          const employee = EmployeeState.getEmployee;
+          const response = res.data;
+          if (response.status) {
+            ElNotification({
+              title: "Success",
+              type: "success",
+              duration: 2000,
+              customClass: "successNotif",
+              message: "Subscribe Berhasil!",
+            });
+
+            setTimeout(() => {
+              store.dispatch(Actions.ADD_BODY_CLASSNAME, "page-loading");
+              setTimeout(() => {
+                store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "page-loading");
+              }, 1000);
+            }, 2000);
+          } else {
+            ElNotification({
+              title: "Error",
+              type: "error",
+              duration: 2000,
+              customClass: "errorNotif",
+              message: response.error[0].text,
+            });
+          }
+        })
+        .catch(() => {
+          ElNotification({
+            title: "Error",
+            type: "error",
+            duration: 2000,
+            customClass: "successNotif",
+            message: "Harap isi Bidang Yang Sesuai",
+          });
+        })
+        .finally(() => {
+          subscriptionDialog.value = false;
           loadingBtnDialog.value = false;
           loading.value = false;
         });
@@ -285,6 +429,8 @@ export default defineComponent({
       Employeedetail,
       unlinkDialog,
       loading,
+      employees,
+      subscriptionDialog,
       employee,
       moment,
       EmployeeModule,
@@ -295,8 +441,14 @@ export default defineComponent({
       store,
       selectedItem,
       userID,
+      options,
+      subsValue,
+      Value,
+      period,
 
       onSubmit,
+      showItems,
+      SubmitActive,
       Submit,
       SelectItem,
       formatDate,

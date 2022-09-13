@@ -18,6 +18,11 @@ export interface Employee {
   image: string | null;
   bank: string | null;
   user_type: number | null;
+  subscribe_name: string | null,
+  is_free : string | null;
+  period : string;
+  expired_date: string | null;
+
 }
 
 @Module({ name: "EmployeeModule", dynamic: true, store })
@@ -28,13 +33,18 @@ export default class EmployeeModule extends VuexModule {
       name: null,
       bank: null,
       outlet_id: "",
-      outlet_sum: null,
+      outlet_sum: null,      
       verified: null,
       village_name: null,
       outlet_name: null,
       signature_id: null,
       image: null,
+      subscribe_name: null,
       user_type: null,
+      is_free: null,
+      period: "",
+      expired_date: null,
+
     },
   ];
   employee: Employee = {
@@ -49,6 +59,11 @@ export default class EmployeeModule extends VuexModule {
     signature_id: null,
     image: null,
     user_type: null,
+    subscribe_name: null,
+    is_free: null,
+    period: "",
+    expired_date: null,
+
   };
   metaPagination: { next_cursor: string | null; prev_cursor: string | null } = {
     next_cursor: null,
@@ -76,6 +91,12 @@ export default class EmployeeModule extends VuexModule {
   ADD_VERIFIED(payload) {
     this.employee = payload;
   }
+
+  @Mutation
+  ACTIVE_SUBSCRIPTION(payload) {
+    this.employee = payload;
+  }
+
 
   @Mutation
   FORCE_LOGOUT(payload) {
@@ -161,6 +182,20 @@ export default class EmployeeModule extends VuexModule {
       .then((res) => {
         if (res.data.status) {
           this.context.commit("UPDATE_EMPLOYEE", res.data.data);
+        }
+        return res.data;
+      })
+      .catch((err) => console.log(err));
+  }
+
+
+  @Action
+  activesubscription(payload): Promise<any> {
+    return http
+      .post(`/dusky_lory/v1/oklahoma/subscription/${payload.uuid}`, payload.formData, payload.options)
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("ACTIVE_SUBSCRIPTION", res.data.data);
         }
         return res.data;
       })

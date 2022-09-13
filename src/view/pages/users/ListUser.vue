@@ -91,7 +91,7 @@
                 {{ epochToDateTime(scope.row.unix_time) }}
               </template>
             </el-table-column>
-
+            <el-table-column prop="subs_name" label="Tipe Akun" />
             <el-table-column label="Aksi" align="center">
               <template #default="scope">
                 <div class="d-flex justify-content-center my-3">
