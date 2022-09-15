@@ -11,7 +11,7 @@ import { DrawerComponent } from "@/assets/ts/components/_DrawerOptions";
 import WidgetKaryawan from "@/view/content/widgets/stats/WidgetKaryawan.vue";
 import { getModule } from "vuex-module-decorators";
 import DashboardModule from "@/store/modules/DashboardModule";
-import WidgetEntity from "@/view/content/widgets/stats/WidgetEntity.vue";
+import WidgetEntity from "@/view/content/widgets/stats/detailoutlet/WidgetEntity.vue";
 import WidgetBalance from "@/view/content/widgets/stats/WidgetBalance.vue";
 
 export default defineComponent({

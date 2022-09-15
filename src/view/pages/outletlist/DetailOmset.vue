@@ -32,7 +32,7 @@
   
       <!-- begin::entity list -->
       <div class="col-12 col-md-6 col-lg-6 col-xl-6 d-flex">
-        <div class="card w-full">
+        <div class="card w-100">
           <div class="card-body d-flex flex-column">
             <div class="d-flex flex-row justify-content-between">
               <p class="mb-0">Produk Terjual</p>

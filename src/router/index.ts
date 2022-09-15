@@ -85,10 +85,45 @@ const routes: Array<RouteRecordRaw> = [
       // },
       // {
       //   path: "outlets/outlet/omset",
-      //   name: "outlet-omset",
       //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
       //   component: () => import(("@/view/pages/outletlist/DetailOmset.vue"),),
       // },
+      // {
+      //   path: "outlets/outlet/profit",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailProfit.vue"),),
+      // },
+      // {
+      //   path: "outlets/outlet/transaksi",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailTransaksi.vue"),),
+      // },
+      // {
+      //   path: "outlets/outlet/diskon",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailDiskon.vue"),),
+      // },
+      // {
+      //   path: "outlets/outlet/produk",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailProduk.vue"),),
+      // },
+      // {
+      //   path: "outlets/outlet/tipe-produk",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailTipeProduk.vue"),),
+      // },
+      // {
+      //   path: "outlets/outlet/payment-methods",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailPembayaran.vue"),),
+      // },
+      // {
+      //   path: "outlets/outlet/order-methods",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailPemesanan.vue"),),
+      // },
+
 
 
       {

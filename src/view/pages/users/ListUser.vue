@@ -3,8 +3,35 @@
     <div class="card">
       <div class="card-body">
         <div
-          class="mb-5 justity-content-right d-flex justify-content-between align-items-center md:flex-row md:justiify-content-between"
+          class="mb-5 justity-content-right d-flex justify-content-end align-items-center md:flex-row md:justiify-content-between"
         >
+          <div class="d-flex ">
+            <div class="input-group ">
+              <el-select
+                style="border-radius:16px"
+                v-model="filter"
+                class="ms-auto me-3"
+                size="small"
+                clearable
+                placeholder="Select"
+                @change="searchSubs"
+              >
+                <el-option
+                  style="border-radius:16px"
+                  v-for="o in FilterSubmission"
+                  :key="o"
+                  :value="o.value"
+                  :label="o.name"
+                >
+                  <span v-if="o.value == '1'">Sudah Mengajukan</span>
+                  <span v-else-if="o.value == '0'">Belum Mengajukan</span>
+                </el-option>
+              </el-select>
+            </div>
+            <!-- <button class="btn btn-sm btn-primary ms-2" @click="searchSubs">
+              Go
+            </button> -->
+          </div>
           <div class="d-flex ">
             <div class="input-group input-group-sm">
               <input
@@ -38,25 +65,6 @@
             </div>
             <button class="btn btn-sm btn-primary ms-2" @click="searchData">
               Search
-            </button>
-          </div>
-
-          <div class="d-flex ">
-            <div class="input-group input-group-sm">
-              <el-select v-model="filter" clearable placeholder="Select">
-                <el-option
-                  v-for="o in FilterSubmission"
-                  :key="o"
-                  :value="o.value"
-                  :label="o.name"
-                >
-                  <span v-if="o.value == '1'">Sudah Mengajukan</span>
-                  <span v-else-if="o.value == '0'">Belum Mengajukan</span>
-                </el-option>
-              </el-select>
-            </div>
-            <button class="btn btn-sm btn-primary ms-2" @click="searchSubs">
-              Go
             </button>
           </div>
         </div>
@@ -240,6 +248,16 @@ export default defineComponent({
       }).finally(() => (loadingDatatable.value = false));
     };
 
+    const changeOutlet = () => {
+      loadingDatatable.value = true;
+      EmployeeState.getEmployeesAPI({
+        outletId: myOutletId.value,
+        search: search.value,
+        cursor: cursor.value,
+        perPage: perPage.value,
+      }).finally(() => (loadingDatatable.value = false));
+    };
+
     const clearSearch = () => {
       search.value = "";
       cursor.value = "";
@@ -317,6 +335,7 @@ export default defineComponent({
       metaPagination,
       employee,
       epochToDateTime,
+      changeOutlet,
       searchSubs,
       textSearch,
       clearSearch,

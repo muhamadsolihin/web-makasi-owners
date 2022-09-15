@@ -12,33 +12,43 @@
       <!-- <StatsWidget4></StatsWidget4> -->
     </div>
     <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
-      <WidgetTransaction :value="widgets.all_transaction" />
+      <WidgetTransaksi :value="widgets.diskon" />
       <!-- <StatsWidget5></StatsWidget5> -->
     </div>
     <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
-      <WidgetOnlineTransaction :value="widgets.transaction_online" />
+      <WidgetDiskon :value="widgets.all_transaction" />
       <!-- <StatsWidget5></StatsWidget5> -->
     </div>
+
     <!-- </div> -->
 
     <!-- <div class="row g-5 g-xxl-8"> -->
     <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
-      <WidgetProductSelled :value="widgets.total_product" />
+      <WidgetProduk :value="widgets.produk" />
       <!-- <StatsWidget3></StatsWidget3> -->
     </div>
     <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
-      <WidgetCustomer :value="widgets.customer" />
+      <WidgetTipeProduk :value="widgets.customer" />
+      <!-- <StatsWidget4></StatsWidget4> -->
+    </div>
+    <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
+      <WidgetPembayaran :value="widgets.customer" />
+      <!-- <StatsWidget4></StatsWidget4> -->
+    </div>
+    <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
+      <WidgetPemesanan :value="widgets.customer" />
       <!-- <StatsWidget4></StatsWidget4> -->
     </div>
 
-    <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
+
+    <!-- <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
       <WidgetTransactionCash :value="widgets.transaction_cash" />
-      <!-- <StatsWidget5></StatsWidget5> -->
-    </div>
-    <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
+       <StatsWidget5></StatsWidget5> 
+    </div> -->
+    <!-- <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
       <WidgetTransactionNonCash :value="widgets.transaction_non_cash" />
-      <!-- <StatsWidget5></StatsWidget5> -->
-    </div>
+       <StatsWidget5></StatsWidget5> 
+    </div> -->
 
   </div>
 
@@ -62,20 +72,21 @@ import { computed, defineComponent, onMounted, ref } from "vue";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
 import { DrawerComponent } from "@/assets/ts/components/_DrawerOptions";
 
-import WidgetEntity from "@/view/content/widgets/stats/WidgetEntity.vue";
-import WidgetProfit from "@/view/content/widgets/stats/WidgetProfit.vue";
-import WidgetTransaction from "@/view/content/widgets/stats/WidgetTransaction.vue";
-import WidgetOnlineTransaction from "@/view/content/widgets/stats/WidgetOnlineTransaction.vue";
-import WidgetProductSelled from "@/view/content/widgets/stats/WidgetProductSelled.vue";
-import WidgetCustomer from "@/view/content/widgets/stats/WidgetCustomer.vue";
-import WidgetTransactionCash from "@/view/content/widgets/stats/WidgetTransactionCash.vue";
-import WidgetTransactionNonCash from "@/view/content/widgets/stats/WidgetTransactionNonCash.vue";
+import WidgetEntity from "@/view/content/widgets/stats/detailoutlet/WidgetEntity.vue";
+import WidgetProfit from "@/view/content/widgets/stats/detailoutlet/WidgetProfit.vue";
+import WidgetTransaksi from "@/view/content/widgets/stats/detailoutlet/WidgetTransaksi.vue";
+import WidgetDiskon from "@/view/content/widgets/stats/detailoutlet/WidgetDiskon.vue";
+import WidgetProduk from "@/view/content/widgets/stats/detailoutlet/WidgetProduk.vue";
+import WidgetTipeProduk from "@/view/content/widgets/stats/detailoutlet/WidgetTipeProduk.vue";
+
+import WidgetPembayaran from "@/view/content/widgets/stats/detailoutlet/WidgetPembayaran.vue";
 
 
 
 
 import { getModule } from "vuex-module-decorators";
 import DashboardModule from "@/store/modules/DashboardModule";
+import WidgetPemesanan from "../../content/widgets/stats/detailoutlet/WidgetPemesanan.vue";
 
 export default defineComponent({
   name: "light",
@@ -92,15 +103,13 @@ export default defineComponent({
     // StatsWidget2,
     WidgetEntity,
     WidgetProfit,
-    WidgetTransaction,
-    WidgetOnlineTransaction,
-    WidgetProductSelled,
-    WidgetCustomer,
-    WidgetTransactionCash,
-    WidgetTransactionNonCash,
-
-
-  },
+    WidgetDiskon,
+    WidgetProduk,
+    WidgetTipeProduk,
+    WidgetTransaksi,
+    WidgetPembayaran,
+    WidgetPemesanan
+},
   setup() {
     const filteredOutlet = ref<string>("");
     const typeFilter = ref<number>(1);
