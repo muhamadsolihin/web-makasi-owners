@@ -4,17 +4,28 @@
     <div class="row ">
       <div class="col-md-4 ">
         <span v-if="employee.verified == '0'">
-          <button class="btn btn-sm btn-primary ms-2" @click="SelectItem">
-            Verify
-          </button></span
+          <span v-if="employee.is_submission == '1'">
+            <button class="btn btn-sm btn-primary ms-2" @click="SelectItem">
+              Verify
+            </button></span
+          ></span
         >
         <span v-else-if="employee.verified == '1'"> </span>
+        <span v-else-if="employee.is_submission == '0'"> </span>
 
+        <button class="btn btn-sm btn-primary ms-2" @click="showItems">
+          Aktifkan Subscribe
+        </button>
 
-          <button class="btn btn-sm btn-primary ms-2" @click="showItems">
-            Active
-          </button>
-
+        <span v-if="employee.verified == '0'">
+          <span v-if="employee.is_submission == '1'">
+            <button class="btn btn-sm btn-primary ms-2" @click="SelectReject">
+              Reject
+            </button></span
+          ></span
+        >
+        <span v-else-if="employee.verified == '1'"> </span>
+        <span v-else-if="employee.is_submission == '0'"> </span>
       </div>
 
       <div class="col d-flex justify-content-end ">
@@ -108,7 +119,7 @@
               <p class="fw-bold">No KTP:</p>
             </div>
 
-                        <div class="col-md-2">
+            <div class="col-md-2">
               <p class="fw-bold">
                 {{ handleNullToString(employee.identity_number) }}
               </p>
@@ -135,9 +146,6 @@
                 - {{ handleNullToString(employee.bank?.bank_account_number) }}
               </p>
             </div>
-
-
-
           </div>
           <div class="col d-flex justify-content-end ">
             <span v-if="employee.jwt_token_mbl == '1'">
@@ -256,6 +264,37 @@
         </button>
       </div>
     </el-dialog>
+
+    <el-dialog title="Konfirmasi" v-model="rejectDialog" width="30%">
+      <div class="mb-5">
+        <i
+          class="bi bi-exclamation-triangle text-danger me-3"
+          style="font-size: 1.5rem"
+        ></i>
+        <span>Are you sure you want to proceed?</span>
+      </div>
+      <template #footer>
+        <button @click="rejectDialog = false" class="btn btn-sm btn-secondary">
+          No
+        </button>
+        <button
+          @click="SubmitReject"
+          class="btn btn-sm btn-primary ms-3"
+          :disabled="loadingBtnDialog"
+          :data-kt-indicator="!loadingBtnDialog ? 'off' : 'on'"
+        >
+          <span v-if="!loadingBtnDialog" class="indicator-label">
+            Yes
+          </span>
+          <span v-else class="indicator-progress">
+            Please wait...
+            <span
+              class="spinner-border spinner-border-sm align-middle ms-2"
+            ></span>
+          </span>
+        </button>
+      </template>
+    </el-dialog>
   </div>
   <DetailUser />
 </template>
@@ -299,6 +338,7 @@ export default defineComponent({
     const selectedItem: any = reactive({});
     const unlinkDialog = ref(false);
     const verifyDialog = ref(false);
+    const rejectDialog = ref(false);
     const subscriptionDialog = ref(false);
     const loadingBtnDialog = ref(false);
     const period = ref<string | Blob>("");
@@ -327,12 +367,15 @@ export default defineComponent({
       selectedItem.value = item;
       subscriptionDialog.value = true;
     };
+    const SelectReject = (item) => {
+      selectedItem.value = item;
+      rejectDialog.value = true;
+    };
 
     const onSubmit = () => {
       loadingBtnDialog.value = true;
       EmployeeState.SET_EMPLOYEES([]);
       ElMessage("Success Verified. ");
-
       EmployeeState.addverified(route.params.uuid)
         .then(() => {
           const employee = EmployeeState.getEmployee;
@@ -397,6 +440,23 @@ export default defineComponent({
         });
     };
 
+
+   
+    const SubmitReject = () => {
+      loadingBtnDialog.value = true;
+      EmployeeState.SET_EMPLOYEES([]);
+      ElMessage("Success Reject. ");
+      EmployeeState.rejectverified(route.params.uuid)
+        .then(() => {
+          const employee = EmployeeState.getEmployee;
+        })
+        .finally(() => {
+          rejectDialog.value = false;
+          loadingBtnDialog.value = false;
+          loading.value = false;
+        });
+    };
+
     const Submit = () => {
       loadingBtnDialog.value = true;
       EmployeeState.SET_EMPLOYEES([]);
@@ -445,8 +505,11 @@ export default defineComponent({
       subsValue,
       Value,
       period,
+      rejectDialog,
 
       onSubmit,
+      SubmitReject,
+      SelectReject,
       showItems,
       SubmitActive,
       Submit,

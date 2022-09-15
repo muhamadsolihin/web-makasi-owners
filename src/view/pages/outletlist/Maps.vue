@@ -1,18 +1,22 @@
 <template>
-  <div class="row mt-5 p-5 bg-white ml-5">
-    <div class="col-md-6 ">
+  <div class="row mt-5 justify-content-center bg-transparent">
+    <div class="col-md-5 ml-5 "
+
+    >
       <GoogleMap
         api-key="AIzaSyAC1LXjnlql-0uZ3D8J9jLF9PO1_LF0nxA"
-        style="width: 100%; height: 300px; margin-left: 10px;"
+        style="width: 100%; height: 300px; margin-left: 10px; border-radius: 20px;"
         :center="center"
         :zoom="15"
+        
       >
         <Marker :options="{ position: center }" />
       </GoogleMap>
     </div>
-    <div class="col-md-6 ">
-      <CardBalance/>
-
+    <div class="col-md-5 bg-white"
+    style="margin-left:1em"
+    >
+      <CardBalance />
     </div>
   </div>
 </template>

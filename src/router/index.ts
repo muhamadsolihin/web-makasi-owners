@@ -49,40 +49,46 @@ const routes: Array<RouteRecordRaw> = [
       },
 
 
-      {
-        path: "/voucher",
-        name: "voucher",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/voucher/ListVoucher.vue"),
-      },
+      // {
+      //   path: "/voucher",
+      //   name: "voucher",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/voucher/ListVoucher.vue"),
+      // },
 
-      {
-        path: "/voucher/Add",
-        name: "add-voucher",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/voucher/Add.vue"),
-      },
+      // {
+      //   path: "/voucher/Add",
+      //   name: "add-voucher",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/voucher/Add.vue"),
+      // },
 
-      {
-        path: "/voucher/Detail",
-        name: "detail-voucher",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/voucher/Detail.vue"),
-      },
+      // {
+      //   path: "/voucher/Detail",
+      //   name: "detail-voucher",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/voucher/Detail.vue"),
+      // },
 
-      {
-        path: "/outlets",
-        name: "outlet-list",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/outletlist/ListOutlet.vue"),
-      },
+      // {
+      //   path: "/outlets",
+      //   name: "outlet-list",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/outletlist/ListOutlet.vue"),
+      // },
       
-      {
-        path: "outlets/outlet",
-        name: "outlet-detail",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true},
-        component: () => import(("@/view/pages/outletlist/DetailOutlet.vue"),),
-      },
+      // {
+      //   path: "outlets/outlet",
+      //   name: "outlet-detail",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailOutlet.vue"),),
+      // },
+      // {
+      //   path: "outlets/outlet/omset",
+      //   name: "outlet-omset",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailOmset.vue"),),
+      // },
 
 
       {

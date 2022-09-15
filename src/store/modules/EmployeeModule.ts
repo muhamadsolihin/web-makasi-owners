@@ -19,6 +19,7 @@ export interface Employee {
   bank: string | null;
   user_type: number | null;
   subscribe_name: string | null,
+  is_submission: string | null,
   is_free : string | null;
   period : string;
   expired_date: string | null;
@@ -44,6 +45,7 @@ export default class EmployeeModule extends VuexModule {
       is_free: null,
       period: "",
       expired_date: null,
+      is_submission: null,     
 
     },
   ];
@@ -63,6 +65,7 @@ export default class EmployeeModule extends VuexModule {
     is_free: null,
     period: "",
     expired_date: null,
+    is_submission: null,     
 
   };
   metaPagination: { next_cursor: string | null; prev_cursor: string | null } = {
@@ -89,6 +92,12 @@ export default class EmployeeModule extends VuexModule {
 
   @Mutation
   ADD_VERIFIED(payload) {
+    this.employee = payload;
+  }
+
+  
+  @Mutation
+  REJECT_VERIFIED(payload) {
     this.employee = payload;
   }
 
@@ -201,4 +210,18 @@ export default class EmployeeModule extends VuexModule {
       })
       .catch((err) => console.log(err));
   }
+
+  @Action
+  rejectverified(payload): Promise<any> {
+    return http
+      .post(`/dusky_lory/v1/oklahoma/reject-verification/${payload}`)
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("REJECT_VERIFIED", res.data.data);
+        }
+      })
+      .catch((err) => console.log(err));
+  }
 }
+
+

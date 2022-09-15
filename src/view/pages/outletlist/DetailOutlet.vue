@@ -8,10 +8,8 @@
         </button>
       </div>
     </div>
-    <ChartCard class="mt-3" :name="`Grafik ${selectedEntity}`" />
-    <CardEntity />
   </div>
-
+  <CardEntity/>
   <div class="row mt-5">
     <div class="col">
       <div class="card">
@@ -101,7 +99,6 @@
     <Maps />
   </div>
   <TabMenu />
-
 </template>
 
 <script lang="ts">
@@ -117,7 +114,6 @@ import Loader from "@/view/content/Loader.vue";
 import AuthModule from "@/store/modules/AuthModule";
 import { ElMessage } from "element-plus";
 import TabMenu from "@/view/pages/outletlist/TabMenu.vue";
-import ChartCard from "@/view/pages/outletlist/components/ChartCard.vue";
 
 import {
   handleNullToString,
@@ -127,11 +123,12 @@ import {
   handleNull,
 } from "@/helper";
 import Maps from "./Maps.vue";
-import CardEntity from "@/view/pages/outletlist/CardEntity.vue";
+import CardEntity from "./CardEntity.vue";
+
 
 export default defineComponent({
   name: "detail-pengguna",
-  components: { Loader, TabMenu, Maps, CardEntity, ChartCard },
+  components: { Loader, TabMenu, Maps, CardEntity },
   setup() {
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);
@@ -141,6 +138,7 @@ export default defineComponent({
     const route = useRoute();
     const EmployeeState = getModule(EmployeeModule);
     const employee = computed(() => EmployeeState.getEmployee);
+    const selectedEntity = ref<string>('Omset');
 
     const FilterSubmission = ref([
       {
@@ -203,6 +201,7 @@ export default defineComponent({
       AuthState,
       store,
       userID,
+      selectedEntity,
 
       onSubmit,
       Submit,

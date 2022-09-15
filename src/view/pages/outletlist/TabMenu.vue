@@ -1,17 +1,17 @@
 <template>
   <div class="row mt-5">
-    <div class="col">
+    <div class="col-md-12 justify-content-center align-items-center">
       <div class="card">
-        <div class="card-body">
+        <div class="card-body py-5 justify-content-left align-items-left" >
           <el-tabs
             v-model="activeName"
             class="col demo-tabs"
             @tab-click="handleClick"
           >
-            <el-tab-pane label="karyawan" name="first">
+            <el-tab-pane label="karyawan" name="first" >
               <CardKaryawan />
             </el-tab-pane>
-            <el-tab-pane label="Pesanan Online" name="second"
+            <el-tab-pane  label="Pesanan Online" name="second"
               >Pesanan Online</el-tab-pane
             >
             <el-tab-pane label="Pelanggan" name="third">
@@ -21,7 +21,7 @@
               <TransaksiList />
             </el-tab-pane>
             <el-tab-pane label="Transaksi Kasbon" name="seven"
-              >Laporan</el-tab-pane
+              ><CardKasbon /></el-tab-pane
             >
           </el-tabs>
         </div>
@@ -43,10 +43,11 @@ import { ElMessage } from "element-plus";
 import CardKaryawan from "@/view/pages/outletlist/CardKaryawan.vue";
 import CardPelanggan from "@/view/pages/outletlist/CardPelanggan.vue";
 import TransaksiList from "@/view/pages/outletlist/components/TransaksiList.vue";
+import CardKasbon from "@/view/pages/outletlist/CardKasbon.vue";
 
 export default defineComponent({
   name: "detail-Voucher",
-  components: { CardKaryawan, CardPelanggan, TransaksiList },
+  components: { CardKaryawan, CardPelanggan, TransaksiList, CardKasbon },
   setup() {
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);

@@ -128,6 +128,7 @@ export default class LoginModule extends VuexModule implements StoreInfo {
   }
 
   @Action
+  
   postLogin(payload): Promise<any> {
     return http.post(`${SERVICE_API}/v1/login`, payload)
     .then(async res => {
@@ -145,16 +146,15 @@ export default class LoginModule extends VuexModule implements StoreInfo {
 
   @Action
   postLogout(): Promise<any> {
-    return http.post(`${SERVICE_API}/v1/logout`)
-    .then(res => {
+    return http.post('/toucan/v1/logout').then(res => {
       if (res.data.status) {
+        this.context.commit('SET_USER', {});
         JwtService.destroyToken();
-        this.context.commit("SET_USER", {});
-        window.localStorage.removeItem("token_fcm")
-        window.localStorage.removeItem("UNIQ_ID")
+        window.sessionStorage.removeItem('token_fcm');
+        window.sessionStorage.removeItem('UNIQ_ID');
         router.push('/login');
-      } 
-      return res.data
-    })
+      }
+      return res.data;
+    });
   }
 }
