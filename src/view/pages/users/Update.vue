@@ -36,7 +36,7 @@
     </div>
   </div>
 
-  <CardDetail />
+  <!-- <CardDetail /> -->
 
   <div class="row mt-5">
     <div class="col">
@@ -296,7 +296,7 @@
       </template>
     </el-dialog>
   </div>
-  <DetailUser />
+  <!-- <DetailUser /> -->
 </template>
 
 <script lang="ts">
@@ -324,7 +324,7 @@ import {
 
 export default defineComponent({
   name: "detail-pengguna",
-  components: { Loader, CardDetail, DetailUser },
+  components: { Loader,  },
   setup() {
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);
