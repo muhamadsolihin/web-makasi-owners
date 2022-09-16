@@ -20,14 +20,7 @@
           <div class="fs-1 text-gray-800 fw-bolder mt-1">
             Rp {{ formatCurrency(value) }}
           </div>
-          <div class="col" >
-          <el-button
-              id="detail"
-              @click="$router.push(`/outlets/outlet/omset`)"
-              class="bg-transparent "
-              style="border:none; text-align: left !important; float: left; margin-left: -1.5em; color:#E60023"
-              >lihat Detail</el-button
-            ></div>
+
         </div>
         <!--end::Title-->
       </div>
