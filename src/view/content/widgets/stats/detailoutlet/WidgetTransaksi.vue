@@ -3,15 +3,15 @@
     <!--begin::Body-->
     <div class="card-body">
       <!--begin::Section-->
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center justify-content-center">
         <!--begin::Symbol-->
-        <div class="symbol symbol-60px me-5">
+        <!-- <div class="symbol symbol-60px me-5">
           <span class="symbol-label bg-light-info">
             <span class="svg-icon svg-icon-2x svg-icon-info">
               <i class="bi bi-basket text-info" style="font-size: 3rem"></i>
             </span>
           </span>
-        </div>
+        </div> -->
         <!--end::Symbol-->
 
         <!--begin::Title-->

@@ -102,10 +102,12 @@ export default defineComponent({
         animateRotate: true,
       },
     });
+
     return {
       dataSeries,
       chartOptions,
-      props
+      props,
+      formatCurrency,
     };
   },
 });

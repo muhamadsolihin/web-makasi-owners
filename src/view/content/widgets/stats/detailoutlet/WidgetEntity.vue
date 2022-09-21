@@ -3,20 +3,21 @@
     <!--begin::Body-->
     <div class="card-body">
       <!--begin::Section-->
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center justify-content-center">
+        
         <!--begin::Symbol-->
-        <div class="symbol symbol-60px me-5">
+        <!-- <div class="symbol symbol-60px me-5">
           <span class="symbol-label bg-light-primary">
             <span class="svg-icon svg-icon-2x svg-icon-primary">
               <i class="bi bi-cash text-primary" style="font-size: 1.75rem"></i>
             </span>
           </span>
-        </div>
+        </div> -->
         <!--end::Symbol-->
 
         <!--begin::Title-->
         <div>
-          <a href="#" class="fs-4 text-gray-800 fw-bolder">Omset</a>
+          <a href="#" class="fs-4 text-gray-800 fw-bolder ">Omset</a>
           <div class="fs-1 text-gray-800 fw-bolder mt-1">
             Rp {{ formatCurrency(value) }}
           </div>

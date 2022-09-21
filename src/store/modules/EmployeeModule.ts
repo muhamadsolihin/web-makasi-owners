@@ -8,8 +8,10 @@ const CORE_URL_API = "/dusky_lory/";
 /* eslint-disable */
 export interface Employee {
   uuid: string;
+  id: number | null;
   signature_id: number | null;
   name: string | null;
+  email_account: string | null;
   outlet_sum: string | null;
   outlet_id: string;
   verified: string | null;
@@ -18,12 +20,11 @@ export interface Employee {
   image: string | null;
   bank: string | null;
   user_type: number | null;
-  subscribe_name: string | null,
-  is_submission: string | null,
-  is_free : string | null;
-  period : string;
+  subscribe_name: string | null;
+  is_submission: string | null;
+  is_free: string | null;
+  period: string;
   expired_date: string | null;
-
 }
 
 @Module({ name: "EmployeeModule", dynamic: true, store })
@@ -31,10 +32,12 @@ export default class EmployeeModule extends VuexModule {
   employees: Employee[] = [
     {
       uuid: "",
+      id: null,
       name: null,
+      email_account: null,
       bank: null,
       outlet_id: "",
-      outlet_sum: null,      
+      outlet_sum: null,
       verified: null,
       village_name: null,
       outlet_name: null,
@@ -45,13 +48,14 @@ export default class EmployeeModule extends VuexModule {
       is_free: null,
       period: "",
       expired_date: null,
-      is_submission: null,     
-
+      is_submission: null,
     },
   ];
   employee: Employee = {
     uuid: "",
+    id: null,
     name: null,
+    email_account: null,
     outlet_sum: null,
     outlet_id: "",
     verified: null,
@@ -65,8 +69,7 @@ export default class EmployeeModule extends VuexModule {
     is_free: null,
     period: "",
     expired_date: null,
-    is_submission: null,     
-
+    is_submission: null,
   };
   metaPagination: { next_cursor: string | null; prev_cursor: string | null } = {
     next_cursor: null,
@@ -74,6 +77,10 @@ export default class EmployeeModule extends VuexModule {
   };
 
   get getEmployees() {
+    return this.employees;
+  }
+
+  get getKaryawans() {
     return this.employees;
   }
 
@@ -85,8 +92,25 @@ export default class EmployeeModule extends VuexModule {
     return this.employee;
   }
 
+  get getMyOutletId() {
+    return this.employee.outlet_id
+      ? this.employee.outlet_id
+      : window.localStorage.getItem("UNIQ_ID");
+  }
+
+  get getUserId() {
+    return this.employee.id
+      ? this.employee.id
+      : window.localStorage.getItem("UNIQ_ID");
+  }
+
   @Mutation
   SET_EMPLOYEES(payload) {
+    this.employees = payload;
+  }
+
+  @Mutation
+  SET_KARYAWANS(payload) {
     this.employees = payload;
   }
 
@@ -95,7 +119,6 @@ export default class EmployeeModule extends VuexModule {
     this.employee = payload;
   }
 
-  
   @Mutation
   REJECT_VERIFIED(payload) {
     this.employee = payload;
@@ -105,7 +128,6 @@ export default class EmployeeModule extends VuexModule {
   ACTIVE_SUBSCRIPTION(payload) {
     this.employee = payload;
   }
-
 
   @Mutation
   FORCE_LOGOUT(payload) {
@@ -197,11 +219,14 @@ export default class EmployeeModule extends VuexModule {
       .catch((err) => console.log(err));
   }
 
-
   @Action
   activesubscription(payload): Promise<any> {
     return http
-      .post(`/dusky_lory/v1/oklahoma/subscription/${payload.uuid}`, payload.formData, payload.options)
+      .post(
+        `/dusky_lory/v1/oklahoma/subscription/${payload.uuid}`,
+        payload.formData,
+        payload.options
+      )
       .then((res) => {
         if (res.data.status) {
           this.context.commit("ACTIVE_SUBSCRIPTION", res.data.data);
@@ -222,6 +247,36 @@ export default class EmployeeModule extends VuexModule {
       })
       .catch((err) => console.log(err));
   }
+  @Action
+  getKaryawansAPI(payload) {
+    return http
+      .get(
+        `/dusky_lory/v1/employee/${payload.UserId}?perpage=10&outlet_id=`
+      )
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("SET_EMPLOYEES", res.data.data);
+          this.context.commit("SET_META_PAGINATION", res.data.meta);
+        }
+        return res;
+      })
+      .catch((err) => console.log(err));
+  }
+
+  @Action
+  getKaryawanShow(payload) {
+    return http
+      .get(
+        `/dusky_lory/v1/hawaii/emp/${payload}`
+        
+      )
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("SET_EMPLOYEES", res.data.data);
+          this.context.commit("SET_META_PAGINATION", res.data.meta);
+        }
+        return res;
+      })
+      .catch((err) => console.log(err));
+  }
 }
-
-

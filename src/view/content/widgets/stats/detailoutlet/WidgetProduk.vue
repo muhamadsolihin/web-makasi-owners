@@ -3,9 +3,9 @@
       <!--begin::Body-->
       <div class="card-body">
         <!--begin::Section-->
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center justify-content-center">
           <!--begin::Symbol-->
-          <div class="symbol symbol-60px me-5">
+          <!-- <div class="symbol symbol-60px me-5">
             <span class="symbol-label" style="background-color: #F1FAFF">
               <span class="svg-icon svg-icon-2x svg-icon-success">
                 <i
@@ -14,7 +14,7 @@
                 ></i>
               </span>
             </span>
-          </div>
+          </div> -->
           <!--end::Symbol-->
   
           <!--begin::Title-->

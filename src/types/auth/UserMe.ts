@@ -1,6 +1,7 @@
 /* eslint-disable */ 
 export interface UserMe {
   uuid: string,
+  id: string | null,
   signature_id: string | null,
   user_name: string | null,
   outlet_name: string | null,

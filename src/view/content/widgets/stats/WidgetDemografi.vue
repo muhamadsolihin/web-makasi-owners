@@ -36,7 +36,9 @@
           class="fw-bolder fs-1 text-gray-800 position-absolute"
           v-if="(items as any)[0]?.name.length"
         >
-          {{ totalPercentage }}
+        {{
+            totalPercentage % 10 != 0 ? totalPercentage.toFixed(2) : totalPercentage
+          }}
         </div>
         <apexchart
           v-if="(items as any)[0]?.name.length"

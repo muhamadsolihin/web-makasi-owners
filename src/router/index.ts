@@ -23,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
       },
 
       {
-        path: "users/user/:uuid/:id/",
+        path: "users/:uuid/:id/",
         name: "otletlist-update",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
         component: () => import("@/view/pages/users/Update.vue"),
@@ -47,6 +47,13 @@ const routes: Array<RouteRecordRaw> = [
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
         component: () => import("@/view/pages/users/DetailOutlet.vue"),
       },
+      {
+        path: "users/:uuid",
+        name: "DetailOutlet",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/users/DetailEmployee.vue"),
+      },
+
 
 
       // {
@@ -846,7 +853,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/logout",
     name: "logout",
-    component: () => import("@/view/pages/auth/Logout.vue"),
+    component: () => import("@/view/pages/auth/Login.vue"),
   },
   // {
   //   path: "/registration/confirmation-code",

@@ -131,13 +131,20 @@
     </div>
   </template>
   
-  <script lang="ts" setup>
-  import { ref, onMounted } from 'vue';
+  <script lang="ts">
+  import { ref, onMounted, defineComponent } from 'vue';
   import moment from 'moment';
   
   import { setCurrentPageBreadcrumbs } from '@/core/helpers/breadcrumbs/breadcrumb';
   import { formatCurrency } from '@/helper';
-  
+  import PieChartCard from './components/PieChartCard.vue'
+
+
+  export default defineComponent({
+  name: "employee",
+  components: {},
+  setup() {
+
   const filterRangeDate = ref<any[]>([
     moment()
       .subtract(7, 'days')
@@ -152,5 +159,12 @@
   onMounted(() => {
     setCurrentPageBreadcrumbs('Dashboard', 'Produk');
   });
+  return {
+    formatCurrency,
+    filterRangeDate,
+    changeFilterDateRange,
+    };
+},
+});
   </script>
   

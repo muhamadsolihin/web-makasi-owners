@@ -8,8 +8,8 @@
             <button class="btn btn-sm btn-primary ms-2" @click="SelectItem">
               Verify
             </button></span
-          ></span
-        >
+          >
+        </span>
         <span v-else-if="employee.verified == '1'"> </span>
         <span v-else-if="employee.is_submission == '0'"> </span>
 
@@ -68,6 +68,33 @@
               <p class="fw-bold">
                 {{ epochToDateTime(employee.created_at) }}
               </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <p class="fw-bold">No Telp :</p>
+            </div>
+            <div class="col-md-3">
+              <!-- <p class="fw-bold">
+                {{ handleNullToString(employee.name) }}
+                <span v-if="employee.verified == '0'"></span>
+                <span v-else-if="employee.verified == '1'"
+                  ><i
+                    class="bi bi-patch-check-fill text-danger me-3"
+                    style="font-size: 1.3rem"
+                    prop="verified"
+                  >
+                  </i
+                ></span>
+              </p> -->
+            </div>
+            <div class="col-md-2 pl-5">
+              <p class="fw-bold">Email :</p>
+            </div>
+            <div class="col-md-2">
+              <!-- <p class="fw-bold">
+                {{ epochToDateTime(employee.created_at) }}
+              </p> -->
             </div>
           </div>
           <div class="row">
@@ -297,6 +324,9 @@
     </el-dialog>
   </div>
   <!-- <DetailUser /> -->
+  <div>
+    <ListEmployee />
+  </div>
 </template>
 
 <script lang="ts">
@@ -313,6 +343,7 @@ import AuthModule from "@/store/modules/AuthModule";
 import { ElMessage, ElNotification } from "element-plus";
 import CardDetail from "@/view/pages/users/CardDetail.vue";
 import DetailUser from "@/view/pages/users/DetailUser.vue";
+import ListEmployee from "@/view/pages/users/ListEmployee.vue";
 
 import {
   handleNullToString,
@@ -324,7 +355,7 @@ import {
 
 export default defineComponent({
   name: "detail-pengguna",
-  components: { Loader,  },
+  components: { Loader,  ListEmployee },
   setup() {
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);
@@ -375,14 +406,17 @@ export default defineComponent({
     const onSubmit = () => {
       loadingBtnDialog.value = true;
       EmployeeState.SET_EMPLOYEES([]);
+      location.reload();
       ElMessage("Success Verified. ");
       EmployeeState.addverified(route.params.uuid)
         .then(() => {
           const employee = EmployeeState.getEmployee;
         })
         .finally(() => {
+          rejectDialog.value = false;
           verifyDialog.value = false;
           loadingBtnDialog.value = false;
+          location.reload();
           loading.value = false;
         });
     };
@@ -434,14 +468,13 @@ export default defineComponent({
           });
         })
         .finally(() => {
+          rejectDialog.value = false;
           subscriptionDialog.value = false;
           loadingBtnDialog.value = false;
           loading.value = false;
         });
     };
 
-
-   
     const SubmitReject = () => {
       loadingBtnDialog.value = true;
       EmployeeState.SET_EMPLOYEES([]);
@@ -466,6 +499,7 @@ export default defineComponent({
           const employee = EmployeeState.getEmployee;
         })
         .finally(() => {
+          rejectDialog.value = false;
           unlinkDialog.value = false;
           loadingBtnDialog.value = false;
           loading.value = false;

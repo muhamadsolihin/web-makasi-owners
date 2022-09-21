@@ -2,111 +2,34 @@
   <div>
     <div class="card">
       <div class="card-body">
-        <div
-          class="mb-5 justity-content-right d-flex justify-content-end align-items-center md:flex-row md:justiify-content-between"
-        >
-          <div class="d-flex ">
-            <div class="input-group ">
-              <el-select
-                style="border-radius:16px"
-                v-model="filter"
-                class="ms-auto me-3"
-                size="small"
-                clearable
-                placeholder="Select"
-                @change="searchSubs"
-              >
-                <el-option
-                  style="border-radius:16px"
-                  v-for="o in FilterSubmission"
-                  :key="o"
-                  :value="o.value"
-                  :label="o.name"
-                >
-                  <span v-if="o.value == '1'">Sudah Mengajukan</span>
-                  <span v-else-if="o.value == '0'">Belum Mengajukan</span>
-                </el-option>
-              </el-select>
-            </div>
-            <!-- <button class="btn btn-sm btn-primary ms-2" @click="searchSubs">
-              Go
-            </button> -->
-          </div>
-          <div class="d-flex ">
-            <div class="input-group input-group-sm">
-              <input
-                type="text"
-                v-model="search"
-                @keyup="textSearch"
-                class="form-control form-control-sm"
-                :class="{
-                  'border-right-white': clearable,
-                  'border-right-default': !clearable,
-                  'rounded-end': !clearable,
-                }"
-                placeholder="Search..."
-                style="border-right-color: white"
-              />
-              <span
-                class="input-group-text"
-                :class="{
-                  'border-left-white': clearable,
-                  'd-inline-block': clearable,
-                  'd-none': !clearable,
-                }"
-                style="background-color: white;"
-              >
-                <i
-                  class="bi bi-x-lg fw-bold"
-                  style="cursor: pointer"
-                  @click="clearSearch"
-                ></i>
-              </span>
-            </div>
-            <button class="btn btn-sm btn-primary ms-2" @click="searchData">
-              Search
-            </button>
-          </div>
-        </div>
-
         <div class="rounded border border-1 p-2">
+          <div class="col-12 d-flex flex-column justify-content-end" id="chart">
+            <!-- begin::filter date -->
+          </div>
+
           <el-table
             :data="employees"
-            v-loading="loadingDatatable"
-            :default-sort="{ prop: 'name', order: 'descending' }"
             style="width: 100%"
+            @selection-change="handleSelectionChange"
+            v-loading="loadingDatatable"
             table-layout="fixed"
           >
-            <el-table-column label="Nama" width="220">
-              <template #default="scope">
-                {{ scope.row.name }}
-                <span v-if="scope.row.verified == '0'"></span>
-                <span v-else-if="scope.row.verified == '1'">
-                  <i
-                    class="bi bi-patch-check-fill text-danger me-3"
-                    style="font-size: 1.5rem"
-                    prop="verified"
-                  >
-                  </i>
-                </span>
-              </template>
-            </el-table-column>
             <!-- <el-table-column prop="outlet_sum" label="Jumlah Outlet"/> -->
-            <el-table-column prop="village_name" label="Kelurahan" />
-            <el-table-column prop="outlet_name" label="Nama Outlet" />
-            <el-table-column label="Tgl Mendaftar">
-              <template #default="scope">
-                {{ epochToDateTime(scope.row.unix_time) }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="subs_name" label="Tipe Akun" />
+            <el-table-column prop="name" label="Nama" width="200" />
+            <el-table-column
+              prop="village_name"
+              label="Alamat"
+              width="200"
+            ></el-table-column>
+            <el-table-column prop="outlet_name" label="Nama Outlet" class="ml-5" />
+
             <el-table-column label="Aksi" align="center">
               <template #default="scope">
                 <div class="d-flex justify-content-center my-3">
                   <el-button
                     @click="
                       $router.push(
-                        `/users/${scope.row.uuid}/${scope.row.id}`
+                        `/users/${scope.row.uuid}`
                       )
                     "
                     type="danger"
@@ -183,15 +106,18 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, onMounted, computed } from "vue";
 import EmployeeModule from "@/store/modules/EmployeeModule";
+import { useRoute } from "vue-router";
 import AuthModule from "@/store/modules/AuthModule";
+import moment from "moment";
 import { getModule } from "vuex-module-decorators";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
 import { handleNull, epochToDateTime } from "@/helper";
 
 import { ElNotification } from "element-plus";
+import { identity } from "lodash";
 
 export default defineComponent({
-  name: "employee",
+  name: "outlet-list",
   components: {},
   setup() {
     const deleteDialog = ref(false);
@@ -214,6 +140,7 @@ export default defineComponent({
     const cursor = ref<string | null>("");
     const perPage = ref<number>(15);
     const clearable = ref<boolean>(false);
+    const route = useRoute();
 
     const selectedItem: any = reactive({});
 
@@ -223,8 +150,15 @@ export default defineComponent({
     const metaPagination = computed(
       () => EmployeeState.getMetaPaginationEmployee
     );
-    const myOutletId = computed(() => AuthState.getMyOutletId);
-    
+    const myOutletId = computed(() => EmployeeState.getMyOutletId);
+    const myUserId = computed(() => EmployeeState.getUserId);
+
+    const filterRangeDate = ref<any[]>([
+      moment()
+        .subtract(7, "days")
+        .format("YYYY-MM-DD"),
+      moment().format("YYYY-MM-DD"),
+    ]);
 
     const selectItem = (item) => {
       selectedItem.value = item;
@@ -239,21 +173,11 @@ export default defineComponent({
     const searchSubs = () => {
       loadingDatatable.value = true;
       cursor.value = "";
-      EmployeeState.SET_EMPLOYEES([]);
+      EmployeeState.SET_KARYAWANS([]);
       EmployeeState.getEmployeesAPI({
         outletId: myOutletId.value,
         search: search.value,
         FilterSubmission: filter.value,
-        cursor: cursor.value,
-        perPage: perPage.value,
-      }).finally(() => (loadingDatatable.value = false));
-    };
-
-    const changeOutlet = () => {
-      loadingDatatable.value = true;
-      EmployeeState.getEmployeesAPI({
-        outletId: myOutletId.value,
-        search: search.value,
         cursor: cursor.value,
         perPage: perPage.value,
       }).finally(() => (loadingDatatable.value = false));
@@ -264,8 +188,8 @@ export default defineComponent({
       cursor.value = "";
       clearable.value = false;
       loadingDatatable.value = true;
-      EmployeeState.SET_EMPLOYEES([]);
-      EmployeeState.getEmployeesAPI({
+      EmployeeState.SET_KARYAWANS([]);
+      EmployeeState.getKaryawansAPI({
         outletId: myOutletId.value,
         search: search.value,
         cursor: cursor.value,
@@ -277,7 +201,7 @@ export default defineComponent({
     const searchData = () => {
       loadingDatatable.value = true;
       cursor.value = "";
-      EmployeeState.SET_EMPLOYEES([]);
+      EmployeeState.SET_KARYAWANS([]);
       EmployeeState.getEmployeesAPI({
         outletId: myOutletId.value,
         search: search.value,
@@ -302,6 +226,7 @@ export default defineComponent({
     const nextPage = () => {
       loadingDatatable.value = true;
       cursor.value = metaPagination.value.next_cursor;
+      
       EmployeeState.getEmployeesAPI({
         outletId: myOutletId.value,
         search: search.value,
@@ -311,10 +236,12 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      setCurrentPageBreadcrumbs("Dashboard", "Daftar Pengguna");
+      setCurrentPageBreadcrumbs("Dashboard", "Daftar Employee");
       loadingDatatable.value = true;
       EmployeeState.SET_EMPLOYEES([]);
-      EmployeeState.getEmployeesAPI({
+      // console.log(myUserId.value);
+      EmployeeState.getKaryawansAPI({
+        UserId: route.params.id,
         outletId: myOutletId.value,
         search: search.value,
         filter: filter.value,
@@ -325,6 +252,7 @@ export default defineComponent({
 
     return {
       employees,
+      route,
       FilterSubmission,
       deleteDialog,
       loadingBtnDialog,
@@ -332,11 +260,11 @@ export default defineComponent({
       selectedItem,
       filter,
       search,
+      filterRangeDate,
       clearable,
       metaPagination,
       employee,
       epochToDateTime,
-      changeOutlet,
       searchSubs,
       textSearch,
       clearSearch,

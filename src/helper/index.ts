@@ -2,11 +2,20 @@ import moment from "moment"
 
 export function formatCurrency(val: string | number): string {
   if (val !== undefined && val !== null) {
-    return val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')
+    return  val.toString().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1.')
   } else {
     return '-'
   }
 }
+
+export function formatCurrens(num): string {
+  if (String(num).length < 7) {
+    return Math.floor(num/1000) + 'RB';
+} else {
+    return Math.floor(num/1000000) + 'Jt';
+}
+}
+
 
 export function formatCurrencyVoucher(val: string | number): string {
   if (val !== undefined && val !== null) {

@@ -145,7 +145,7 @@ export default class LoginModule extends VuexModule implements StoreInfo {
   }
 
   @Action
-  postLogout(): Promise<any> {
+  postLogout(): Promise<any>  {
     return http.post('/toucan/v1/logout').then(res => {
       if (res.data.status) {
         this.context.commit('SET_USER', {});

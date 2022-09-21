@@ -1,17 +1,20 @@
 <template>
   <div class="row mt-5">
-    <div class="col-md-12 justify-content-center align-items-center">
+    <div class="col-md-12 justify-content-right align-items-end">
       <div class="card">
-        <div class="card-body py-5 justify-content-left align-items-left" >
+        <div class="card-body py-5 justify-content-between align-items-end">
           <el-tabs
             v-model="activeName"
-            class="col demo-tabs"
+            class="col demo-tabs tabs-pills fill justified"
             @tab-click="handleClick"
+            style="width: 100%; margin-left: 1em;"
+            fills
+            justified
           >
-            <el-tab-pane label="karyawan" name="first" >
+            <el-tab-pane label="karyawan" name="first">
               <CardKaryawan />
             </el-tab-pane>
-            <el-tab-pane  label="Pesanan Online" name="second"
+            <el-tab-pane label="Pesanan Online" name="second"
               >Pesanan Online</el-tab-pane
             >
             <el-tab-pane label="Pelanggan" name="third">
@@ -21,8 +24,8 @@
               <TransaksiList />
             </el-tab-pane>
             <el-tab-pane label="Transaksi Kasbon" name="seven"
-              ><CardKasbon /></el-tab-pane
-            >
+              ><CardKasbon
+            /></el-tab-pane>
           </el-tabs>
         </div>
       </div>

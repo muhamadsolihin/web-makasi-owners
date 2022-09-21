@@ -15,13 +15,14 @@
         <!--end::Symbol-->
 
         <!--begin::Title-->
+
         <div>
           <a href="#" class="fs-4 text-gray-800 fw-bolder">Omset</a>
           <div class="fs-1 text-gray-800 fw-bolder mt-1">
-            Rp {{ formatCurrency(value) }}
+           Rp. {{ formatCurrens(value) }}
           </div>
-
         </div>
+
         <!--end::Title-->
       </div>
       <!--end::Section-->
@@ -32,7 +33,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { formatCurrency } from "@/helper";
+import { formatCurrens } from "@/helper";
 
 export default defineComponent({
   name: "WidgetEntity",
@@ -45,14 +46,13 @@ export default defineComponent({
   },
   components: {},
   setup() {
-    return { formatCurrency };
+    return { formatCurrens };
   },
 });
 </script>
 
 <style scope lang="scss">
-.fs-1{
+.fs-1 {
   font-size: 1.5em !important;
 }
-
 </style>
