@@ -272,7 +272,7 @@ export default class EmployeeModule extends VuexModule {
       )
       .then((res) => {
         if (res.data.status) {
-          this.context.commit("SET_EMPLOYEES", res.data.data);
+          this.context.commit("SET_EMPLOYEE", res.data.data);
           this.context.commit("SET_META_PAGINATION", res.data.meta);
         }
         return res;

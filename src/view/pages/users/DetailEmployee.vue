@@ -15,13 +15,13 @@
       <div class="card">
         <div class="card-body">
           <div class="row mb-5"></div>
-          <div class="row">
+          <div class="row" v-if="Object.keys(employee).length">
             <div class="col-md-3">
               <p class="fw-bold">Nama :</p>
             </div>
             <div class="col-md-3">
               <p class="fw-bold">
-                {{ handleNullToString(employees.name) }}
+                {{ handleNullToString(employee.name) }}
                 <span v-if="employee.verified == '0'"></span>
                 <span v-else-if="employee.verified == '1'"
                   ><i
@@ -38,8 +38,8 @@
             </div>
             <div class="col-md-3">
               <p class="fw-bold">
-                  {{ handleNullToString(employees.phone_account) }}
-                </p>
+                {{ handleNullToString(employee.phone_account) }}
+              </p>
             </div>
           </div>
           <div class="row">
@@ -48,18 +48,16 @@
             </div>
             <div class="col-md-3">
               <p class="fw-bold">
-                  {{ handleNullToString(employees.email_account) }}
-
-                </p>
+                {{ handleNullToString(employee.email_account) }}
+              </p>
             </div>
             <div class="col-md-3">
               <p class="fw-bold">Nama Outlet :</p>
             </div>
             <div class="col-md-3">
               <p class="fw-bold">
-                  {{ handleNullToString(employees.outlet_name)
-                   }}
-                </p>
+                {{ handleNullToString(employee.outlet_name) }}
+              </p>
             </div>
           </div>
           <div class="row">
@@ -68,15 +66,61 @@
             </div>
             <div class="col-md-3">
               <p class="fw-bold">
-                {{ handleNullToString(employees.village_name) }}
+                {{ handleNullToString(employee.village_name) }}
               </p>
             </div>
+            <div class="col-md-3">
+              <p class="fw-bold">Tanggal Ditambahkan :</p>
+            </div>
+            <div class="col-md-3">
+              <p class="fw-bold">
+                {{ epochToDateTime(employee.created_at) }}
+              </p>
+            </div>
+          </div>
+          <div class="col d-flex justify-content-end ">
+            <span v-if="employee.jwt_token_mbl == '1'">
+              <button class="btn btn-sm btn-primary ms-2" @click="selectItem">
+                Unlink
+              </button></span
+            >
+            <span v-else-if="employee.jwt_token_mbl == '0'"> </span>
           </div>
         </div>
       </div>
     </div>
   </div>
   <div></div>
+  <el-dialog title="Konfirmasi" v-model="unlinkDialog" width="30%">
+      <div class="mb-5">
+        <i
+          class="bi bi-exclamation-triangle text-danger me-3"
+          style="font-size: 1.5rem"
+        ></i>
+        <span>Are you sure you want to proceed?</span>
+      </div>
+      <template #footer>
+        <button @click="unlinkDialog = false" class="btn btn-sm btn-secondary">
+          No
+        </button>
+        <button
+          @click="Submit"
+          class="btn btn-sm btn-primary ms-3"
+          :disabled="loadingBtnDialog"
+          :data-kt-indicator="!loadingBtnDialog ? 'off' : 'on'"
+        >
+          <span v-if="!loadingBtnDialog" class="indicator-label">
+            Yes
+          </span>
+          <span v-else class="indicator-progress">
+            Please wait...
+            <span
+              class="spinner-border spinner-border-sm align-middle ms-2"
+            ></span>
+          </span>
+        </button>
+      </template>
+    </el-dialog>
 </template>
 
 <script lang="ts">
@@ -112,7 +156,6 @@ export default defineComponent({
     const route = useRoute();
     const EmployeeState = getModule(EmployeeModule);
     const employee = computed(() => EmployeeState.getEmployee);
-    const employees = computed(() => EmployeeState.getEmployees);
     const selectedItem: any = reactive({});
     const unlinkDialog = ref(false);
     const verifyDialog = ref(false);
@@ -126,28 +169,29 @@ export default defineComponent({
       selectedItem.value = item;
       unlinkDialog.value = true;
     };
-    const onSubmit = () => {
+
+    const Submit = () => {
       loadingBtnDialog.value = true;
       EmployeeState.SET_EMPLOYEES([]);
-      location.reload();
-      ElMessage("Success Verified. ");
-      EmployeeState.addverified(route.params.uuid)
+      ElMessage("Success Logout. ");
+      EmployeeState.forceLogout(route.params.id)
         .then(() => {
           const employee = EmployeeState.getEmployee;
         })
         .finally(() => {
-          verifyDialog.value = false;
+          rejectDialog.value = false;
+          unlinkDialog.value = false;
           loadingBtnDialog.value = false;
-          location.reload();
           loading.value = false;
         });
     };
 
     onMounted(() => {
-      setCurrentPageBreadcrumbs("Dashboard", "Detail Pengguna");
+      setCurrentPageBreadcrumbs("Dashboard", "Detail Karyawan");
 
       store.dispatch(Actions.ADD_BODY_CLASSNAME, "page-loading");
       EmployeeState.getKaryawanShow(route.params.uuid)
+
         .then(() => {
           const employee = EmployeeState.getEmployee;
         })
@@ -156,23 +200,22 @@ export default defineComponent({
         );
     });
 
-    onMounted(() => {
-      setCurrentPageBreadcrumbs("Dashboard", "Daftar Employee");
-    //   loadingDatatable.value = true;
-      EmployeeState.SET_EMPLOYEES([]);
-      // console.log(myUserId.value);
-      EmployeeState.getKaryawanShow({
-        UserUuid: route.params.id,
-      }).finally(() =>  store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "page-loading"))
-    });
+    // onMounted(() => {
+    //   setCurrentPageBreadcrumbs("Dashboard", "Daftar Employee");
+    // //   loadingDatatable.value = true;
+    //   EmployeeState.SET_EMPLOYEES([]);
+    //   // console.log(myUserId.value);
+    //   EmployeeState.getKaryawanShow({
+    //     UserUuid: route.params.id,
+    //   }).finally(() =>  store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "page-loading"))
+    // });
 
     return {
       Employeedetail,
       unlinkDialog,
       loading,
-      employees,
-      subscriptionDialog,
       employee,
+      subscriptionDialog,
       moment,
       EmployeeModule,
       verifyDialog,
@@ -186,8 +229,8 @@ export default defineComponent({
       period,
       rejectDialog,
 
-      onSubmit,
       formatDate,
+      Submit,
       handleNull,
       selectItem,
       formatCurrency,

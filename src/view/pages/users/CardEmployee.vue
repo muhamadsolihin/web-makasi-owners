@@ -19,9 +19,27 @@
             <el-table-column
               prop="village_name"
               label="Alamat"
-              width="200"
+              width="220"
             ></el-table-column>
             <el-table-column prop="outlet_name" label="Nama Outlet" class="ml-5" />
+            <el-table-column
+              prop="is_active"
+              label="Status"
+              width="150px"
+              sortable
+            >
+              <template #default="scope">
+                <span
+                  v-if="scope.row.is_active"
+                  class="ms-2 badge badge-success"
+                >
+                  Aktif
+                </span>
+                <span v-else class="ms-2 badge badge-light">
+                  Tidak Aktif
+                </span>
+              </template>
+            </el-table-column>
 
             <el-table-column label="Aksi" align="center">
               <template #default="scope">
@@ -239,7 +257,7 @@ export default defineComponent({
       setCurrentPageBreadcrumbs("Dashboard", "Daftar Employee");
       loadingDatatable.value = true;
       EmployeeState.SET_EMPLOYEES([]);
-      // console.log(myUserId.value);
+      console.log(myUserId.value);
       EmployeeState.getKaryawansAPI({
         UserId: route.params.id,
         outletId: myOutletId.value,
