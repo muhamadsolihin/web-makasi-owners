@@ -25,6 +25,7 @@ import '@/core/plugins/bootstrap';
 import '@/core/plugins/keenthemes';
 import '@/core/plugins/prismjs';
 
+
 import 'primevue/resources/themes/saga-blue/theme.css';
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';

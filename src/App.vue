@@ -20,6 +20,7 @@
 // Main demo style scss
 @import "assets/sass/plugins";
 @import "assets/sass/style";
+
 </style>
 
 <script lang="ts">
