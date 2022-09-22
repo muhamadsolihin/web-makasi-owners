@@ -78,6 +78,25 @@
               </p>
             </div>
           </div>
+          <div class="row">
+            <div class="col-md-3">
+              <p class="fw-bold">Status :</p>
+            </div>
+            <div class="col-md-3">
+              <p class="fw-bold">
+                <span
+                  v-if= handleNullToString(employee.is_active) 
+                  class="ms-2 badge badge-success"
+                >
+                  Aktif
+                </span>
+                <span v-else class="ms-3 badge badge-light">
+                  Tidak Aktif
+                </span>
+                
+              </p>
+            </div>
+          </div>
           <div class="col d-flex justify-content-end ">
             <span v-if="employee.jwt_token_mbl == '1'">
               <button class="btn btn-sm btn-primary ms-2" @click="selectItem">
