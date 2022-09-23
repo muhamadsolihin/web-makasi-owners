@@ -85,7 +85,7 @@
             <div class="col-md-3">
               <p class="fw-bold">
                 <span
-                  v-if= handleNullToString(employee.is_active) 
+                  v-if="handleNullToString(employee.is_active)"
                   class="ms-2 badge badge-success"
                 >
                   Aktif
@@ -93,7 +93,6 @@
                 <span v-else class="ms-3 badge badge-light">
                   Tidak Aktif
                 </span>
-                
               </p>
             </div>
           </div>
@@ -111,35 +110,35 @@
   </div>
   <div></div>
   <el-dialog title="Konfirmasi" v-model="unlinkDialog" width="30%">
-      <div class="mb-5">
-        <i
-          class="bi bi-exclamation-triangle text-danger me-3"
-          style="font-size: 1.5rem"
-        ></i>
-        <span>Are you sure you want to proceed?</span>
-      </div>
-      <template #footer>
-        <button @click="unlinkDialog = false" class="btn btn-sm btn-secondary">
-          No
-        </button>
-        <button
-          @click="Submit"
-          class="btn btn-sm btn-primary ms-3"
-          :disabled="loadingBtnDialog"
-          :data-kt-indicator="!loadingBtnDialog ? 'off' : 'on'"
-        >
-          <span v-if="!loadingBtnDialog" class="indicator-label">
-            Yes
-          </span>
-          <span v-else class="indicator-progress">
-            Please wait...
-            <span
-              class="spinner-border spinner-border-sm align-middle ms-2"
-            ></span>
-          </span>
-        </button>
-      </template>
-    </el-dialog>
+    <div class="mb-5">
+      <i
+        class="bi bi-exclamation-triangle text-danger me-3"
+        style="font-size: 1.5rem"
+      ></i>
+      <span>Are you sure you want to proceed?</span>
+    </div>
+    <template #footer>
+      <button @click="unlinkDialog = false" class="btn btn-sm btn-secondary">
+        No
+      </button>
+      <button
+        @click="Submit"
+        class="btn btn-sm btn-primary ms-3"
+        :disabled="loadingBtnDialog"
+        :data-kt-indicator="!loadingBtnDialog ? 'off' : 'on'"
+      >
+        <span v-if="!loadingBtnDialog" class="indicator-label">
+          Yes
+        </span>
+        <span v-else class="indicator-progress">
+          Please wait...
+          <span
+            class="spinner-border spinner-border-sm align-middle ms-2"
+          ></span>
+        </span>
+      </button>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts">

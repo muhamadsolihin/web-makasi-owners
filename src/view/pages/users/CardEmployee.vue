@@ -21,7 +21,11 @@
               label="Alamat"
               width="220"
             ></el-table-column>
-            <el-table-column prop="outlet_name" label="Nama Outlet" class="ml-5" />
+            <el-table-column
+              prop="outlet_name"
+              label="Nama Outlet"
+              class="ml-5"
+            />
             <el-table-column
               prop="is_active"
               label="Status"
@@ -45,11 +49,7 @@
               <template #default="scope">
                 <div class="d-flex justify-content-center my-3">
                   <el-button
-                    @click="
-                      $router.push(
-                        `/users/${scope.row.uuid}`
-                      )
-                    "
+                    @click="$router.push(`/users/${scope.row.uuid}`)"
                     type="danger"
                     size="small"
                   >
@@ -244,7 +244,7 @@ export default defineComponent({
     const nextPage = () => {
       loadingDatatable.value = true;
       cursor.value = metaPagination.value.next_cursor;
-      
+
       EmployeeState.getEmployeesAPI({
         outletId: myOutletId.value,
         search: search.value,
