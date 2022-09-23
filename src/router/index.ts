@@ -56,80 +56,90 @@ const routes: Array<RouteRecordRaw> = [
 
 
 
-      {
-        path: "/voucher",
-        name: "voucher",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/voucher/ListVoucher.vue"),
-      },
+      // {
+      //   path: "/voucher",
+      //   name: "voucher",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/voucher/ListVoucher.vue"),
+      // },
 
-      {
-        path: "/voucher/Add",
-        name: "add-voucher",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/voucher/Add.vue"),
-      },
+      // {
+      //   path: "/voucher/Add",
+      //   name: "add-voucher",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/voucher/Add.vue"),
+      // },
 
-      {
-        path: "/voucher/Detail",
-        name: "detail-voucher",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/voucher/Detail.vue"),
-      },
+      // {
+      //   path: "/voucher/Detail",
+      //   name: "detail-voucher",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/voucher/Detail.vue"),
+      // },
 
-      {
-        path: "/outlets",
-        name: "outlet-list",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/outletlist/ListOutlet.vue"),
-      },
+      // {
+      //   path: "/outlets",
+      //   name: "outlet-list",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/outletlist/ListOutlet.vue"),
+      // },
       
-      {
-        path: "outlets/outlet",
-        name: "outlet-detail",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true},
-        component: () => import(("@/view/pages/outletlist/DetailOutlet.vue"),),
-      },
-      {
-        path: "outlets/outlet/omset",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true},
-        component: () => import(("@/view/pages/outletlist/DetailOmset.vue"),),
-      },
-      {
-        path: "outlets/outlet/profit",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true},
-        component: () => import(("@/view/pages/outletlist/DetailProfit.vue"),),
-      },
-      {
-        path: "outlets/outlet/transaksi",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true},
-        component: () => import(("@/view/pages/outletlist/DetailTransaksi.vue"),),
-      },
-      {
-        path: "outlets/outlet/diskon",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true},
-        component: () => import(("@/view/pages/outletlist/DetailDiskon.vue"),),
-      },
-      {
-        path: "outlets/outlet/produk",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true},
-        component: () => import(("@/view/pages/outletlist/DetailProduk.vue"),),
-      },
-      {
-        path: "outlets/outlet/tipe-produk",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true},
-        component: () => import(("@/view/pages/outletlist/DetailTipeProduk.vue"),),
-      },
-      {
-        path: "outlets/outlet/payment-methods",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true},
-        component: () => import(("@/view/pages/outletlist/DetailPembayaran.vue"),),
-      },
-      {
-        path: "outlets/outlet/order-methods",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true},
-        component: () => import(("@/view/pages/outletlist/DetailPemesanan.vue"),),
-      },
+      // {
+      //   path: "outlets/outlet",
+      //   name: "outlet-detail",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailOutlet.vue"),),
+      // },
+      // {
+      //   path: "outlets/outlet/omset",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailOmset.vue"),),
+      // },
+      // {
+      //   path: "outlets/outlet/profit",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailProfit.vue"),),
+      // },
+      // {
+      //   path: "outlets/outlet/transaksi",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailTransaksi.vue"),),
+      // },
+      // {
+      //   path: "outlets/outlet/diskon",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailDiskon.vue"),),
+      // },
+      // {
+      //   path: "outlets/outlet/produk",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailProduk.vue"),),
+      // },
+      // {
+      //   path: "outlets/outlet/tipe-produk",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailTipeProduk.vue"),),
+      // },
+      // {
+      //   path: "outlets/outlet/payment-methods",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailPembayaran.vue"),),
+      // },
+      // {
+      //   path: "outlets/outlet/order-methods",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
+      //   component: () => import(("@/view/pages/outletlist/DetailPemesanan.vue"),),
+      // },
+
+
+
+
+
+
+
+
+
+
 
 
 
