@@ -1,29 +1,33 @@
-import store from "@/store"
-import http from "@/http-common"
-import router from "@/router/index"
-import JwtService from "@/core/services/JwtService"
+import store from "@/store";
+import http from "@/http-common";
+import router from "@/router/index";
+import JwtService from "@/core/services/JwtService";
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 
-const SERVICE_API = "/toucan"
+const SERVICE_API = "/toucan";
 
 export interface UserType {
   uuid: string;
-  userName: string,
-  signatureId: string,
-  outletName: string,
-  image: string | null,
-  userType: number,
-  userTypeName: string,
-  accessToken: string,
-  outletUUID: string,
-  isActiveRecapCash?: number,
-  authUse?: number,
-  verified?: number,
-  isWaitingVerified?: number
+  userName: string;
+  signatureId: string;
+  outletName: string;
+  image: string | null;
+  userType: number;
+  userTypeName: string;
+  accessToken: string;
+  outletUUID: string;
+  isActiveRecapCash?: number;
+  authUse?: number;
+  verified?: number;
+  isWaitingVerified?: number;
 }
 
 // eslint-disable-next-line
-export interface UserState { email: string, phone: string, token_fcm: string }
+export interface UserState {
+  email: string;
+  phone: string;
+  token_fcm: string;
+}
 
 export interface StoreInfo {
   loading: boolean;
@@ -41,7 +45,6 @@ export default class LoginModule extends VuexModule implements StoreInfo {
     userTypeName: "",
     accessToken: "",
     outletUUID: "",
-
   };
   // eslint-disable-next-line
   userState: UserState = { email: "", phone: "", token_fcm: "" };
@@ -67,7 +70,9 @@ export default class LoginModule extends VuexModule implements StoreInfo {
     // if (this.user.accessToken.length == 0 && JwtService.getToken()) {
     //   this.context.commit('SET_TOKEN_ID', JwtService.getToken());
     // }
-    return this.user.accessToken ? this.user.accessToken : JwtService.getToken();
+    return this.user.accessToken
+      ? this.user.accessToken
+      : JwtService.getToken();
   }
 
   get getLoadingAuth() {
@@ -89,9 +94,9 @@ export default class LoginModule extends VuexModule implements StoreInfo {
   get isLoggedIn() {
     if (JwtService.getToken()) {
       // authModule.getUserMe();
-      return true
+      return true;
     }
-    return false
+    return false;
   }
 
   @Mutation
@@ -114,45 +119,43 @@ export default class LoginModule extends VuexModule implements StoreInfo {
 
   @Mutation
   SET_USER_STATE(payload: UserState) {
-    this.userState = payload
+    this.userState = payload;
   }
 
   @Mutation
   SET_RESULT_SIGN_IN_WITH_PHONE_NUMBER(payload) {
-    this.resultSignInWithPhoneNumber = payload
+    this.resultSignInWithPhoneNumber = payload;
   }
 
   @Mutation
   SET_TOKEN_ID(payload) {
-    this.user.accessToken = payload
+    this.user.accessToken = payload;
   }
 
   @Action
-  
   postLogin(payload): Promise<any> {
-    return http.post(`${SERVICE_API}/v1/login`, payload)
-    .then(async res => {
+    return http.post(`${SERVICE_API}/v1/login`, payload).then(async (res) => {
       if (res.data.status) {
         this.context.commit("SET_TOKEN_ID", res.data.data.access_token);
         store.commit("SET_ACCESS_TOKEN", res.data.data.access_token);
         JwtService.saveToken(res.data.data.access_token);
-        router.push('/');
+        router.push("/");
       } else {
-        // 
+        //
       }
       return res.data;
-    })
+    });
   }
 
   @Action
-  postLogout(): Promise<any>  {
-    return http.post('/toucan/v1/logout').then(res => {
+  postLogout(): Promise<any> {
+    return http.post("/toucan/v1/logout").then((res) => {
       if (res.data.status) {
-        this.context.commit('SET_USER', {});
+        this.context.commit("SET_USER", {});
         JwtService.destroyToken();
-        window.sessionStorage.removeItem('token_fcm');
-        window.sessionStorage.removeItem('UNIQ_ID');
-        router.push('/login');
+        window.sessionStorage.removeItem("token_fcm");
+        window.sessionStorage.removeItem("UNIQ_ID");
+        router.push("/login");
       }
       return res.data;
     });

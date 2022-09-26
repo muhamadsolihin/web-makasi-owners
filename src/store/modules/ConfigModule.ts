@@ -1,6 +1,6 @@
 import objectPath from "object-path";
 import merge from "deepmerge";
-import JwtService from "@/core/services/JwtService"
+import JwtService from "@/core/services/JwtService";
 import layoutConfig from "@/core/config/DefaultLayoutConfig";
 import LayoutConfig from "@/core/config/LayoutConfigTypes";
 import { Mutations } from "@/store/enums/store.enums";

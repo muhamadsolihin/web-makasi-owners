@@ -250,9 +250,7 @@ export default class EmployeeModule extends VuexModule {
   @Action
   getKaryawansAPI(payload) {
     return http
-      .get(
-        `/dusky_lory/v1/employee/${payload.UserId}?perpage=10&outlet_id=`
-      )
+      .get(`/dusky_lory/v1/employee/${payload.UserId}?perpage=10&outlet_id=`)
       .then((res) => {
         if (res.data.status) {
           this.context.commit("SET_EMPLOYEES", res.data.data);
@@ -266,10 +264,7 @@ export default class EmployeeModule extends VuexModule {
   @Action
   getKaryawanShow(payload) {
     return http
-      .get(
-        `/dusky_lory/v1/hawaii/emp/${payload}`
-        
-      )
+      .get(`/dusky_lory/v1/hawaii/emp/${payload}`)
       .then((res) => {
         if (res.data.status) {
           this.context.commit("SET_EMPLOYEE", res.data.data);
