@@ -3,16 +3,14 @@ import http from "@/http-common";
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { number } from "yup";
 
-
 /* eslint-disable */
 export interface Karyawan {
   uuid: string;
-  id : string;
+  id: string;
   name: string | null;
   outlet_id: string;
   outlet_name: string | null;
   village_name: string | null;
-
 }
 
 @Module({ name: "UserModule", dynamic: true, store })
@@ -20,22 +18,20 @@ export default class UserModule extends VuexModule {
   Karyawans: Karyawan[] = [
     {
       uuid: "",
-      id: '',
+      id: "",
       name: null,
-      outlet_id: "",     
+      outlet_id: "",
       village_name: null,
-      outlet_name: null,  
-
+      outlet_name: null,
     },
   ];
   Karyawan: Karyawan = {
     uuid: "",
-    id: '',
+    id: "",
     name: null,
     outlet_id: "",
     village_name: null,
-    outlet_name: null,     
-
+    outlet_name: null,
   };
   metaPagination: { next_cursor: string | null; prev_cursor: string | null } = {
     next_cursor: null,
@@ -47,10 +43,10 @@ export default class UserModule extends VuexModule {
   }
 
   get getUserId() {
-    return this.Karyawan.id ? this.Karyawan.id : window.localStorage.getItem("UNIQ_ID");
+    return this.Karyawan.id
+      ? this.Karyawan.id
+      : window.localStorage.getItem("UNIQ_ID");
   }
-
-
 
   get getMetaPaginationEmployee() {
     return this.metaPagination;
@@ -65,7 +61,6 @@ export default class UserModule extends VuexModule {
     this.Karyawans = payload;
   }
 
-  
   @Mutation
   SET_META_PAGINATION(payload) {
     this.metaPagination.prev_cursor = payload.prev_cursor;
@@ -80,7 +75,8 @@ export default class UserModule extends VuexModule {
   @Action
   getEmployeesAPI(payload) {
     return http
-      .get( `/dusky_lory/v1/employee/?userId=${payload}?perpage=10&outlet_id=${payload.outletId}`
+      .get(
+        `/dusky_lory/v1/employee/?userId=${payload}?perpage=10&outlet_id=${payload.outletId}`
       )
       .then((res) => {
         if (res.data.status) {
@@ -89,10 +85,7 @@ export default class UserModule extends VuexModule {
         }
 
         return res;
-
       })
       .catch((err) => console.log(err));
   }
 }
-
-
