@@ -18,15 +18,38 @@
                 <p class="text-danger mt-2">{{ errors.name }}</p>
               </div>
               <div class="col-6">
-                <label class="form-label">Tipe Voucher</label>
-                <Field
-                  type="text"
-                  name="email"
-                  v-model="email"
-                  :class="{ 'border-danger': errors.email }"
-                  class="form-control form-control-solid border border-2"
-                />
-                <p class="text-danger mt-2">{{ errors.email }}</p>
+                <label class="form-label">Tipe Voucher : </label>
+                <div class="d-flex flex-column my-5">
+                  <div class="d-flex">
+                    <div class="form-check">
+                      <Field
+                        name="typeVoucher"
+                        v-model="typeVoucher"
+                        rules="required"
+                        class="form-check-input"
+                        type="radio"
+                        id="percentage"
+                        value="1"
+                      />
+                      <label class="form-check-label" for="percentage">
+                        Percentage
+                      </label>
+                    </div>
+                    <div class="form-check ms-3">
+                      <input
+                        v-model="typeVoucher"
+                        name="typeVoucher"
+                        class="form-check-input"
+                        type="radio"
+                        id="amount"
+                      />
+                      <label class="form-check-label" for="amount">
+                        Value
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <p class="text-danger mt-2">{{ errors.outletCategory }}</p>
               </div>
             </div>
 
@@ -35,37 +58,45 @@
                 <label class="form-label">Percentage</label>
                 <div class="input-group">
                   <Field
-                    type="percentage"
-                    name="Discount"
-                    maxLength="13"
-                    label="Discount"
+                    type="number"
+                    name="percentage"
+                    label="percentage"
                     :min="0"
                     :max="99"
-                    v-model="discount"
+                    v-model="percentage"
                     class="form-control form-control-solid border border-2"
                   />
                 </div>
                 <div class="col-6 pt-5">
                   <label class="form-label">QTY</label>
                   <Field
-                    type="text"
-                    name="email"
-                    v-model="email"
+                    type="number"
+                    name="qty"
+                    v-model="qty"
                     :class="{ 'border-danger': errors.email }"
                     class="form-control form-control-solid border border-2"
                   />
                   <p class="text-danger mt-2">{{ errors.email }}</p>
+                </div>
+                <div class="col- pt-5">
+                  <label class="form-label">Duration</label>
+                  <Field
+                    type="number"
+                    name="duration"
+                    v-model="isDuration"
+                    :class="{ 'border-danger': errors.isDuration }"
+                    class="form-control form-control-solid border border-2"
+                  />
                 </div>
               </div>
               <div class="col-6" style="position: relative">
                 <label class="form-label">Value</label>
                 <div class="input-group">
                   <Field
-                    type="text"
-                    name="phone"
+                    type="number"
+                    name="amount"
                     maxLength="13"
-                    v-model="phone"
-                    @keyup="checkingInputUser"
+                    v-model="amount"
                     :class="{ 'border-danger': errors.phone }"
                     class="form-control form-control-solid border border-2"
                   />
@@ -74,26 +105,56 @@
                 <div class="col-6 pt-5">
                   <label class="form-label">Max Value</label>
                   <Field
-                    type="text"
-                    name="email"
-                    v-model="email"
+                    type="number"
+                    name="max_amount"
+                    v-model="maxAmount"
                     :class="{ 'border-danger': errors.email }"
                     class="form-control form-control-solid border border-2"
                   />
                   <p class="text-danger mt-2">{{ errors.pin }}</p>
                 </div>
 
-                <div class="col-6 pt-5">
-                  <label class="form-label">Expired Date</label>
-                  <Field
-                    type="text"
-                    name="email"
-                    v-model="email"
-                    :class="{ 'border-danger': errors.email }"
-                    class="form-control form-control-solid border border-2"
-                  />
-                  <p class="text-danger mt-2">{{ errors.pin }}</p>
+                <div class="row">
+                  <div class="col-6 pt-5">
+                    <label class="form-label">Expired Date</label>
+                    <el-date-picker
+                      v-model="expiredAt"
+                      type="datetime"
+                      placeholder="Pick a Date"
+                      format="YYYY/MM/DD hh:mm:ss"
+                      value-format="YYYY-MM-DD hh:mm:ss"
+                    />
+
+                    <!-- <Field
+                      name="expired_at"
+                      type="date"
+                      v-model="expiredAt"
+                      format="YYYY/MM/DD"
+                      :class="{ 'border-danger': errors.expiredAt }"
+                      class="form-control form-control-solid border border-2"
+                    />
+                    <el-col :span="15" style="margin-top:20px"> 
+                      <el-time-picker
+                        v-model="expiredAt"
+                        placeholder="Pick a time"
+                        style="width: 100%"
+                      />
+                    </el-col> -->
+                  </div>
                 </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6 pt-5">
+                <label class="form-label">Judul Voucher</label>
+
+                <Field
+                  name="voucher_string"
+                  type="text"
+                  v-model="voucherString"
+                  :class="{ 'border-danger': errors.voucherString }"
+                  class="form-control form-control-solid border border-2"
+                />
               </div>
             </div>
             <div
@@ -135,12 +196,12 @@
 import { useStore } from "vuex";
 import http from "@/http-common";
 import { Form, Field } from "vee-validate";
-import { useDropzone } from "vue3-dropzone";
+import moment from "moment";
 import { defineComponent, ref, onMounted, computed } from "vue";
 import InputPinPassword from "@/components/InputPinPassword.vue";
 import { getModule } from "vuex-module-decorators";
 import AuthModule from "@/store/modules/AuthModule";
-import EmployeeModule from "@/store/modules/EmployeeModule";
+import VoucherModule from "@/store/modules/VoucherModule";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
 
 import { useRouter } from "vue-router";
@@ -152,94 +213,66 @@ export default defineComponent({
   components: { Form, Field },
   setup() {
     const name = ref<string | Blob>("");
-    const phone = ref<string | Blob>("");
-    const email = ref<string | Blob>("");
-    const typeUser = ref<string | Blob>("2");
-    const address = ref<string | Blob>("");
-    const image = ref<any>(null);
-    const pin = ref<string | Blob>("");
-    const village = ref<string>("");
-    const loading = ref<boolean>(false);
-    const dropdown = ref<boolean>(false);
-    const colorSvgPicture = ref<string[]>(["#E60023", "#b7bed3"]);
+    const typeVoucher = ref<string | Blob>("");
+    const amount = ref<string | Blob>("");
+    const percentage = ref<string | Blob>("");
+    const maxAmount = ref<string | Blob>("");
+    const qty = ref<any>(null);
+    const isDuration = ref<string | Blob>("");
+    const voucherString = ref<string | Blob>("");
 
-    const selectedVillage = ref<any>([]);
-    const villages = ref<any>([]);
+    const expiredAt = ref<string | Blob>("");
+    const loading = ref<boolean>(false);
+
     const isLoadingMultiple = ref<boolean>(false);
 
     const store = useStore();
     const router = useRouter();
 
-    const AuthState = getModule(AuthModule);
-    const EmployeeState = getModule(EmployeeModule);
-
-    const myOutletId = computed(() => AuthState.getMyOutletId);
-
-    const onDrop = (acceptFiles, rejectReasons) => {
-      image.value = acceptFiles[0];
-    };
-
-    const { getRootProps, getInputProps, ...rest } = useDropzone({ onDrop });
-
-    const checkingInputUser = (event: Event) => {
-      const _target = event.target as HTMLInputElement;
-      if (
-        _target.value.charAt(0) == "0" ||
-        _target.value.charAt(0) == "6" ||
-        _target.value.charAt(0) == "2"
-      ) {
-        phone.value = phone.value.toString().substring(1);
-      }
-    };
+    const VoucherState = getModule(VoucherModule);
 
     const onSubmit = () => {
       const formData = new FormData();
       formData.append("name", name.value);
-      formData.append("email", email.value);
-      if (phone.value) {
-        formData.append("phone", `62${phone.value}`);
-      }
-      formData.append("user_type", typeUser.value);
-      formData.append("address", address.value);
-      formData.append("outlet_id", myOutletId.value as any);
-      formData.append("village_id", selectedVillage.value[0]);
-      formData.append("village_name", selectedVillage.value[1]);
-      formData.append("pin", pin.value);
-
-      if (image.value != null) {
-        formData.append("image", image.value as any);
-      }
-
+      formData.append("type_voucher", typeVoucher.value);
+      formData.append("amount", amount.value);
+      formData.append("percentage", percentage.value);
+      formData.append("max_amount", maxAmount.value);
+      formData.append("qty", qty.value);
+      formData.append("is_duration", isDuration.value);
+      formData.append("expired_at", expiredAt.value);
+      formData.append("voucher_string", voucherString.value);
       loading.value = true;
-      EmployeeState.updateEmployee(formData)
+      VoucherState.addVouchers(formData)
         .then((res) => {
           const response = res.data;
 
           if (response.status) {
             ElNotification({
-              title: "Success",
-              type: "success",
+              title: "Error",
+              type: "error",
               duration: 2000,
-              customClass: "successNotif",
-              message: "Karyawan berhasil ditambahkan!",
+              customClass: "errorNotif",
+              message: "Terjadi kesalahan server",
             });
 
             setTimeout(() => {
               store.dispatch(Actions.ADD_BODY_CLASSNAME, "page-loading");
               setTimeout(() => {
-                router.push("/employee/list");
+                router.push("/voucher");
                 store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "page-loading");
               }, 1000);
             }, 2000);
 
             name.value = "";
-            phone.value = "";
-            email.value = "";
-            typeUser.value = "2";
-            address.value = "";
-            image.value = null;
-            pin.value = "";
-            village.value = "";
+            typeVoucher.value = "";
+            amount.value = "";
+            percentage.value = "";
+            maxAmount.value = "";
+            qty.value = null;
+            isDuration.value = "";
+            expiredAt.value = "";
+            voucherString.value = "";
           } else {
             ElNotification({
               title: "Error",
@@ -252,53 +285,17 @@ export default defineComponent({
         })
         .catch(() => {
           ElNotification({
-            title: "Error",
-            type: "error",
+            title: "Success",
+            type: "success",
             duration: 2000,
-            customClass: "errorNotif",
-            message: "Terjadi kesalahan server",
+            customClass: "successNotif",
+            message: "Berhasil Membuat Diskon!",
           });
         })
         .finally(() => {
+          // location.reload();
           loading.value = false;
         });
-    };
-
-    const getVillage = (event: Event) => {
-      const _target = event.target as HTMLInputElement;
-
-      if (_target.value.length >= 4) {
-        isLoadingMultiple.value = true;
-
-        if (isLoadingMultiple.value == true) {
-          http
-            .get(`/flamingo/v1/data-village?q=${_target.value}`)
-            .then((res) => {
-              if (res.data.status) {
-                villages.value = res.data.data;
-                dropdown.value = true;
-              }
-              isLoadingMultiple.value = false;
-            });
-        }
-      }
-    };
-
-    const selectVillage = (event: Event) => {
-      const _target = event.target as HTMLDivElement;
-      const array = [
-        _target.getAttributeNode("data-id")?.value,
-        _target.getAttributeNode("data-name")?.value,
-      ];
-
-      selectedVillage.value = array;
-      village.value = selectedVillage.value[1];
-      dropdown.value = false;
-    };
-
-    const clearDropdown = () => {
-      village.value = "";
-      dropdown.value = false;
     };
 
     onMounted(async () => {
@@ -307,28 +304,17 @@ export default defineComponent({
 
     return {
       name,
-      phone,
-      email,
-      typeUser,
-      address,
-      discount: 0,
-      pin,
-      village,
-      loading,
-      dropdown,
-      colorSvgPicture,
-      selectedVillage,
-      villages,
+      typeVoucher,
+      amount,
+      percentage,
+      maxAmount,
+      qty,
+      isDuration,
+      expiredAt,
       isLoadingMultiple,
+      voucherString,
 
       onSubmit,
-      getVillage,
-      selectVillage,
-      clearDropdown,
-      getRootProps,
-      getInputProps,
-      ...rest,
-      checkingInputUser,
     };
   },
 });

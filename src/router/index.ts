@@ -71,7 +71,7 @@ const routes: Array<RouteRecordRaw> = [
       // },
 
       // {
-      //   path: "/voucher/Detail",
+      //   path: "voucher/:uuid",
       //   name: "detail-voucher",
       //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
       //   component: () => import("@/view/pages/voucher/Detail.vue"),

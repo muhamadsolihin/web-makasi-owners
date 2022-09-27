@@ -103,7 +103,7 @@
           >
             <span>Add</span>
           </el-button>
-          <div class="col-md-2 ">
+          <!-- <div class="col-md-2 ">
             <el-upload
               v-model:file-list="fileList"
               class="upload-demo"
@@ -117,9 +117,15 @@
             >
               <el-button type="danger" size="small">Export Data</el-button>
             </el-upload>
-          </div>
+          </div> -->
           <div class="col-md-2">
-            <el-button type="danger" style="margin-left:0.5em" size="small">Hapus</el-button>
+            <el-button
+              @click="SelectDelete"
+              type="danger"
+              style="margin-left:0.5em"
+              size="small"
+              >Hapus</el-button
+            >
           </div>
         </div>
       </div>
@@ -127,44 +133,54 @@
   </div>
   <el-table
     ref="multipleTableRef"
-    :data="FilterSubmission"
+    :data="vouchers"
     style="width: 100%"
+    :default-sort="{ prop: 'name', order: 'descending' }"
     @selection-change="handleSelectionChange"
   >
-    <el-table-column type="selection" width="55" />
-    <el-table-column property="name" label="Nama Voucher" width="130" />
+    <el-table-column type="selection" v-model="selectedItem" width="55" />
+    <el-table-column prop="name" label="Nama Voucher" width="130" />
     <el-table-column
-      property="tipe"
+      prop="type_voucher"
       label="Tipe Voucher"
       show-overflow-tooltip
     />
-    <el-table-column
-      property="percentage"
-      label="Percentage"
-      show-overflow-tooltip
-    />
-    <el-table-column property="value" label="Value" show-overflow-tooltip />
+    <el-table-column prop="percentage" label="Percentage" show-overflow-tooltip>
+    </el-table-column>
+
+    <el-table-column property="amount" label="Value" show-overflow-tooltip />
     <!-- <el-table-column
       property="address"
       label="Max Value"
       show-overflow-tooltip
     /> -->
     <el-table-column property="qty" label="QTY" show-overflow-tooltip />
-    <el-table-column
-      property="expired"
-      label="Expired Date"
-      show-overflow-tooltip
-    />
+    <el-table-column label="Expired Date" show-overflow-tooltip>
+      <template #default="scope">
+        {{ epochToDateTime(scope.row.expired_at) }}
+      </template>
+    </el-table-column>
     <el-table-column label="Aksi" align="center">
-      <div class="d-flex justify-content-center my-3">
-        <el-button
-          @click="$router.push(`/voucher/Detail/`)"
-          type="danger"
-          size="small"
-        >
-          <i class="bi bi-eye-fill text-white"></i>
-        </el-button>
-      </div>
+      <template #default="scope">
+        <div class="d-flex justify-content-center my-3">
+          <el-button
+            @click="$router.push(`/voucher/${scope.row.uuid}`)"
+            type="danger"
+            size="small"
+          >
+            <i class="bi bi-eye-fill text-white"></i>
+          </el-button>
+
+          <el-button
+            type="danger"
+            size="small"
+            circle
+            @click="selectItem(scope.row)"
+          >
+            <i class="bi bi-trash text-white"></i>
+          </el-button>
+        </div>
+      </template>
     </el-table-column>
   </el-table>
   <!-- <div style="margin-top: 20px">
@@ -173,53 +189,97 @@
       >
       <el-button @click="toggleSelection()">Clear selection</el-button>
     </div> -->
+
+  <el-dialog title="Konfirmasi" v-model="deleteDialog" width="30%">
+    <div class="mb-5">
+      <i
+        class="bi bi-exclamation-triangle text-danger me-3"
+        style="font-size: 1.5rem"
+      ></i>
+      <span>Are you sure you want to proceed?</span>
+    </div>
+    <template #footer>
+      <button @click="deleteDialog = false" class="btn btn-sm btn-secondary">
+        No
+      </button>
+      <button
+        @click="confirmRemove"
+        class="btn btn-sm btn-primary ms-3"
+        :disabled="loadingBtnDialog"
+        :data-kt-indicator="!loadingBtnDialog ? 'off' : 'on'"
+      >
+        <span v-if="!loadingBtnDialog" class="indicator-label">
+          Yes
+        </span>
+        <span v-else class="indicator-progress">
+          Please wait...
+          <span
+            class="spinner-border spinner-border-sm align-middle ms-2"
+          ></span>
+        </span>
+      </button>
+    </template>
+  </el-dialog>
+
+  <el-dialog title="Konfirmasi" v-model="multideleteDialog" width="30%">
+    <div class="mb-5">
+      <i
+        class="bi bi-exclamation-triangle text-danger me-3"
+        style="font-size: 1.5rem"
+      ></i>
+      <span>Are you sure you want to proceed?</span>
+    </div>
+    <template #footer>
+      <button
+        @click="multideleteDialog = false"
+        class="btn btn-sm btn-secondary"
+      >
+        No
+      </button>
+      <button
+        @click="confirmDelete"
+        class="btn btn-sm btn-primary ms-3"
+        :disabled="loadingBtnDialog"
+        :data-kt-indicator="!loadingBtnDialog ? 'off' : 'on'"
+      >
+        <span v-if="!loadingBtnDialog" class="indicator-label">
+          Yes
+        </span>
+        <span v-else class="indicator-progress">
+          Please wait...
+          <span
+            class="spinner-border spinner-border-sm align-middle ms-2"
+          ></span>
+        </span>
+      </button>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, reactive, onMounted, computed } from "vue";
 import moment from "moment";
-import EmployeeModule from "@/store/modules/EmployeeModule";
+import { useRoute } from "vue-router";
+import VoucherModule, { Voucher } from "@/store/modules/VoucherModule";
 import AuthModule from "@/store/modules/AuthModule";
 import { getModule } from "vuex-module-decorators";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
-import { handleNull, epochToDateTime } from "@/helper";
+import { handleNull, epochToDateTime, handleNullToString } from "@/helper";
 
-import { ElNotification, ElTable } from "element-plus";
+import { ElNotification, ElTable, ElMessage } from "element-plus";
 
 export default defineComponent({
-  name: "employee",
+  name: "voucher",
   components: {},
   setup() {
     const deleteDialog = ref(false);
+    const multideleteDialog = ref(false);
     const loadingBtnDialog = ref(false);
     const loadingDatatable = ref(false);
-    const employee = ref("");
-    const FilterSubmission = ref([
-      {
-        name: "Rabu asik",
-        tipe: "%",
-        percentage: "20%",
-        value: "9218738127431467",
-        qty: "20",
-        expired: "21-09-2021",
-      },
-      {
-        name: "Rabu asik",
-        tipe: "%",
-        percentage: "20%",
-        value: "9218738127431467",
-        qty: "20",
-        expired: "21-09-2021",
-      },
-      {
-        name: "Rabu asik",
-        tipe: "%",
-        percentage: "20%",
-        value: "9218738127431467",
-        qty: "20",
-        expired: "21-09-2021",
-      },
-    ]);
+    const VoucherState = getModule(VoucherModule);
+    const vouchers = computed(() => VoucherState.getVouchers);
+    const loading = ref<boolean>(true);
+    const route = useRoute();
 
     const filter = ref("");
     const search = ref<string | null>("");
@@ -228,18 +288,26 @@ export default defineComponent({
     const clearable = ref<boolean>(false);
 
     const selectedItem: any = reactive({});
-
-    const EmployeeState = getModule(EmployeeModule);
-    const AuthState = getModule(AuthModule);
-    const employees = computed(() => EmployeeState.getEmployees);
-    const metaPagination = computed(
-      () => EmployeeState.getMetaPaginationEmployee
-    );
-    const myOutletId = computed(() => AuthState.getMyOutletId);
+    const multipleTableRef = ref<InstanceType<typeof ElTable>>();
+ 
+    const handleSelectionChange = (val: Voucher[]) => {
+      selectedItem.value = val;
+    };
 
     const selectItem = (item) => {
       selectedItem.value = item;
       deleteDialog.value = true;
+    };
+
+    const AuthState = getModule(AuthModule);
+    const metaPagination = computed(
+      () => VoucherState.getMetaPaginationEmployee
+    );
+    const myOutletId = computed(() => AuthState.getMyOutletId);
+
+    const SelectDelete = (item) => {
+      selectedItem.value = item;
+      multideleteDialog.value = true;
     };
 
     const textSearch = () => {
@@ -247,17 +315,21 @@ export default defineComponent({
       else clearable.value = false;
     };
 
-    const searchSubs = () => {
-      loadingDatatable.value = true;
-      cursor.value = "";
-      EmployeeState.SET_EMPLOYEES([]);
-      EmployeeState.getEmployeesAPI({
-        outletId: myOutletId.value,
-        search: search.value,
-        filter: filter.value,
-        cursor: cursor.value,
-        perPage: perPage.value,
-      }).finally(() => (loadingDatatable.value = false));
+    const SubmitDelete = () => {
+      loadingBtnDialog.value = true;
+      VoucherState.SET_VOUCHERS([]);
+      // location.reload();
+      ElMessage("Success Menghapus Data. ");
+      VoucherState.deleteVoucher(route.params.uuid)
+        .then(() => {
+          const voucher = VoucherState.getVoucher;
+        })
+        .finally(() => {
+          deleteDialog.value = false;
+          loadingBtnDialog.value = false;
+          // location.reload();
+          loading.value = false;
+        });
     };
 
     const clearSearch = () => {
@@ -265,8 +337,8 @@ export default defineComponent({
       cursor.value = "";
       clearable.value = false;
       loadingDatatable.value = true;
-      EmployeeState.SET_EMPLOYEES([]);
-      EmployeeState.getEmployeesAPI({
+      VoucherState.SET_VOUCHERS([]);
+      VoucherState.getVouchersAPI({
         outletId: myOutletId.value,
         search: search.value,
         cursor: cursor.value,
@@ -278,8 +350,8 @@ export default defineComponent({
     const searchData = () => {
       loadingDatatable.value = true;
       cursor.value = "";
-      EmployeeState.SET_EMPLOYEES([]);
-      EmployeeState.getEmployeesAPI({
+      VoucherState.SET_VOUCHERS([]);
+      VoucherState.getVouchersAPI({
         outletId: myOutletId.value,
         search: search.value,
         cursor: cursor.value,
@@ -290,7 +362,7 @@ export default defineComponent({
     const prevPage = () => {
       loadingDatatable.value = true;
       cursor.value = metaPagination.value.prev_cursor;
-      EmployeeState.getEmployeesAPI({
+      VoucherState.getVouchersAPI({
         outletId: myOutletId.value,
         search: search.value,
         cursor: cursor.value,
@@ -302,7 +374,7 @@ export default defineComponent({
     const nextPage = () => {
       loadingDatatable.value = true;
       cursor.value = metaPagination.value.next_cursor;
-      EmployeeState.getEmployeesAPI({
+      VoucherState.getVouchersAPI({
         outletId: myOutletId.value,
         search: search.value,
         cursor: cursor.value,
@@ -343,12 +415,93 @@ export default defineComponent({
       return valueFilterDate.value;
     };
 
+    const confirmRemove = () => {
+      loadingBtnDialog.value = true;
+      VoucherState.deleteVoucher(selectedItem.value)
+        .then((res) => {
+          const response = res.data;
+
+          if (response.status) {
+            ElNotification({
+              title: "Success",
+              type: "success",
+              duration: 3000,
+              customClass: "successNotif",
+              message: "Voucher berhasil dihapus!",
+            });
+          } else {
+            ElNotification({
+              title: "Error",
+              type: "error",
+              duration: 3000,
+              customClass: "errorNotif",
+              message: response.error[0].text,
+            });
+          }
+        })
+        .catch(() => {
+          ElNotification({
+            title: "Error",
+            type: "error",
+            duration: 2000,
+            customClass: "errorNotif",
+            message: "Terjadi kesalahan server",
+          });
+        })
+        .finally(() => {
+          deleteDialog.value = false;
+          loadingBtnDialog.value = false;
+          location.reload();
+          selectedItem.value = {};
+        });
+    };
+
+    const confirmDelete = () => {
+      loadingBtnDialog.value = true;
+      VoucherState.deletemultiVoucher(selectedItem.value)
+        .then((res) => {
+          const response = res.data;
+
+          if (response.status) {
+            ElNotification({
+              title: "Success",
+              type: "success",
+              duration: 3000,
+              customClass: "successNotif",
+              message: "Voucher berhasil dihapus!",
+            });
+          } else {
+            ElNotification({
+              title: "Error",
+              type: "error",
+              duration: 3000,
+              customClass: "errorNotif",
+              message: response.error[0].text,
+            });
+          }
+        })
+        .catch(() => {
+          ElNotification({
+            title: "Error",
+            type: "error",
+            duration: 2000,
+            customClass: "errorNotif",
+            message: "Terjadi kesalahan server",
+          });
+        })
+        .finally(() => {
+          multideleteDialog.value = false;
+          loadingBtnDialog.value = false;
+          // location.reload();
+          selectedItem.value = {};
+        });
+    };
+
     onMounted(() => {
-      setCurrentPageBreadcrumbs("Dashboard", "Daftar Pengguna");
+      setCurrentPageBreadcrumbs("Dashboard", "Daftar Voucher");
       loadingDatatable.value = true;
-      EmployeeState.SET_EMPLOYEES([]);
-      EmployeeState.getEmployeesAPI({
-        outletId: myOutletId.value,
+      VoucherState.SET_VOUCHERS([]);
+      VoucherState.getVouchersAPI({
         search: search.value,
         filter: filter.value,
         cursor: cursor.value,
@@ -357,9 +510,6 @@ export default defineComponent({
     });
 
     return {
-      employees,
-
-      FilterSubmission,
       deleteDialog,
       loadingBtnDialog,
       loadingDatatable,
@@ -369,18 +519,24 @@ export default defineComponent({
       clearable,
       ElTable,
       metaPagination,
-      employee,
+      vouchers,
+      selectItem,
       epochToDateTime,
-      searchSubs,
+      handleNullToString,
+      SelectDelete,
+      SubmitDelete,
       textSearch,
       clearSearch,
       searchData,
-      selectItem,
       prevPage,
       nextPage,
       handleNull,
-
+      confirmRemove,
+      confirmDelete,
+      multideleteDialog,
+      multipleTableRef,
       getValueToFilterDate,
+      handleSelectionChange,
       typeFilter,
       filterRangeDate,
       filterRangeMonth,

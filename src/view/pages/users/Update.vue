@@ -471,6 +471,7 @@ export default defineComponent({
           rejectDialog.value = false;
           subscriptionDialog.value = false;
           loadingBtnDialog.value = false;
+          location.reload();
           loading.value = false;
         });
     };
@@ -486,6 +487,7 @@ export default defineComponent({
         .finally(() => {
           rejectDialog.value = false;
           loadingBtnDialog.value = false;
+          location.reload();
           loading.value = false;
         });
     };
@@ -502,6 +504,7 @@ export default defineComponent({
           rejectDialog.value = false;
           unlinkDialog.value = false;
           loadingBtnDialog.value = false;
+          location.reload();
           loading.value = false;
         });
     };

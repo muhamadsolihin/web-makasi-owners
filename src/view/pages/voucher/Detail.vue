@@ -10,7 +10,7 @@
       </div>
     </div>
     <DetailVoucher />
-    <CardVoucher />
+    <!-- <CardVoucher /> -->
     
   
      
@@ -42,7 +42,7 @@ import DetailVoucher from "@/view/pages/voucher/DetailVoucher.vue";
   
   export default defineComponent({
     name: "detail-Voucher",
-    components: { Loader, CardVoucher, DetailVoucher },
+    components: { Loader, DetailVoucher },
     setup() {
       const Employeedetail = ref<string | null>("");
       const loading = ref<boolean>(true);

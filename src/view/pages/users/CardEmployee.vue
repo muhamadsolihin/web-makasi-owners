@@ -35,7 +35,7 @@
               <template #default="scope">
                 <span
                   v-if="scope.row.is_active"
-                  class="ms-2 badge badge-success"
+                  t
                 >
                   Aktif
                 </span>
