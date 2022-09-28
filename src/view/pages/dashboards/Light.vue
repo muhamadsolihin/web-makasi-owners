@@ -109,7 +109,7 @@
       <WidgetTransactionNonCash :value="widgets.transaction_non_cash" />
       <!-- <StatsWidget5></StatsWidget5> -->
     </div>
-            <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
+    <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
       <WidgetUserList :value="widgets.user_register" />
       <!-- <StatsWidget4></StatsWidget4> -->
     </div>
@@ -187,7 +187,6 @@ import WidgetTransactionCash from "@/view/content/widgets/stats/WidgetTransactio
 import WidgetTransactionNonCash from "@/view/content/widgets/stats/WidgetTransactionNonCash.vue";
 import WidgetUserList from "@/view/content/widgets/stats/WidgetUserList.vue";
 
-
 import WidgetChartSelling from "@/view/content/widgets/stats/WidgetChartSelling.vue";
 import WidgetChartOmsetProfit from "@/view/content/widgets/stats/WidgetChartOmsetProfit.vue";
 import WidgetDemografi from "@/view/content/widgets/stats/WidgetDemografi.vue";
@@ -217,7 +216,7 @@ export default defineComponent({
     WidgetCustomer,
     WidgetTransactionCash,
     WidgetTransactionNonCash,
-    WidgetUserList ,
+    WidgetUserList,
     WidgetChartSelling,
     WidgetChartOmsetProfit,
     WidgetDemografi,

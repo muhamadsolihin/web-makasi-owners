@@ -97,11 +97,26 @@ export default class VoucherModule extends VuexModule {
     this.vouchers.push(payload);
   }
 
+  @Mutation
+  UPDATE_VOUCHER(payload) {
+    let itemWillUpdate = this.vouchers.find(
+      (item) => item.uuid == payload.uuid
+    );
+    itemWillUpdate = payload;
+  }
+
 
   @Mutation
   DELETE_VOUCHER(payload) {
     this.vouchers = this.vouchers.filter(item => item.uuid != payload);
   }
+
+  
+  @Mutation
+  DELETE_MULTIVOUCHER(payload) {
+    this.vouchers = this.vouchers.filter(item => item.uuid[0] != payload);
+  }
+
 
 
   @Mutation
@@ -162,9 +177,36 @@ export default class VoucherModule extends VuexModule {
   }
 
   @Action
+  updateStatus(payload): Promise<any> {
+    return http
+      .post(`/dusky_lory/v1/voucher/oklahoma/status/${payload.uuid}`)
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("UPDATE_VOUCHER", res.data.data);
+        }
+        return res.data;
+      })
+      .catch((err) => console.log(err));
+  }
+
+  @Action
+  updateVoucher(payload): Promise<any> {
+    return http
+      .post(`/dusky_lory/v1/voucher/oklahoma/${payload.uuid}` , payload.formData)
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("UPDATE_VOUCHER", res.data.data);
+        }
+        return res.data;
+      })
+      .catch((err) => console.log(err));
+  }
+
+
+  @Action
   deleteVoucher(payload): Promise<any> {
     return http
-      .delete(`/dusky_lory/v1/voucher/nevada/${payload.uuid}`)
+      .delete(`/dusky_lory/v1/voucher/nevada/${payload.uuid}` )
       .then((res) => {
         if (res.data.status) {
           this.context.commit("DELETE_VOUCHER", res.data.data);
@@ -177,10 +219,10 @@ export default class VoucherModule extends VuexModule {
   @Action
   deletemultiVoucher(payload): Promise<any> {
     return http
-      .delete(`/dusky_lory/v1/voucher/nevada/multiple?${payload.uuid[0]}`)
+      .delete(`/dusky_lory/v1/voucher/nevada/multiple?uuid[0]=${payload.uuid}`)
       .then((res) => {
         if (res.data.status) {
-          this.context.commit("DELETE_VOUCHER", res.data.data);
+          this.context.commit("DELETE_MULTIVOUCHER", res.data.data);
         }
         return res;
       })

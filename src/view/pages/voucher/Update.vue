@@ -19,9 +19,9 @@
               </div>
 
               <div class="col-6">
-                <label class="form-label"
-                rules="required"
-                >Tipe Voucher : </label>
+                <label class="form-label" rules="required"
+                  >Tipe Voucher :
+                </label>
                 <select class="form-select" v-model="typeVoucher">
                   <option value="percentage">Percentage</option>
                   <option value="amount">Amount</option>
@@ -45,46 +45,45 @@
                   />
                 </div>
                 <div class="row">
-                <div class="col-6 pt-5">
-                  <label class="form-label">QTY</label>
-                  <Field
-                    type="number"
-                    name="qty"
-                    v-model="qty"
-                    :class="{ 'border-danger': errors.email }"
-                    class="form-control form-control-solid border border-2"
-                  />
-                  <p class="text-danger mt-2">{{ errors.email }}</p>
-                </div>
+                  <div class="col-6 pt-5">
+                    <label class="form-label">QTY</label>
+                    <Field
+                      type="number"
+                      name="qty"
+                      v-model="qty"
+                      :class="{ 'border-danger': errors.email }"
+                      class="form-control form-control-solid border border-2"
+                    />
+                    <p class="text-danger mt-2">{{ errors.email }}</p>
+                  </div>
 
-                <div class="col-6 pt-5">
-                  <label class="form-label">Max Value</label>
-                  <Field
-                    type="number"
-                    name="max_amount"
-                    v-model="maxAmount"
-                    rules="required"
-                    :class="{ 'border-danger': errors.maxAmount }"
-                    class="form-control form-control-solid border border-2"
-                  />
-                  <p class="text-danger mt-2">{{ errors.maxAmount }}</p>
+                  <div class="col-6 pt-5">
+                    <label class="form-label">Max Value</label>
+                    <Field
+                      type="number"
+                      name="max_amount"
+                      v-model="maxAmount"
+                      rules="required"
+                      :class="{ 'border-danger': errors.maxAmount }"
+                      class="form-control form-control-solid border border-2"
+                    />
+                    <p class="text-danger mt-2">{{ errors.maxAmount }}</p>
+                  </div>
                 </div>
-              </div>
 
                 <div class="row">
-                <div class="col-6 pt-5">
-                  <label class="form-label">Duration</label>
-                  <Field
-                    type="number"
-                    name="duration"
-                    rules="required"
-                    v-model="isDuration"
-                    :class="{ 'border-danger': errors.isDuration }"
-                    class="form-control form-control-solid border border-2"
-                  />
-                </div>
+                  <div class="col-6 pt-5">
+                    <label class="form-label">Duration</label>
+                    <Field
+                      type="number"
+                      name="duration"
+                      rules="required"
+                      v-model="isDuration"
+                      :class="{ 'border-danger': errors.isDuration }"
+                      class="form-control form-control-solid border border-2"
+                    />
+                  </div>
 
-    
                   <div class="col-6 pt-5">
                     <label class="form-label">Expired Date</label>
                     <el-date-picker
@@ -96,8 +95,7 @@
                       value-format="YYYY-MM-DD hh:mm:ss"
                     />
                   </div>
-
-              </div>
+                </div>
               </div>
             </div>
 
@@ -118,44 +116,43 @@
                   </div>
                 </div>
                 <div class="row">
-                <div class="col-3 pt-5">
-                  <label class="form-label">Max Value</label>
-                  <Field
-                    type="number"
-                    name="max_amount"
-                    v-model="maxAmount"
-                    :class="{ 'border-danger': errors.maxAmount }"
-                    class="form-control form-control-solid border border-2"
-                  />
-                  <p class="text-danger mt-2">{{ errors.maxAmount }}</p>
-                </div>
-                <div class="col-3 pt-5">
-                  <label class="form-label">QTY</label>
-                  <Field
-                    type="number"
-                    name="qty"
-                    rules="required"
-                    v-model="qty"
-                    :class="{ 'border-danger': errors.qty }"
-                    class="form-control form-control-solid border border-2"
-                  />
-                  <p class="text-danger mt-2">{{ errors.qty }}</p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-3 pt-5">
-                  <label class="form-label">Duration</label>
-                  <Field
-                    type="number"
-                    name="duration"
-                    v-model="isDuration"
-                    :class="{ 'border-danger': errors.isDuration }"
-                    class="form-control form-control-solid border border-2"
-                  />
+                  <div class="col-3 pt-5">
+                    <label class="form-label">Max Value</label>
+                    <Field
+                      type="number"
+                      name="max_amount"
+                      v-model="maxAmount"
+                      :class="{ 'border-danger': errors.maxAmount }"
+                      class="form-control form-control-solid border border-2"
+                    />
+                    <p class="text-danger mt-2">{{ errors.maxAmount }}</p>
+                  </div>
+                  <div class="col-3 pt-5">
+                    <label class="form-label">QTY</label>
+                    <Field
+                      type="number"
+                      name="qty"
+                      rules="required"
+                      v-model="qty"
+                      :class="{ 'border-danger': errors.qty }"
+                      class="form-control form-control-solid border border-2"
+                    />
+                    <p class="text-danger mt-2">{{ errors.qty }}</p>
+                  </div>
                 </div>
 
-    
+                <div class="row">
+                  <div class="col-3 pt-5">
+                    <label class="form-label">Duration</label>
+                    <Field
+                      type="number"
+                      name="duration"
+                      v-model="isDuration"
+                      :class="{ 'border-danger': errors.isDuration }"
+                      class="form-control form-control-solid border border-2"
+                    />
+                  </div>
+
                   <div class="col-3 pt-5">
                     <label class="form-label">Expired Date </label>
                     <el-date-picker
@@ -166,8 +163,7 @@
                       value-format="YYYY-MM-DD hh:mm:ss"
                     />
                   </div>
-
-              </div>
+                </div>
               </div>
             </div>
             <div class="row">
@@ -231,7 +227,7 @@ import AuthModule from "@/store/modules/AuthModule";
 import VoucherModule from "@/store/modules/VoucherModule";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
 
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { ElNotification } from "element-plus";
 import { Actions } from "@/store/enums/store.enums";
 
@@ -247,6 +243,7 @@ export default defineComponent({
     const qty = ref<any>(null);
     const isDuration = ref<string | Blob>("");
     const voucherString = ref<string | Blob>("");
+    const route = useRoute();
 
     const expiredAt = ref<string | Blob>("");
     const loading = ref<boolean>(false);
@@ -270,17 +267,20 @@ export default defineComponent({
       formData.append("expired_at", expiredAt.value);
       formData.append("voucher_string", voucherString.value);
       loading.value = true;
-      VoucherState.addVouchers(formData)
+      VoucherState.updateVoucher({
+        uuid: route.params.uuid,
+        formData: formData,
+      })
         .then((res) => {
           const response = res.data;
 
           if (response.status) {
             ElNotification({
-              title: "Error",
-              type: "error",
+              title: "Success",
+              type: "success",
               duration: 2000,
-              customClass: "errorNotif",
-              message: "Terjadi kesalahan server",
+              customClass: "successNotif",
+              message: "Berhasil Edit Diskon!",
             });
 
             setTimeout(() => {
@@ -312,21 +312,41 @@ export default defineComponent({
         })
         .catch(() => {
           ElNotification({
-            title: "Success",
-            type: "success",
+            title: "Error",
+            type: "error",
             duration: 2000,
-            customClass: "successNotif",
-            message: "Berhasil Membuat Diskon!",
+            customClass: "errorNotif",
+            message: "Terjadi kesalahan server",
           });
         })
         .finally(() => {
-          location.reload();
+          // location.reload();
           loading.value = false;
         });
     };
 
     onMounted(async () => {
-      setCurrentPageBreadcrumbs("Dashboard", "Tambah Voucher");
+      setCurrentPageBreadcrumbs("Dashboard", "Edit Voucher");
+      store.dispatch(Actions.ADD_BODY_CLASSNAME, 'page-loading');
+      VoucherState.getDetailVoucher(route.params.uuid)
+        .then(res => {
+          if (res.status) {
+            name.value = res.data.name;
+            typeVoucher.value = res.data.type_voucher;
+            amount.value = res.data.amount.toString();
+            percentage.value = res.data.percentage.toString();
+            maxAmount.value = res.data.max_amount;
+            qty.value = res.data.qty;
+            isDuration.value = res.data.is_duration;
+            expiredAt.value = res.data.expired_at;
+            voucherString.value = res.data.voucher_string;
+
+          }
+        })
+        .finally(() =>
+          store.dispatch(Actions.REMOVE_BODY_CLASSNAME, 'page-loading')
+        );
+
     });
 
     return {

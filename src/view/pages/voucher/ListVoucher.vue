@@ -138,7 +138,7 @@
     :default-sort="{ prop: 'name', order: 'descending' }"
     @selection-change="handleSelectionChange"
   >
-    <el-table-column type="selection" v-model="selectedItem" width="55" />
+    <el-table-column type="selection" width="55" />
     <el-table-column prop="name" label="Nama Voucher" width="130" />
     <el-table-column
       prop="type_voucher"
@@ -155,6 +155,16 @@
       show-overflow-tooltip
     /> -->
     <el-table-column property="qty" label="QTY" show-overflow-tooltip />
+    <el-table-column prop="status" label="Status" width="150px" sortable>
+      <template #default="scope">
+        <span v-if="scope.row.status" class="ms-2 badge badge-success">
+          Aktif
+        </span>
+        <span v-else class="ms-2 badge badge-light">
+          Tidak Aktif
+        </span>
+      </template>
+    </el-table-column>
     <el-table-column label="Expired Date" show-overflow-tooltip>
       <template #default="scope">
         {{ epochToDateTime(scope.row.expired_at) }}
@@ -165,10 +175,10 @@
         <div class="d-flex justify-content-center my-3">
           <el-button
             @click="$router.push(`/voucher/${scope.row.uuid}`)"
-            type="danger"
             size="small"
+            style="border:none"
           >
-            <i class="bi bi-eye-fill text-white"></i>
+            <i class="bi bi-eye-fill text-danger"></i>
           </el-button>
 
           <el-button
@@ -179,17 +189,20 @@
           >
             <i class="bi bi-trash text-white"></i>
           </el-button>
+
+          <el-button
+            type="success"
+            size="small"
+            circle
+            @click="selectUpdate(scope.row)"
+          >
+            <i class="bi bi-pencil-square text-white"></i>
+          </el-button>
+          <!-- @click="$router.push(`/voucher/update/${scope.row.uuid}`)" -->
         </div>
       </template>
     </el-table-column>
   </el-table>
-  <!-- <div style="margin-top: 20px">
-      <el-button @click="toggleSelection([tableData[1], tableData[2]])"
-        >Toggle selection status of second and third rows</el-button
-      >
-      <el-button @click="toggleSelection()">Clear selection</el-button>
-    </div> -->
-
   <el-dialog title="Konfirmasi" v-model="deleteDialog" width="30%">
     <div class="mb-5">
       <i
@@ -204,6 +217,37 @@
       </button>
       <button
         @click="confirmRemove"
+        class="btn btn-sm btn-primary ms-3"
+        :disabled="loadingBtnDialog"
+        :data-kt-indicator="!loadingBtnDialog ? 'off' : 'on'"
+      >
+        <span v-if="!loadingBtnDialog" class="indicator-label">
+          Yes
+        </span>
+        <span v-else class="indicator-progress">
+          Please wait...
+          <span
+            class="spinner-border spinner-border-sm align-middle ms-2"
+          ></span>
+        </span>
+      </button>
+    </template>
+  </el-dialog>
+
+  <el-dialog title="Konfirmasi" v-model="updateDialog" width="30%">
+    <div class="mb-5">
+      <i
+        class="bi bi-exclamation-triangle text-danger me-3"
+        style="font-size: 1.5rem"
+      ></i>
+      <span>Are you sure you want to Update status?</span>
+    </div>
+    <template #footer>
+      <button @click="updateDialog = false" class="btn btn-sm btn-secondary">
+        No
+      </button>
+      <button
+        @click="confirmUpdate"
         class="btn btn-sm btn-primary ms-3"
         :disabled="loadingBtnDialog"
         :data-kt-indicator="!loadingBtnDialog ? 'off' : 'on'"
@@ -273,6 +317,7 @@ export default defineComponent({
   components: {},
   setup() {
     const deleteDialog = ref(false);
+    const updateDialog = ref(false);
     const multideleteDialog = ref(false);
     const loadingBtnDialog = ref(false);
     const loadingDatatable = ref(false);
@@ -280,6 +325,7 @@ export default defineComponent({
     const vouchers = computed(() => VoucherState.getVouchers);
     const loading = ref<boolean>(true);
     const route = useRoute();
+    const typeFilter = ref<number>(1);
 
     const filter = ref("");
     const search = ref<string | null>("");
@@ -289,7 +335,7 @@ export default defineComponent({
 
     const selectedItem: any = reactive({});
     const multipleTableRef = ref<InstanceType<typeof ElTable>>();
- 
+
     const handleSelectionChange = (val: Voucher[]) => {
       selectedItem.value = val;
     };
@@ -297,6 +343,11 @@ export default defineComponent({
     const selectItem = (item) => {
       selectedItem.value = item;
       deleteDialog.value = true;
+    };
+
+    const selectUpdate = (item) => {
+      selectedItem.value = item;
+      updateDialog.value = true;
     };
 
     const AuthState = getModule(AuthModule);
@@ -400,7 +451,6 @@ export default defineComponent({
         .format("YYYY")
     );
     const filterRangeEndYear = ref<any>(moment().format("YYYY"));
-    const typeFilter = ref<number>(1);
 
     const getValueToFilterDate = (): string[] => {
       const valueFilterDate = ref<string[]>([]);
@@ -414,6 +464,7 @@ export default defineComponent({
       }
       return valueFilterDate.value;
     };
+
 
     const confirmRemove = () => {
       loadingBtnDialog.value = true;
@@ -450,6 +501,47 @@ export default defineComponent({
         })
         .finally(() => {
           deleteDialog.value = false;
+          loadingBtnDialog.value = false;
+          location.reload();
+          selectedItem.value = {};
+        });
+    };
+
+    const confirmUpdate = () => {
+      loadingBtnDialog.value = true;
+      VoucherState.updateStatus(selectedItem.value)
+        .then((res) => {
+          const response = res.data;
+
+          if (response.status) {
+            ElNotification({
+              title: "Error",
+              type: "error",
+              duration: 3000,
+              customClass: "errorNotif",
+              message: "Terjadi Kesalahan!",
+            });
+          } else {
+            ElNotification({
+              title: "Error",
+              type: "error",
+              duration: 3000,
+              customClass: "errorNotif",
+              message: response.error[0].text,
+            });
+          }
+        })
+        .catch(() => {
+          ElNotification({
+            title: "Success",
+            type: "success",
+            duration: 2000,
+            customClass: "successNotif",
+            message: "Voucher Berhasil Di Update",
+          });
+        })
+        .finally(() => {
+          updateDialog.value = false;
           loadingBtnDialog.value = false;
           location.reload();
           selectedItem.value = {};
@@ -494,6 +586,7 @@ export default defineComponent({
           loadingBtnDialog.value = false;
           // location.reload();
           selectedItem.value = {};
+          multipleTableRef;
         });
     };
 
@@ -510,6 +603,7 @@ export default defineComponent({
     });
 
     return {
+      ElTable,
       deleteDialog,
       loadingBtnDialog,
       loadingDatatable,
@@ -517,11 +611,22 @@ export default defineComponent({
       filter,
       search,
       clearable,
-      ElTable,
       metaPagination,
       vouchers,
-      selectItem,
+      multideleteDialog,
+      updateDialog,
+      multipleTableRef,
+      typeFilter,
+      filterRangeDate,
+      filterRangeMonth,
+      filterRangeStartYear,
+
+      selectUpdate,
+      getValueToFilterDate,
+      handleSelectionChange,
+      confirmUpdate,
       epochToDateTime,
+      selectItem,
       handleNullToString,
       SelectDelete,
       SubmitDelete,
@@ -533,14 +638,6 @@ export default defineComponent({
       handleNull,
       confirmRemove,
       confirmDelete,
-      multideleteDialog,
-      multipleTableRef,
-      getValueToFilterDate,
-      handleSelectionChange,
-      typeFilter,
-      filterRangeDate,
-      filterRangeMonth,
-      filterRangeStartYear,
     };
   },
 });
