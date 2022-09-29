@@ -56,33 +56,33 @@ const routes: Array<RouteRecordRaw> = [
 
 
 
-      {
-        path: "/voucher",
-        name: "voucher",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/voucher/ListVoucher.vue"),
-      },
+      // {
+      //   path: "/voucher",
+      //   name: "voucher",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/voucher/ListVoucher.vue"),
+      // },
 
-      {
-        path: "/voucher/Add",
-        name: "add-voucher",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/voucher/Add.vue"),
-      },
+      // {
+      //   path: "/voucher/Add",
+      //   name: "add-voucher",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/voucher/Add.vue"),
+      // },
 
-      {
-        path: "voucher/:uuid",
-        name: "detail-voucher",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/voucher/Detail.vue"),
-      },
+      // {
+      //   path: "voucher/:uuid",
+      //   name: "detail-voucher",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/voucher/Detail.vue"),
+      // },
 
-      {
-        path: "voucher/update/:uuid",
-        name: "update-voucher",
-        meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/voucher/Update.vue"),
-      },
+      // {
+      //   path: "voucher/update/:uuid",
+      //   name: "update-voucher",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/voucher/Update.vue"),
+      // },
 
       // {
       //   path: "/outlets",

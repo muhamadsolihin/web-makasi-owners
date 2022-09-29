@@ -75,26 +75,18 @@
               <p class="fw-bold">No Telp :</p>
             </div>
             <div class="col-md-3">
-              <!-- <p class="fw-bold">
-                {{ handleNullToString(employee.name) }}
-                <span v-if="employee.verified == '0'"></span>
-                <span v-else-if="employee.verified == '1'"
-                  ><i
-                    class="bi bi-patch-check-fill text-danger me-3"
-                    style="font-size: 1.3rem"
-                    prop="verified"
-                  >
-                  </i
-                ></span>
-              </p> -->
+              <p class="fw-bold">
+                {{ handleNullToString(employee.phone_account) }}
+
+              </p>
             </div>
             <div class="col-md-2 pl-5">
               <p class="fw-bold">Email :</p>
             </div>
             <div class="col-md-2">
-              <!-- <p class="fw-bold">
-                {{ epochToDateTime(employee.created_at) }}
-              </p> -->
+              <p class="fw-bold">
+                {{ handleNullToString(employee.email_account) }}
+              </p>
             </div>
           </div>
           <div class="row">
