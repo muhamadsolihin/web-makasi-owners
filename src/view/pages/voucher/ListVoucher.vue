@@ -42,7 +42,7 @@
       <div class="col-12 d-flex justify-content-end ">
         <div class="d-flex align-items-center">
           <!-- begin::filter date -->
-          <el-date-picker
+          <!-- <el-date-picker
             v-if="typeFilter == 1"
             v-model="filterRangeDate"
             @change="changeFilterDateRange"
@@ -53,11 +53,11 @@
             type="daterange"
             unlink-panels
             size="large"
-          />
+          /> -->
           <!-- end::filter date -->
 
           <!-- begin::filter year -->
-          <div
+          <!-- <div
             class="d-flex align-items-center"
             style="width: 300px"
             v-if="typeFilter == 2"
@@ -79,11 +79,11 @@
               placeholder="End year"
               value-format="YYYY"
             />
-          </div>
+          </div> -->
           <!-- end::filter year -->
 
           <!-- begin::filter month -->
-          <el-date-picker
+          <!-- <el-date-picker
             type="monthrange"
             v-if="typeFilter == 3"
             v-model="filterRangeMonth"
@@ -91,18 +91,19 @@
             start-placeholder="Start month"
             end-placeholder="End month"
             value-format="YYYY-MM"
-          />
+          /> -->
           <!-- end::filter month -->
-
-          <!-- <button class="btn btn-sm btn-primary"></button> -->
-          <el-button
-            @click="$router.push(`/voucher/Add`)"
-            type="danger"
-            size="small"
-            style="margin-right:10px; margin-left: 10px;"
-          >
-            <span>Add</span>
-          </el-button>
+          <div class="col-6">
+            <!-- <button class="btn btn-sm btn-primary"></button> -->
+            <el-button
+              @click="$router.push(`/voucher/Add`)"
+              type="danger"
+              size="small"
+              style="margin-right:10px; margin-left: 100px;"
+            >
+              <span>Add</span>
+            </el-button>
+          </div>
           <!-- <div class="col-md-2 ">
             <el-upload
               v-model:file-list="fileList"
@@ -118,6 +119,15 @@
               <el-button type="danger" size="small">Export Data</el-button>
             </el-upload>
           </div> -->
+          <div class="col-3">
+            <el-button
+              @click="SelectmultiUpdate"
+              type="success"
+              style="margin-left:0.5em"
+              size="small"
+              >Update</el-button
+            >
+          </div>
           <div class="col-md-2">
             <el-button
               @click="SelectDelete"
@@ -138,23 +148,43 @@
     :default-sort="{ prop: 'name', order: 'descending' }"
     @selection-change="handleSelectionChange"
   >
-    <el-table-column type="selection" width="55" />
-    <el-table-column prop="name" label="Nama Voucher" width="130" />
-    <el-table-column
+    <el-table-column type="selection" width="55" fixed />
+
+    <el-table-column prop="name" label="Nama Voucher" width="200">
+      <template #default="scope">
+        <button
+          style="border:none; background-color: transparent; text-align: left; "
+          @click="$router.push(`/voucher/${scope.row.uuid}`)"
+        >
+          {{ handleNullToString(scope.row.name) }}
+        </button>
+      </template>
+    </el-table-column>
+    <!-- <el-table-column
       prop="type_voucher"
       label="Tipe Voucher"
       show-overflow-tooltip
-    />
-    <el-table-column prop="percentage" label="Percentage" show-overflow-tooltip>
+    /> -->
+    <el-table-column prop="percentage" label="Diskon %" show-overflow-tooltip>
+      <template #default="prop">
+        <span v-if="handleNull(prop.row.percentage)">
+          {{ prop.row.percentage }}%
+        </span>
+      </template>
     </el-table-column>
 
-    <el-table-column property="amount" label="Value" show-overflow-tooltip />
-    <!-- <el-table-column
-      property="address"
-      label="Max Value"
-      show-overflow-tooltip
-    /> -->
-    <el-table-column property="qty" label="QTY" show-overflow-tooltip />
+    <el-table-column prop="amount" label="Diskon Rupiah" show-overflow-tooltip>
+      <template #default="prop">
+        <span v-if="handleNull(prop.row.amount)">
+          Rp. {{ formatCurrency(prop.row.amount) }}
+        </span>
+      </template>
+    </el-table-column>
+    <el-table-column property="qty" label="QTY" show-overflow-tooltip>
+      <template #default="prop">
+        <span v-if="handleNull(prop.row.qty)"> {{ prop.row.qty }} pcs </span>
+      </template>
+    </el-table-column>
     <el-table-column prop="status" label="Status" width="150px" sortable>
       <template #default="scope">
         <span v-if="scope.row.status" class="ms-2 badge badge-success">
@@ -170,15 +200,16 @@
         {{ epochToDateTime(scope.row.expired_at) }}
       </template>
     </el-table-column>
-    <el-table-column label="Aksi" align="center">
+    <el-table-column fixed="right" label="Aksi" align="center">
       <template #default="scope">
         <div class="d-flex justify-content-center my-3">
           <el-button
-            @click="$router.push(`/voucher/${scope.row.uuid}`)"
+            @click="selectUpdate(scope.row)"
             size="small"
-            style="border:none"
+            type="danger"
+            circle
           >
-            <i class="bi bi-eye-fill text-danger"></i>
+            <i class="bi bi-arrow-repeat text-white"></i>
           </el-button>
 
           <el-button
@@ -194,7 +225,7 @@
             type="success"
             size="small"
             circle
-            @click="selectUpdate(scope.row)"
+            @click="$router.push(`/voucher/update/${scope.row.uuid}`)"
           >
             <i class="bi bi-pencil-square text-white"></i>
           </el-button>
@@ -298,19 +329,66 @@
       </button>
     </template>
   </el-dialog>
+  <el-dialog title="Konfirmasi" v-model="multiupdateDialog" width="30%">
+    <div class="mb-5">
+      <i
+        class="bi bi-exclamation-triangle text-danger me-3"
+        style="font-size: 1.5rem"
+      ></i>
+      <span>Are you sure you want to proceed?</span>
+    </div>
+    <template #footer>
+      <button
+        @click="multiupdateDialog = false"
+        class="btn btn-sm btn-secondary"
+      >
+        No
+      </button>
+      <button
+        @click="confirmMultiUpdate"
+        class="btn btn-sm btn-primary ms-3"
+        :disabled="loadingBtnDialog"
+        :data-kt-indicator="!loadingBtnDialog ? 'off' : 'on'"
+      >
+        <span v-if="!loadingBtnDialog" class="indicator-label">
+          Yes
+        </span>
+        <span v-else class="indicator-progress">
+          Please wait...
+          <span
+            class="spinner-border spinner-border-sm align-middle ms-2"
+          ></span>
+        </span>
+      </button>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, onMounted, computed } from "vue";
+import {
+  defineComponent,
+  ref,
+  reactive,
+  onMounted,
+  computed,
+  watch,
+} from "vue";
 import moment from "moment";
 import { useRoute } from "vue-router";
 import VoucherModule, { Voucher } from "@/store/modules/VoucherModule";
 import AuthModule from "@/store/modules/AuthModule";
 import { getModule } from "vuex-module-decorators";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
-import { handleNull, epochToDateTime, handleNullToString } from "@/helper";
+import {
+  handleNull,
+  epochToDateTime,
+  handleNullToString,
+  formatCurrency,
+} from "@/helper";
 
 import { ElNotification, ElTable, ElMessage } from "element-plus";
+import { uniqueId } from "lodash";
+import { number } from "yup/lib/locale";
 
 export default defineComponent({
   name: "voucher",
@@ -319,6 +397,7 @@ export default defineComponent({
     const deleteDialog = ref(false);
     const updateDialog = ref(false);
     const multideleteDialog = ref(false);
+    const multiupdateDialog = ref(false);
     const loadingBtnDialog = ref(false);
     const loadingDatatable = ref(false);
     const VoucherState = getModule(VoucherModule);
@@ -326,6 +405,7 @@ export default defineComponent({
     const loading = ref<boolean>(true);
     const route = useRoute();
     const typeFilter = ref<number>(1);
+    const uuid = ref<string | Blob>("");
 
     const filter = ref("");
     const search = ref<string | null>("");
@@ -334,10 +414,20 @@ export default defineComponent({
     const clearable = ref<boolean>(false);
 
     const selectedItem: any = reactive({});
+    const selectsItem = ref<Voucher[]>([]);
     const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 
+    const listUpdate = ref<string | Blob>("");
+
+    // watch(
+    //   () => selectsItem.value,
+    //   (val) => {
+    //     console.log(val);
+    //   }
+    // );
+
     const handleSelectionChange = (val: Voucher[]) => {
-      selectedItem.value = val;
+      selectsItem.value = val;
     };
 
     const selectItem = (item) => {
@@ -357,8 +447,15 @@ export default defineComponent({
     const myOutletId = computed(() => AuthState.getMyOutletId);
 
     const SelectDelete = (item) => {
-      selectedItem.value = item;
+      // selectsItem.value = item;
       multideleteDialog.value = true;
+      multipleTableRef.value!;
+    };
+
+    const SelectmultiUpdate = (item) => {
+      // selectsItem.value = item;
+      multiupdateDialog.value = true;
+      multipleTableRef.value!;
     };
 
     const textSearch = () => {
@@ -366,22 +463,22 @@ export default defineComponent({
       else clearable.value = false;
     };
 
-    const SubmitDelete = () => {
-      loadingBtnDialog.value = true;
-      VoucherState.SET_VOUCHERS([]);
-      // location.reload();
-      ElMessage("Success Menghapus Data. ");
-      VoucherState.deleteVoucher(route.params.uuid)
-        .then(() => {
-          const voucher = VoucherState.getVoucher;
-        })
-        .finally(() => {
-          deleteDialog.value = false;
-          loadingBtnDialog.value = false;
-          // location.reload();
-          loading.value = false;
-        });
-    };
+    // const SubmitDelete = () => {
+    //   loadingBtnDialog.value = true;
+    //   VoucherState.SET_VOUCHERS([]);
+    //   // location.reload();
+    //   ElMessage("Success Menghapus Data. ");
+    //   VoucherState.deleteVoucher(route.params.uuid)
+    //     .then(() => {
+    //       const voucher = VoucherState.getVoucher;
+    //     })
+    //     .finally(() => {
+    //       deleteDialog.value = false;
+    //       loadingBtnDialog.value = false;
+    //       // location.reload();
+    //       loading.value = false;
+    //     });
+    // };
 
     const clearSearch = () => {
       search.value = "";
@@ -464,7 +561,6 @@ export default defineComponent({
       }
       return valueFilterDate.value;
     };
-
 
     const confirmRemove = () => {
       loadingBtnDialog.value = true;
@@ -550,7 +646,9 @@ export default defineComponent({
 
     const confirmDelete = () => {
       loadingBtnDialog.value = true;
-      VoucherState.deletemultiVoucher(selectedItem.value)
+      // console.log(selectsItem.value);
+
+      VoucherState.deletemultiVoucher(selectsItem.value)
         .then((res) => {
           const response = res.data;
 
@@ -584,9 +682,61 @@ export default defineComponent({
         .finally(() => {
           multideleteDialog.value = false;
           loadingBtnDialog.value = false;
-          // location.reload();
-          selectedItem.value = {};
-          multipleTableRef;
+          location.reload();
+          selectsItem.value = [];
+        });
+    };
+
+    const confirmMultiUpdate = () => {
+      console.log(selectsItem.value);
+
+      const dataForm = new FormData();
+      
+      selectsItem.value.forEach((el, indexEl) => {
+        dataForm.append(`uuid[${indexEl}]`, el.uuid);
+      });
+
+      loading.value = true;
+      loadingBtnDialog.value = true;
+      // console.log(selectsItem.value);
+
+      VoucherState.updatemultiVoucher(dataForm)
+
+        .then((res) => {
+          const response = res.data;
+
+          if (response.status) {
+            ElNotification({
+              title: "Error",
+              type: "error",
+              duration: 3000,
+              customClass: "errorNotif",
+              message: "Terjadi kesalahan server",
+            });
+          } else {
+            ElNotification({
+              title: "Error",
+              type: "error",
+              duration: 3000,
+              customClass: "errorNotif",
+              message: response.error[0].text,
+            });
+          }
+        })
+        .catch(() => {
+          ElNotification({
+            title: "Success",
+            type: "success",
+            duration: 2000,
+            customClass: "successNotif",
+            message: "Voucher berhasil diupdate!" ,
+          });
+        })
+        .finally(() => {
+          multideleteDialog.value = false;
+          loadingBtnDialog.value = false;
+          location.reload();
+          selectsItem.value = [];
         });
     };
 
@@ -620,8 +770,11 @@ export default defineComponent({
       filterRangeDate,
       filterRangeMonth,
       filterRangeStartYear,
+      multiupdateDialog,
 
       selectUpdate,
+      SelectmultiUpdate,
+      confirmMultiUpdate,
       getValueToFilterDate,
       handleSelectionChange,
       confirmUpdate,
@@ -629,12 +782,12 @@ export default defineComponent({
       selectItem,
       handleNullToString,
       SelectDelete,
-      SubmitDelete,
       textSearch,
       clearSearch,
       searchData,
       prevPage,
       nextPage,
+      formatCurrency,
       handleNull,
       confirmRemove,
       confirmDelete,

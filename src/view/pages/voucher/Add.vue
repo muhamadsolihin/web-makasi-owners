@@ -4,8 +4,9 @@
       <div class="card-body">
         <div class="container">
           <Form @submit="onSubmit" v-slot="{ errors }" autocomplete="off">
+            <div class="row">
             <div class="row" style="margin-top: 30px">
-              <div class="col-6">
+              <div class="col-6 pt-5">
                 <label class="form-label">Nama Voucher</label>
                 <Field
                   type="text"
@@ -17,120 +18,87 @@
                 />
                 <p class="text-danger mt-2">{{ errors.name }}</p>
               </div>
-
-              <div class="col-6">
-                <label class="form-label"
-                rules="required"
-                >Tipe Voucher : </label>
-                <select class="form-select" v-model="typeVoucher">
-                  <option value="percentage">Percentage</option>
-                  <option value="amount">Amount</option>
-                </select>
+              <div class="col-6 pt-5">
+                <label class="form-label" rules="required"
+                  >Tipe Voucher :
+                </label>
+                <Field
+                  as="select"
+                  name="typeVoucher"
+                  v-model="typeVoucher"
+                  @change="changeTypeVoucher"
+                  class="form-select form-select-solid border border-2"
+                >
+                  <option :value="2">Rupiah</option>
+                  <option :value="1">Persentase</option>
+                </Field>
                 <p class="text-danger mt-2">{{ errors.typeVoucher }}</p>
               </div>
             </div>
-
-            <div class="row">
-              <div class="col-6" v-if="typeVoucher === 'percentage'">
-                <label class="form-label">Percentage</label>
-                <div class="input-group">
+            
+              <div class="row">
+                <div class="col-6 pt-5">
+                  <label class="form-label">Jumlah Diskon</label>
+                  <Field
+                    type="number"
+                    name="amount"
+                    maxLength="13"
+                    v-model="amount"
+                    :disabled="typeVoucher == 1 ? true : false"
+                    :rules="typeVoucher == 1 ? '' : 'required'"
+                    :class="{ 'border-danger': errors.amount }"
+                    class="form-control form-control-solid border border-2"
+                  />
+                  <p class="text-danger mt-2">{{ errors.amount }}</p>
+                </div>
+                <div class="col-6 pt-5">
+                  <label class="form-label">Diskon Persen</label>
                   <Field
                     type="number"
                     name="percentage"
-                    label="percentage"
-                    :min="0"
-                    :max="99"
                     v-model="percentage"
+                    :class="{ 'border-danger': errors.percentage }"
+                    :disabled="typeVoucher == 2 ? true : false"
+                    :rules="typeVoucher == 2 ? '' : 'required|minMax:1,100'"
                     class="form-control form-control-solid border border-2"
                   />
+                  <p class="text-danger mt-2">{{ errors.percentage }}</p>
                 </div>
-                <div class="row">
-                <div class="col-6 pt-5">
-                  <label class="form-label">QTY</label>
-                  <Field
-                    type="number"
-                    name="qty"
-                    v-model="qty"
-                    :class="{ 'border-danger': errors.email }"
-                    class="form-control form-control-solid border border-2"
-                  />
-                  <p class="text-danger mt-2">{{ errors.email }}</p>
-                </div>
+              </div>
 
+              <div class="row">
                 <div class="col-6 pt-5">
-                  <label class="form-label">Max Value</label>
+                  <label class="form-label">Maksimal Harga Diskon</label>
                   <Field
                     type="number"
                     name="max_amount"
-                    v-model="maxAmount"
                     rules="required"
-                    :class="{ 'border-danger': errors.maxAmount }"
-                    class="form-control form-control-solid border border-2"
-                  />
-                  <p class="text-danger mt-2">{{ errors.maxAmount }}</p>
-                </div>
-              </div>
-
-                <div class="row">
-                <div class="col-6 pt-5">
-                  <label class="form-label">Duration</label>
-                  <Field
-                    type="number"
-                    name="duration"
-                    rules="required"
-                    v-model="isDuration"
-                    :class="{ 'border-danger': errors.isDuration }"
-                    class="form-control form-control-solid border border-2"
-                  />
-                </div>
-
-    
-                  <div class="col-6 pt-5">
-                    <label class="form-label">Expired Date</label>
-                    <el-date-picker
-                      v-model="expiredAt"
-                      type="datetime"
-                      rules="required"
-                      placeholder="Pick a Date"
-                      format="YYYY/MM/DD hh:mm:ss"
-                      value-format="YYYY-MM-DD hh:mm:ss"
-                    />
-                  </div>
-
-              </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div v-if="typeVoucher === 'amount'">
-                <div class="col-6" style="position: relative">
-                  <label class="form-label">Value</label>
-                  <div class="input-group">
-                    <Field
-                      type="number"
-                      name="amount"
-                      rules="required"
-                      maxLength="13"
-                      v-model="amount"
-                      :class="{ 'border-danger': errors.amount }"
-                      class="form-control form-control-solid border border-2"
-                    />
-                  </div>
-                </div>
-                <div class="row">
-                <div class="col-3 pt-5">
-                  <label class="form-label">Max Value</label>
-                  <Field
-                    type="number"
-                    name="max_amount"
                     v-model="maxAmount"
                     :class="{ 'border-danger': errors.maxAmount }"
                     class="form-control form-control-solid border border-2"
                   />
                   <p class="text-danger mt-2">{{ errors.maxAmount }}</p>
                 </div>
-                <div class="col-3 pt-5">
-                  <label class="form-label">QTY</label>
+                <div class="col-6 pt-5">
+                  <label class="form-label" rules="required"
+                    >Syarat dan Ketentuan
+                  </label>
+                  <Field
+                    as="select"
+                    name="isyearly"
+                    v-model="isYearly"
+                    class="form-select form-select-solid border border-2"
+                  >
+                    <option :value="0">Tanpa Syarat</option>
+                    <option :value="1">Tahunan</option>
+                  </Field>
+                  <p class="text-danger mt-2">{{ errors.typeVoucher }}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-6 pt-5">
+                  <label class="form-label">Jumlah Voucher</label>
                   <Field
                     type="number"
                     name="qty"
@@ -141,11 +109,8 @@
                   />
                   <p class="text-danger mt-2">{{ errors.qty }}</p>
                 </div>
-              </div>
-
-              <div class="row">
-                <div class="col-3 pt-5">
-                  <label class="form-label">Duration</label>
+                <div class="col-6 pt-5">
+                  <label class="form-label">Durasi</label>
                   <Field
                     type="number"
                     name="duration"
@@ -154,34 +119,33 @@
                     class="form-control form-control-solid border border-2"
                   />
                 </div>
-
-    
-                  <div class="col-3 pt-5">
-                    <label class="form-label">Expired Date </label>
-                    <el-date-picker
-                      v-model="expiredAt"
-                      type="datetime"
-                      placeholder="Pick a Date"
-                      format="YYYY/MM/DD hh:mm:ss"
-                      value-format="YYYY-MM-DD hh:mm:ss"
-                    />
-                  </div>
-
               </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6 pt-5">
-                <label class="form-label">Judul Voucher</label>
 
-                <Field
-                  name="voucher_string"
-                  type="text"
-                  rules="required"
-                  v-model="voucherString"
-                  :class="{ 'border-danger': errors.voucherString }"
-                  class="form-control form-control-solid border border-2"
-                />
+              <div class="row">
+                <div class="col-6 pt-5">
+                  <label class="form-label">Kadaluwarsa </label>
+                  <el-date-picker
+                    v-model="expiredAt"
+                    type="datetime"
+                    placeholder="Pick a Date"
+                    style="margin-left:10px"
+                    format="YYYY/MM/DD hh:mm:ss"
+                    value-format="YYYY-MM-DD hh:mm:ss"
+                  />
+                </div>
+
+                <div class="col-6  ">
+                  <label class="form-label">Judul Voucher</label>
+
+                  <Field
+                    name="voucher_string"
+                    type="text"
+                    rules="required"
+                    v-model="voucherString"
+                    :class="{ 'border-danger': errors.voucherString }"
+                    class="form-control form-control-solid border border-2"
+                  />
+                </div>
               </div>
             </div>
             <div
@@ -240,18 +204,30 @@ export default defineComponent({
   components: { Form, Field },
   setup() {
     const name = ref<string | Blob>("");
-    const typeVoucher = ref<string | Blob>("");
+    const typeVoucher = ref<number>(1);
     const amount = ref<string | Blob>("");
+
+    const isYearly = ref<string | Blob>("");
     const percentage = ref<string | Blob>("");
     const maxAmount = ref<string | Blob>("");
     const qty = ref<any>(null);
     const isDuration = ref<string | Blob>("");
     const voucherString = ref<string | Blob>("");
+    const temporaryDiscPercentage = ref<string | Blob>("");
 
     const expiredAt = ref<string | Blob>("");
     const loading = ref<boolean>(false);
 
     const isLoadingMultiple = ref<boolean>(false);
+
+    const changeTypeVoucher = () => {
+      if (typeVoucher.value == 1) {
+        temporaryDiscPercentage.value = percentage.value;
+        percentage.value = "";
+      } else {
+        percentage.value = temporaryDiscPercentage.value;
+      }
+    };
 
     const store = useStore();
     const router = useRouter();
@@ -261,7 +237,7 @@ export default defineComponent({
     const onSubmit = () => {
       const formData = new FormData();
       formData.append("name", name.value);
-      formData.append("type_voucher", typeVoucher.value);
+      formData.append("type_voucher", typeVoucher.value as any);
       formData.append("amount", amount.value);
       formData.append("percentage", percentage.value);
       formData.append("max_amount", maxAmount.value);
@@ -269,6 +245,7 @@ export default defineComponent({
       formData.append("is_duration", isDuration.value);
       formData.append("expired_at", expiredAt.value);
       formData.append("voucher_string", voucherString.value);
+      formData.append("is_yearly", isYearly.value);
       loading.value = true;
       VoucherState.addVouchers(formData)
         .then((res) => {
@@ -292,7 +269,8 @@ export default defineComponent({
             }, 2000);
 
             name.value = "";
-            typeVoucher.value = "";
+            typeVoucher.value as any;
+            "";
             amount.value = "";
             percentage.value = "";
             maxAmount.value = "";
@@ -339,9 +317,11 @@ export default defineComponent({
       qty,
       isDuration,
       expiredAt,
+      isYearly,
       isLoadingMultiple,
       voucherString,
 
+      changeTypeVoucher,
       onSubmit,
     };
   },

@@ -83,7 +83,7 @@
                     </td>
                     <td class="text-end px-0">
                       <span class="text-gray-800 fw-bolder d-block fs-6">
-                        {{ formatCurrencyKilo(item.price) }}
+                        {{ formatCurrens(item.price) }}
                       </span>
                       <!-- <span :class="`text-${item.status}`" class="fw-bolder">
                         {{ item.profit }}
@@ -91,7 +91,7 @@
                     </td>
                     <td class="text-end">
                       <span class="text-gray-800 fw-bolder d-block fs-6">
-                        {{ formatCurrencyKilo(item.total_price) }}
+                        {{ formatCurrens(item.total_price) }}
                       </span>
                       <!-- <a
                         href="#"
@@ -288,7 +288,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { formatCurrencyKilo } from "@/helper";
+import { formatCurrens } from "@/helper";
 
 export default defineComponent({
   name: "WidgetTable",
@@ -431,7 +431,7 @@ export default defineComponent({
       // day,
       // week,
       // month,
-      formatCurrencyKilo,
+      formatCurrens,
     };
   },
 });

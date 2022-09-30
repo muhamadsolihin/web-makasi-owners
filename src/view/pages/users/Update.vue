@@ -2,7 +2,7 @@
   <div>
     <Loader />
     <div class="row ">
-      <div class="col-md-4 ">
+      <div class="col-md-6 ">
         <span v-if="employee.verified == '0'">
           <span v-if="employee.is_submission == '1'">
             <button class="btn btn-sm btn-primary ms-2" @click="SelectItem">
@@ -19,7 +19,9 @@
 
         <span v-if="employee.verified == '0'">
           <span v-if="employee.is_submission == '1'">
-            <button class="btn btn-sm btn-primary ms-2" @click="SelectReject">
+            <button class="btn btn-sm btn-primary ms-2" 
+
+            @click="SelectReject">
               Reject
             </button></span
           ></span

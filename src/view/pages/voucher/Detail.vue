@@ -1,23 +1,12 @@
 <template>
   <div>
     <Loader />
-    <div class="row ">
-      <div class="col-6 d-flex justify-content-left ">
-        <button
-          class="btn btn-success"
-          @click="$router.push(`/voucher/update/${route.params.uuid}`)"
-        >
-          Update
-        </button>
-      </div>
-
-      <div class="col-6 d-flex justify-content-end ">
+      <div class="col-12 d-flex justify-content-end ">
         <button class="btn btn-secondary" @click="$router.back">
           Kembali
         </button>
       </div>
     </div>
-  </div>
   <DetailVoucher />
   <!-- <CardVoucher /> -->
 </template>

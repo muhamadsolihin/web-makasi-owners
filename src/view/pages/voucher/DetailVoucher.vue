@@ -17,23 +17,23 @@
               </p>
             </div>
             <div class="col-md-2 pl-5">
-              <p class="fw-bold">Tipe Voucher:</p>
+              <p class="fw-bold">Tipe Voucher :</p>
             </div>
             <div class="col-md-2">
               <p class="fw-bold">
-                <span v-if="voucher.type_voucher == '1'">%</span>
+                <span v-if="voucher.type_voucher == '1'">Persentase</span>
                 <span v-else-if="voucher.type_voucher == '2'"
-                  >Amount</span>
+                  >Rupiah</span>
               </p>
             </div>
           </div>
           <div class="row">
             <div class="col-md-3">
-              <p class="fw-bold">Value :</p>
+              <p class="fw-bold">Jumlah Diskon :</p>
             </div>
             <div class="col-md-3">
               <p class="fw-bold">
-                {{ voucher.amount }}
+                Rp. {{ formatCurrency(voucher.amount) }}
               </p>
             </div>
             <div class="col-md-2 pl-5">
@@ -53,15 +53,15 @@
           </div>
           <div class="row">
             <div class="col-md-3">
-              <p class="fw-bold"> Jumlah Voucher </p>
+              <p class="fw-bold"> Jumlah Voucher :</p>
             </div>
             <div class="col-md-3">
               <p class="fw-bold">
-                {{ voucher.qty }}
+                {{ voucher.qty }} pcs
               </p>
             </div>
             <div class="col-md-2 pl-5">
-              <p class="fw-bold">Expired Date:</p>
+              <p class="fw-bold">Expired Date :</p>
             </div>
             <div class="col-md-2">
               <p class="fw-bold">
@@ -75,7 +75,7 @@
             </div>
             <div class="col-md-3">
               <p class="fw-bold">
-                {{ voucher.qty_used }}
+                {{ voucher.qty_used }} pcs
               </p>
             </div>
         <div class="col-md-2">

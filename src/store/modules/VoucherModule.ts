@@ -218,13 +218,33 @@ export default class VoucherModule extends VuexModule {
 
   @Action
   deletemultiVoucher(payload): Promise<any> {
+    // console.log(payload)
+    let listDelete=''
+    payload.forEach((el, indexEl) => {
+      listDelete += `&uuid[${indexEl}]=${el.uuid}`
+    });
     return http
-      .delete(`/dusky_lory/v1/voucher/nevada/multiple?uuid[0]=${payload.uuid}`)
+      .delete(`/dusky_lory/v1/voucher/nevada/multiple?${listDelete}`)
       .then((res) => {
         if (res.data.status) {
           this.context.commit("DELETE_MULTIVOUCHER", res.data.data);
         }
         return res;
+      })
+      .catch((err) => console.log(err));
+  }
+
+  @Action
+  updatemultiVoucher(payload): Promise<any> {
+    // console.log(payload)
+
+    return http
+      .post(`/dusky_lory/v1/voucher/oklahoma/status/multiple`, payload)
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("UPDATE_VOUCHER", res.data.data);
+        }
+        return res.data;
       })
       .catch((err) => console.log(err));
   }
