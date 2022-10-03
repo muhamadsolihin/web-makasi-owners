@@ -293,6 +293,7 @@ export default defineComponent({
       EmployeeState.getEmployeesAPI({
         outletId: myOutletId.value,
         search: search.value,
+        FilterSubmission: filter.value,
         cursor: cursor.value,
         filter: filter.value,
         perPage: perPage.value,
@@ -305,6 +306,7 @@ export default defineComponent({
       EmployeeState.getEmployeesAPI({
         outletId: myOutletId.value,
         search: search.value,
+        FilterSubmission: filter.value,
         cursor: cursor.value,
         perPage: perPage.value,
       }).finally(() => (loadingDatatable.value = false));

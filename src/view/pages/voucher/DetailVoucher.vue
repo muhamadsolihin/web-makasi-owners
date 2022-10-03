@@ -2,6 +2,7 @@
 
   <!-- <CardDetail /> -->
 
+
   <div class="row mt-5">
     <div class="col">
       <div class="card">
@@ -152,6 +153,9 @@
   <div>
     
   </div>
+
+
+
 </template>
 
 <script lang="ts">
@@ -191,9 +195,37 @@ export default defineComponent({
     const subscriptionDialog = ref(false);
     const loadingBtnDialog = ref(false);
     const period = ref<string | Blob>("");
+      const deleteDialog = ref(false);
 
     const subsValue = ref<string | Blob>("");
     const Value = ref("");
+    
+    const selectItem = (item) => {
+      selectedItem.value = item;
+      deleteDialog.value = true;
+    };
+
+    // const confirmRemove = () => {
+    //   loadingBtnDialog.value = true;
+    //   VoucherState.SET_VOUCHERS([]);
+    //   // location.reload();
+    //   ElMessage("Success Delete!. ");
+    //   VoucherState.deleteVoucher(route.params.uuid)
+    //     .then(() => {
+    //       const employee = VoucherState.getVoucher;
+    //     })
+    //     .finally(() => {
+    //       deleteDialog.value = false;
+    //       loadingBtnDialog.value = false;
+          
+    //       // location.reload();
+    //       loading.value = false;
+    //     });
+    // };
+
+   
+
+
 
     onMounted(() => {
       setCurrentPageBreadcrumbs("Dashboard", "Detail Voucher");
@@ -227,7 +259,9 @@ export default defineComponent({
 
       formatDate,
       handleNull,
+      deleteDialog,
       formatCurrency,
+      selectItem,
       epochToDateTime,
       handleNullToString,
     };

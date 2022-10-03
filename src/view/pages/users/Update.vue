@@ -19,9 +19,7 @@
 
         <span v-if="employee.verified == '0'">
           <span v-if="employee.is_submission == '1'">
-            <button class="btn btn-sm btn-primary ms-2" 
-
-            @click="SelectReject">
+            <button class="btn btn-sm btn-primary ms-2" @click="SelectReject">
               Reject
             </button></span
           ></span
@@ -79,7 +77,6 @@
             <div class="col-md-3">
               <p class="fw-bold">
                 {{ handleNullToString(employee.phone_account) }}
-
               </p>
             </div>
             <div class="col-md-2 pl-5">
@@ -147,10 +144,14 @@
               <p class="fw-bold">
                 <span v-if="employee.identity_image === null"> </span>
                 <span v-else>
-                  <img
+                  <el-image
                     style="width: 250px; height: 150px"
                     class="rounded"
                     :src="employee.identity_image"
+                    @click="srcList"
+                    :preview-src="employee.identity_image"
+                    :initial-index="4"
+                    fit="cover"
                   />
                 </span>
               </p>
@@ -179,6 +180,20 @@
         </div>
       </div>
     </div>
+ 
+    <el-dialog v-model="previewImg" width="60%" height="60%">
+      <div class="row">
+        <div class="col-12" >
+          <el-image
+
+            style="width: 100%; height: 100%;"
+            class="rounded"
+            :src="employee.identity_image"
+          />
+        </div>
+      </div>
+    </el-dialog>
+
     <el-dialog title="Konfirmasi" v-model="unlinkDialog" width="30%">
       <div class="mb-5">
         <i
@@ -346,10 +361,11 @@ import {
   epochToDateTime,
   handleNull,
 } from "@/helper";
+import { identity } from "lodash";
 
 export default defineComponent({
   name: "detail-pengguna",
-  components: { Loader,  ListEmployee },
+  components: { Loader, ListEmployee },
   setup() {
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);
@@ -363,10 +379,16 @@ export default defineComponent({
     const selectedItem: any = reactive({});
     const unlinkDialog = ref(false);
     const verifyDialog = ref(false);
+    const previewImg = ref(false);
     const rejectDialog = ref(false);
     const subscriptionDialog = ref(false);
     const loadingBtnDialog = ref(false);
     const period = ref<string | Blob>("");
+
+    const srcList = (item) => {
+      selectedItem.value = item;
+      previewImg.value = true;
+    };
 
     const subsValue = ref<string | Blob>("");
     const Value = ref("");
@@ -527,6 +549,7 @@ export default defineComponent({
       EmployeeModule,
       verifyDialog,
       loadingBtnDialog,
+      previewImg,
       route,
       AuthState,
       store,
@@ -537,6 +560,9 @@ export default defineComponent({
       Value,
       period,
       rejectDialog,
+
+      // url,
+      srcList,
 
       onSubmit,
       SubmitReject,

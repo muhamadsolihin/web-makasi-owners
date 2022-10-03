@@ -20,6 +20,7 @@ export interface Employee {
   image: string | null;
   bank: string | null;
   user_type: number | null;
+  identity_image:  string | null,
   subscribe_name: string | null;
   is_submission: string | null;
   is_free: string | null;
@@ -48,6 +49,7 @@ export default class EmployeeModule extends VuexModule {
       is_free: null,
       period: "",
       expired_date: null,
+      identity_image:null,
       is_submission: null,
     },
   ];
@@ -63,6 +65,7 @@ export default class EmployeeModule extends VuexModule {
     village_name: null,
     outlet_name: null,
     signature_id: null,
+    identity_image:null,
     image: null,
     user_type: null,
     subscribe_name: null,

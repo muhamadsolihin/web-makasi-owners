@@ -54,16 +54,17 @@
                 <div class="col-6 pt-5">
                   <label class="form-label">Diskon Persen</label>
                   <div class="input-group">
-                  <Field
-                    type="number"
-                    name="percentage"
-                    v-model="percentage"
-                    :class="{ 'border-danger': errors.percentage }"
-                    :disabled="typeVoucher == 2 ? true : false"
-                    :rules="typeVoucher == 2 ? '' : 'required|minMax:1,100'"
-                    class="form-control form-control-solid border border-2"
-                  />
-                  <span class="input-group-text">%</span></div>
+                    <Field
+                      type="number"
+                      name="percentage"
+                      v-model="percentage"
+                      :class="{ 'border-danger': errors.percentage }"
+                      :disabled="typeVoucher == 2 ? true : false"
+                      :rules="typeVoucher == 2 ? '' : 'required|minMax:1,100'"
+                      class="form-control form-control-solid border border-2"
+                    />
+                    <span class="input-group-text">%</span>
+                  </div>
                   <p class="text-danger mt-2">{{ errors.percentage }}</p>
                 </div>
               </div>
@@ -113,14 +114,15 @@
                 <div class="col-6 pt-5">
                   <label class="form-label">Durasi</label>
                   <div class="input-group">
-                  <Field
-                    type="number"
-                    name="duration"
-                    v-model="isDuration"
-                    :class="{ 'border-danger': errors.isDuration }"
-                    class="form-control form-control-solid border border-2"
-                  />
-                  <span class="input-group-text">Bulan</span></div>
+                    <Field
+                      type="number"
+                      name="duration"
+                      v-model="isDuration"
+                      :class="{ 'border-danger': errors.isDuration }"
+                      class="form-control form-control-solid border border-2"
+                    />
+                    <span class="input-group-text">Bulan</span>
+                  </div>
                 </div>
               </div>
 
@@ -130,16 +132,11 @@
                   <el-date-picker
                     v-model="expiredAt"
                     type="datetime"
-                    placeholder="Pick a Date"
                     style="margin-left:10px"
                     format="YYYY/MM/DD hh:mm:ss"
-                    
+                    value-format="{{ epochToDateTime (expiredAt) }}"
                   />
-                  <div class="col-6 pt-5">
-                  {{ epochToDateTime (expiredAt) }}</div>
                 </div>
-                 
-
 
                 <div class="col-6  ">
                   <label class="form-label">Judul Voucher</label>
@@ -205,10 +202,7 @@ import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb
 import { useRouter, useRoute } from "vue-router";
 import { ElNotification } from "element-plus";
 import { Actions } from "@/store/enums/store.enums";
-import {
-  handleNull,
-  epochToDateTime,
-} from "@/helper";
+import { handleNull, epochToDateTime } from "@/helper";
 export default defineComponent({
   name: "add-voucher",
   components: { Form, Field },

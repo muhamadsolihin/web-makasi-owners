@@ -328,6 +328,7 @@ export default defineComponent({
       voucherString,
 
       changeTypeVoucher,
+      // changeTypeIsyearly,
       onSubmit,
     };
   },
