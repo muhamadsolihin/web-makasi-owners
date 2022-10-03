@@ -5,44 +5,43 @@
         <div class="container">
           <Form @submit="onSubmit" v-slot="{ errors }" autocomplete="off">
             <div class="row">
-            <div class="row" style="margin-top: 30px">
-              <div class="col-6 pt-5">
-                <label class="form-label">Nama Voucher</label>
-                <Field
-                  type="text"
-                  name="name"
-                  v-model="name"
-                  rules="required"
-                  :class="{ 'border-danger': errors.name }"
-                  class="form-control form-control-solid border border-2"
-                />
-                <p class="text-danger mt-2">{{ errors.name }}</p>
+              <div class="row" style="margin-top: 30px">
+                <div class="col-6 pt-5">
+                  <label class="form-label">Nama Voucher</label>
+                  <Field
+                    type="text"
+                    name="name"
+                    v-model="name"
+                    rules="required"
+                    :class="{ 'border-danger': errors.name }"
+                    class="form-control form-control-solid border border-2"
+                  />
+                  <p class="text-danger mt-2">{{ errors.name }}</p>
+                </div>
+                <div class="col-6 pt-5">
+                  <label class="form-label" rules="required"
+                    >Tipe Voucher :
+                  </label>
+                  <Field
+                    as="select"
+                    name="typeVoucher"
+                    v-model="typeVoucher"
+                    @change="changeTypeVoucher"
+                    class="form-select form-select-solid border border-2"
+                  >
+                    <option :value="2">Rupiah</option>
+                    <option :value="1">Persentase</option>
+                  </Field>
+                  <p class="text-danger mt-2">{{ errors.typeVoucher }}</p>
+                </div>
               </div>
-              <div class="col-6 pt-5">
-                <label class="form-label" rules="required"
-                  >Tipe Voucher :
-                </label>
-                <Field
-                  as="select"
-                  name="typeVoucher"
-                  v-model="typeVoucher"
-                  @change="changeTypeVoucher"
-                  class="form-select form-select-solid border border-2"
-                >
-                  <option :value="2">Rupiah</option>
-                  <option :value="1">Persentase</option>
-                </Field>
-                <p class="text-danger mt-2">{{ errors.typeVoucher }}</p>
-              </div>
-            </div>
-            
+
               <div class="row">
                 <div class="col-6 pt-5">
                   <label class="form-label">Jumlah Diskon</label>
                   <Field
                     type="number"
                     name="amount"
-                    maxLength="13"
                     v-model="amount"
                     :disabled="typeVoucher == 1 ? true : false"
                     :rules="typeVoucher == 1 ? '' : 'required'"
@@ -53,15 +52,18 @@
                 </div>
                 <div class="col-6 pt-5">
                   <label class="form-label">Diskon Persen</label>
-                  <Field
-                    type="number"
-                    name="percentage"
-                    v-model="percentage"
-                    :class="{ 'border-danger': errors.percentage }"
-                    :disabled="typeVoucher == 2 ? true : false"
-                    :rules="typeVoucher == 2 ? '' : 'required|minMax:1,100'"
-                    class="form-control form-control-solid border border-2"
-                  />
+                  <div class="input-group">
+                    <Field
+                      type="number"
+                      name="percentage"
+                      v-model="percentage"
+                      :class="{ 'border-danger': errors.percentage }"
+                      :disabled="typeVoucher == 2 ? true : false"
+                      :rules="typeVoucher == 2 ? '' : 'required|minMax:1,100'"
+                      class="form-control form-control-solid border border-2"
+                    />
+                    <span class="input-group-text">%</span>
+                  </div>
                   <p class="text-danger mt-2">{{ errors.percentage }}</p>
                 </div>
               </div>
@@ -72,9 +74,10 @@
                   <Field
                     type="number"
                     name="max_amount"
-                    rules="required"
                     v-model="maxAmount"
                     :class="{ 'border-danger': errors.maxAmount }"
+                    :disabled="typeVoucher == 2 ? true : false"
+                    :rules="typeVoucher == 2 ? '' : 'required|minMax:1,100'"
                     class="form-control form-control-solid border border-2"
                   />
                   <p class="text-danger mt-2">{{ errors.maxAmount }}</p>
@@ -111,13 +114,16 @@
                 </div>
                 <div class="col-6 pt-5">
                   <label class="form-label">Durasi</label>
-                  <Field
-                    type="number"
-                    name="duration"
-                    v-model="isDuration"
-                    :class="{ 'border-danger': errors.isDuration }"
-                    class="form-control form-control-solid border border-2"
-                  />
+                  <div class="input-group">
+                    <Field
+                      type="number"
+                      name="duration"
+                      v-model="isDuration"
+                      :class="{ 'border-danger': errors.isDuration }"
+                      class="form-control form-control-solid border border-2"
+                    />
+                    <span class="input-group-text">Bulan</span>
+                  </div>
                 </div>
               </div>
 

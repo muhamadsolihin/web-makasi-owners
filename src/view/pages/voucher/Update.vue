@@ -53,6 +53,7 @@
                 </div>
                 <div class="col-6 pt-5">
                   <label class="form-label">Diskon Persen</label>
+                  <div class="input-group">
                   <Field
                     type="number"
                     name="percentage"
@@ -62,6 +63,7 @@
                     :rules="typeVoucher == 2 ? '' : 'required|minMax:1,100'"
                     class="form-control form-control-solid border border-2"
                   />
+                  <span class="input-group-text">%</span></div>
                   <p class="text-danger mt-2">{{ errors.percentage }}</p>
                 </div>
               </div>
@@ -110,6 +112,7 @@
                 </div>
                 <div class="col-6 pt-5">
                   <label class="form-label">Durasi</label>
+                  <div class="input-group">
                   <Field
                     type="number"
                     name="duration"
@@ -117,6 +120,7 @@
                     :class="{ 'border-danger': errors.isDuration }"
                     class="form-control form-control-solid border border-2"
                   />
+                  <span class="input-group-text">Bulan</span></div>
                 </div>
               </div>
 
@@ -129,9 +133,13 @@
                     placeholder="Pick a Date"
                     style="margin-left:10px"
                     format="YYYY/MM/DD hh:mm:ss"
-                    value-format="YYYY-MM-DD hh:mm:ss"
+                    
                   />
+                  <div class="col-6 pt-5">
+                  {{ epochToDateTime (expiredAt) }}</div>
                 </div>
+                 
+
 
                 <div class="col-6  ">
                   <label class="form-label">Judul Voucher</label>
@@ -197,7 +205,10 @@ import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb
 import { useRouter, useRoute } from "vue-router";
 import { ElNotification } from "element-plus";
 import { Actions } from "@/store/enums/store.enums";
-
+import {
+  handleNull,
+  epochToDateTime,
+} from "@/helper";
 export default defineComponent({
   name: "add-voucher",
   components: { Form, Field },
@@ -339,7 +350,9 @@ export default defineComponent({
       expiredAt,
       isLoadingMultiple,
       voucherString,
+      handleNull,
       changeTypeVoucher,
+      epochToDateTime,
 
       onSubmit,
     };

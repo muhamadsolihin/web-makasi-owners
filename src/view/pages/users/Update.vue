@@ -432,8 +432,8 @@ export default defineComponent({
               title: "Success",
               type: "success",
               duration: 2000,
-              customClass: "successNotif",
-              message: "Subscribe Berhasil!",
+              customClass: "errorNotif",
+              message: " Harap isi Bidang Yang Sesuai",
             });
 
             setTimeout(() => {
@@ -454,11 +454,11 @@ export default defineComponent({
         })
         .catch(() => {
           ElNotification({
-            title: "Error",
-            type: "error",
+            title: "Success",
+            type: "success",
             duration: 2000,
             customClass: "successNotif",
-            message: "Harap isi Bidang Yang Sesuai",
+            message: "Subscribe Berhasil!",
           });
         })
         .finally(() => {

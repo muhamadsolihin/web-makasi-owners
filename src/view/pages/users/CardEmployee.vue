@@ -49,7 +49,7 @@
               <template #default="scope">
                 <div class="d-flex justify-content-center my-3">
                   <el-button
-                    @click="$router.push(`/users/${scope.row.uuid}`)"
+                    @click="$router.push(`/employee/${scope.row.uuid}/${scope.row.id}`)"
                     type="danger"
                     size="small"
                   >

@@ -200,6 +200,7 @@ export default defineComponent({
           rejectDialog.value = false;
           unlinkDialog.value = false;
           loadingBtnDialog.value = false;
+          location.reload();
           loading.value = false;
         });
     };

@@ -116,6 +116,15 @@
               </p>
             </div> -->
           </div>
+          <div class="row">
+            <div class="col-md-3">
+              <p class="fw-bold">Kode Voucher :</p>
+            </div>
+            <div class="col-md-2">
+              <p class="fw-bold">
+                {{ voucher.voucher_string}}
+              </p>
+            </div></div>
 
           <!-- <div class="row">
             <div class="col-md-3">
