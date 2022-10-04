@@ -92,8 +92,6 @@
                     name="isyearly"
                     v-model="isYearly"
                     class="form-select form-select-solid border border-2"
-                    
-                    
                   >
                     <option :value="0">Tanpa Syarat</option>
                     <option :value="1">Tahunan</option>
@@ -124,21 +122,28 @@
                       :class="{ 'border-danger': errors.isDuration }"
                       class="form-control form-control-solid border border-2"
                     />
-                    <span class="input-group-text">Bulan</span>
+                    <span class="input-group-text">
+                    <span v-if="isYearly == '0'">
+                      Bulan
+                    </span>
+                    <span v-else-if="isYearly == '1'">
+                      Tahun
+                    </span>
+                    </span>
                   </div>
                 </div>
               </div>
 
               <div class="row">
-                <div class="col-6 pt-5">
+                <div class="col-6 pt-5 ml-5">
                   <label class="form-label">Kadaluwarsa </label>
                   <el-date-picker
                     v-model="expiredAt"
                     type="datetime"
+                    placeholder="Pick a Date"
                     style="margin-left:10px"
                     format="YYYY/MM/DD hh:mm:ss"
-                    placeholder="Pick a Date"
-                    
+                    value-format="YYYY-MM-DD hh:mm:ss"
                   />
                 </div>
 
@@ -151,6 +156,20 @@
                     rules="required"
                     v-model="voucherString"
                     :class="{ 'border-danger': errors.voucherString }"
+                    class="form-control form-control-solid border border-2"
+                  />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-6 pt-5">
+                  <label class="form-label">Deskripsi </label>
+                  <Field
+                    name="deskripsi"
+                    type="text"
+                    rules="required"
+                    v-model="Description"
+                    :class="{ 'border-danger': errors.Description }"
                     class="form-control form-control-solid border border-2"
                   />
                 </div>
@@ -206,8 +225,15 @@ import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb
 import { useRouter, useRoute } from "vue-router";
 import { ElNotification } from "element-plus";
 import { Actions } from "@/store/enums/store.enums";
-import { handleNull, epochToDateTime, convertEpochToDate, formatDate } from "@/helper";
+import {
+  handleNull,
+  epochToDateTime,
+  convertEpochToDate,
+  formatDate,
+  handleNullToString,
+} from "@/helper";
 import { string } from "yup/lib/locale";
+import _Descriptions from "element-plus/lib/el-descriptions";
 export default defineComponent({
   name: "add-voucher",
   components: { Form, Field },
@@ -221,16 +247,13 @@ export default defineComponent({
     const isDuration = ref<string | Blob>("");
     const voucherString = ref<string | Blob>("");
     const isYearly = ref<string | Blob>("");
+    const Description = ref<string | Blob>("");
     const route = useRoute();
 
     const expiredAt = ref<string | Blob>("");
     const loading = ref<boolean>(false);
     const temporaryDiscPercentage = ref<string | Blob>("");
     const isLoadingMultiple = ref<boolean>(false);
-
-
-
-
 
     const store = useStore();
     const router = useRouter();
@@ -257,6 +280,7 @@ export default defineComponent({
       formData.append("is_duration", isDuration.value);
       formData.append("expired_at", expiredAt.value);
       formData.append("voucher_string", voucherString.value);
+      formData.append("description", Description.value);
       loading.value = true;
       VoucherState.updateVoucher({
         uuid: route.params.uuid,
@@ -329,13 +353,16 @@ export default defineComponent({
             percentage.value = res.data.percentage.toString();
             maxAmount.value = res.data.max_amount;
             qty.value = res.data.qty;
-            isYearly.value = res.data.is_yearly;
+            Description.value = res.data.qty;
+            isYearly.value = handleNullToString(res.data.is_yearly);
             isDuration.value = res.data.is_duration;
-            expiredAt.value = formatDate(convertEpochToDate(res.data.expired_at), "YYYY/MM/DD hh:mm:ss");
+            expiredAt.value = formatDate(
+              convertEpochToDate(res.data.expired_at),
+              "YYYY/MM/DD hh:mm:ss"
+            );
             voucherString.value = res.data.voucher_string;
           }
           console.log(isYearly.value);
-          
         })
         .finally(() =>
           store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "page-loading")
@@ -350,6 +377,7 @@ export default defineComponent({
       percentage,
       loading,
       maxAmount,
+      Description,
       qty,
       isDuration,
       expiredAt,

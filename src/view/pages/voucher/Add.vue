@@ -77,7 +77,7 @@
                     v-model="maxAmount"
                     :class="{ 'border-danger': errors.maxAmount }"
                     :disabled="typeVoucher == 2 ? true : false"
-                    :rules="typeVoucher == 2 ? '' : 'required|minMax:1,100'"
+                    :rules="typeVoucher == 2 ? '' : ''"
                     class="form-control form-control-solid border border-2"
                   />
                   <p class="text-danger mt-2">{{ errors.maxAmount }}</p>
@@ -123,13 +123,45 @@
                       class="form-control form-control-solid border border-2"
                     />
                     <span class="input-group-text">
-        
-                      
-                      Bulan</span>
+                      <!-- {{ handleNullToString(isYearly) }} -->
+
+                      <span v-if="isYearly == '0'">
+                      Bulan
+                      </span>
+                      <span v-else-if="isYearly == '1'">
+                      Tahun
+                      </span>
+                    </span>
                   </div>
                 </div>
               </div>
 
+              <div class="row">
+                <div class="col-6">
+                  <label class="form-label">Deskripsi </label>
+                  <Field
+                    name="deskripsi"
+                    type="text"
+                    rules="required"
+                    v-model="Description"
+                    :class="{ 'border-danger': errors._Description }"
+                    class="form-control form-control-solid border border-2"
+                  />
+                </div>
+
+                <div class="col-6  ">
+                  <label class="form-label">Kode Voucher</label>
+
+                  <Field
+                    name="voucher_string"
+                    type="text"
+                    rules="required"
+                    v-model="voucherString"
+                    :class="{ 'border-danger': errors.voucherString }"
+                    class="form-control form-control-solid border border-2"
+                  />
+                </div>
+              </div>
               <div class="row">
                 <div class="col-6 pt-5">
                   <label class="form-label">Kadaluwarsa </label>
@@ -140,19 +172,6 @@
                     style="margin-left:10px"
                     format="YYYY/MM/DD hh:mm:ss"
                     value-format="YYYY-MM-DD hh:mm:ss"
-                  />
-                </div>
-
-                <div class="col-6  ">
-                  <label class="form-label">Judul Voucher</label>
-
-                  <Field
-                    name="voucher_string"
-                    type="text"
-                    rules="required"
-                    v-model="voucherString"
-                    :class="{ 'border-danger': errors.voucherString }"
-                    class="form-control form-control-solid border border-2"
                   />
                 </div>
               </div>
@@ -207,7 +226,15 @@ import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb
 import { useRouter } from "vue-router";
 import { ElNotification } from "element-plus";
 import { Actions } from "@/store/enums/store.enums";
-
+import { ValueOf } from "element-plus/lib/el-table/src/table-column/defaults";
+import { values } from "lodash";
+import {
+  handleNull,
+  epochToDateTime,
+  convertEpochToDate,
+  formatDate,
+  handleNullToString,
+} from "@/helper";
 export default defineComponent({
   name: "add-voucher",
   components: { Form, Field },
@@ -215,6 +242,7 @@ export default defineComponent({
     const name = ref<string | Blob>("");
     const typeVoucher = ref<number>(1);
     const amount = ref<string | Blob>("");
+    const Description = ref<string | Blob>("");
 
     const isYearly = ref<string | Blob>("");
     const percentage = ref<string | Blob>("");
@@ -238,6 +266,17 @@ export default defineComponent({
       }
     };
 
+    const FilterSubmission = ref([
+      {
+        name: "Bulan",
+        value: "0",
+      },
+      {
+        name: "Tahun",
+        value: "1",
+      },
+    ]);
+
     const store = useStore();
     const router = useRouter();
 
@@ -250,6 +289,7 @@ export default defineComponent({
       formData.append("amount", amount.value);
       formData.append("percentage", percentage.value);
       formData.append("max_amount", maxAmount.value);
+      formData.append("description", Description.value);
       formData.append("qty", qty.value);
       formData.append("is_duration", isDuration.value);
       formData.append("expired_at", expiredAt.value);
@@ -285,6 +325,7 @@ export default defineComponent({
             maxAmount.value = "";
             qty.value = null;
             isDuration.value = "";
+            Description.value = "";
             expiredAt.value = "";
             isYearly.value = "";
             voucherString.value = "";
@@ -324,12 +365,16 @@ export default defineComponent({
       percentage,
       loading,
       maxAmount,
+      Description,
       qty,
       isDuration,
       expiredAt,
       isYearly,
       isLoadingMultiple,
       voucherString,
+      FilterSubmission,
+      handleNull,
+      handleNullToString,
 
       changeTypeVoucher,
       // changeTypeIsyearly,
