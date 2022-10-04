@@ -134,16 +134,17 @@
                 </div>
               </div>
 
+
               <div class="row">
-                <div class="col-6 pt-5 ml-5">
-                  <label class="form-label">Kadaluwarsa </label>
-                  <el-date-picker
-                    v-model="expiredAt"
-                    type="datetime"
-                    placeholder="Pick a Date"
-                    style="margin-left:10px"
-                    format="YYYY/MM/DD hh:mm:ss"
-                    value-format="YYYY-MM-DD hh:mm:ss"
+                <div class="col-6">
+                  <label class="form-label">Deskripsi </label>
+                  <Field
+                    name="deskripsi"
+                    as="textarea"
+                    rules="required"
+                    v-model="Description"
+                    :class="{ 'border-danger': errors.Description }"
+                    class="form-control form-control-solid border border-2"
                   />
                 </div>
 
@@ -162,17 +163,18 @@
               </div>
 
               <div class="row">
-                <div class="col-6 pt-5">
-                  <label class="form-label">Deskripsi </label>
-                  <Field
-                    name="deskripsi"
-                    type="text"
-                    rules="required"
-                    v-model="Description"
-                    :class="{ 'border-danger': errors.Description }"
-                    class="form-control form-control-solid border border-2"
+                <div class="col-6 pt-5" style="margin-top:15px">
+                  <label class="form-label">Kadaluwarsa </label>
+                  <el-date-picker
+                    v-model="expiredAt"
+                    type="datetime"
+                    placeholder="Pick a Date"
+                    style="margin-left:10px"
+                    format="YYYY/MM/DD hh:mm:ss"
+                    value-format="YYYY-MM-DD hh:mm:ss"
                   />
                 </div>
+
               </div>
             </div>
             <div

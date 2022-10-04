@@ -141,7 +141,7 @@
                   <label class="form-label">Deskripsi </label>
                   <Field
                     name="deskripsi"
-                    type="text"
+                    as="textarea"
                     rules="required"
                     v-model="Description"
                     :class="{ 'border-danger': errors._Description }"
