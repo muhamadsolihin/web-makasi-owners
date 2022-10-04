@@ -44,7 +44,7 @@
                     name="amount"
                     v-model="amount"
                     :disabled="typeVoucher == 1 ? true : false"
-                    :rules="typeVoucher == 1 ? '' : 'required'"
+                    :rules="typeVoucher == 1 ? '' : ''"
                     :class="{ 'border-danger': errors.amount }"
                     class="form-control form-control-solid border border-2"
                   />
@@ -122,7 +122,10 @@
                       :class="{ 'border-danger': errors.isDuration }"
                       class="form-control form-control-solid border border-2"
                     />
-                    <span class="input-group-text">Bulan</span>
+                    <span class="input-group-text">
+        
+                      
+                      Bulan</span>
                   </div>
                 </div>
               </div>
@@ -283,6 +286,7 @@ export default defineComponent({
             qty.value = null;
             isDuration.value = "";
             expiredAt.value = "";
+            isYearly.value = "";
             voucherString.value = "";
           } else {
             ElNotification({

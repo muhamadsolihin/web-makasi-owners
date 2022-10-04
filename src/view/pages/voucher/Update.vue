@@ -75,7 +75,8 @@
                   <Field
                     type="number"
                     name="max_amount"
-                    rules="required"
+                    :disabled="typeVoucher == 2 ? true : false"
+                    :rules="typeVoucher == 2 ? '' : 'required|minMax:1,100'"
                     v-model="maxAmount"
                     :class="{ 'border-danger': errors.maxAmount }"
                     class="form-control form-control-solid border border-2"
@@ -91,6 +92,8 @@
                     name="isyearly"
                     v-model="isYearly"
                     class="form-select form-select-solid border border-2"
+                    
+                    
                   >
                     <option :value="0">Tanpa Syarat</option>
                     <option :value="1">Tahunan</option>
@@ -134,7 +137,8 @@
                     type="datetime"
                     style="margin-left:10px"
                     format="YYYY/MM/DD hh:mm:ss"
-                    value-format="{{ epochToDateTime (expiredAt) }}"
+                    placeholder="Pick a Date"
+                    
                   />
                 </div>
 
@@ -202,7 +206,8 @@ import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb
 import { useRouter, useRoute } from "vue-router";
 import { ElNotification } from "element-plus";
 import { Actions } from "@/store/enums/store.enums";
-import { handleNull, epochToDateTime } from "@/helper";
+import { handleNull, epochToDateTime, convertEpochToDate, formatDate } from "@/helper";
+import { string } from "yup/lib/locale";
 export default defineComponent({
   name: "add-voucher",
   components: { Form, Field },
@@ -222,6 +227,10 @@ export default defineComponent({
     const loading = ref<boolean>(false);
     const temporaryDiscPercentage = ref<string | Blob>("");
     const isLoadingMultiple = ref<boolean>(false);
+
+
+
+
 
     const store = useStore();
     const router = useRouter();
@@ -320,11 +329,13 @@ export default defineComponent({
             percentage.value = res.data.percentage.toString();
             maxAmount.value = res.data.max_amount;
             qty.value = res.data.qty;
-            isYearly.value = res.data.isYearly;
+            isYearly.value = res.data.is_yearly;
             isDuration.value = res.data.is_duration;
-            expiredAt.value = res.data.expired_at;
+            expiredAt.value = formatDate(convertEpochToDate(res.data.expired_at), "YYYY/MM/DD hh:mm:ss");
             voucherString.value = res.data.voucher_string;
           }
+          console.log(isYearly.value);
+          
         })
         .finally(() =>
           store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "page-loading")
@@ -347,6 +358,8 @@ export default defineComponent({
       handleNull,
       changeTypeVoucher,
       epochToDateTime,
+
+      // value1,
 
       onSubmit,
     };

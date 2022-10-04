@@ -2,7 +2,7 @@
   <div>
     <Loader />
       <div class="col-12 d-flex justify-content-end ">
-        <button class=" btn btn-sm btn-primary ms-2" @click="selectUpdate(route.params)">
+        <button class=" btn btn-sm btn-success ms-2" @click="selectUpdate(route.params)">
           Update
         </button>
         <button class=" btn btn-sm btn-primary ms-2" @click="selectItem(route.params)">
