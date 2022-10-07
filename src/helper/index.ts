@@ -1,35 +1,34 @@
-import moment from "moment"
+import moment from "moment";
 
 export function formatCurrency(val: string | number): string {
   if (val !== undefined && val !== null) {
-    return  val.toString().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1.')
+    return val.toString().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1.");
   } else {
-    return '-'
+    return "-";
   }
 }
 
 export function formatCurrens(num): string {
   if (String(num).length < 7) {
-    return Math.floor(num/1000) + 'RB';
-} else {
-    return Math.floor(num/1000000) + 'Jt';
+    return Math.floor(num / 1000) + "RB";
+  } else {
+    return Math.floor(num / 1000000) + "Jt";
+  }
 }
-}
-
 
 export function formatCurrencyVoucher(val: string | number): string {
   if (val !== undefined && val !== null) {
-    return val.toString().replace(/(\d)(?=(\d\d\d))/g, '$1')
+    return val.toString().replace(/(\d)(?=(\d\d\d))/g, "$1");
   } else {
-    return '-'
+    return "-";
   }
 }
 
 export function formatCurrencyKilo(val: string | number) {
   if (val !== undefined && val !== null) {
-    const toString = val.toString()
-    const formatted = formatCurrency(val)
-    const splitted = formatted.split(",")
+    const toString = val.toString();
+    const formatted = formatCurrency(val);
+    const splitted = formatted.split(",");
 
     switch (toString.length) {
       case 4:
@@ -48,18 +47,18 @@ export function formatCurrencyKilo(val: string | number) {
         break;
     }
   } else {
-    return '-'
+    return "-";
   }
 }
 
 export function handleNull(val: string): boolean {
-  if (val == null || val == 'null') return false
-  return true
+  if (val == null || val == "null") return false;
+  return true;
 }
 
 export function handleNullToString(val: string): string {
-  if (val == null || val == 'null') return '-'
-  return val
+  if (val == null || val == "null") return "-";
+  return val;
 }
 
 export function isNumber(val: string | number): boolean {
@@ -76,24 +75,23 @@ export function isEmailValid(val: string): boolean {
 
 export function formatDate(val, format) {
   if (val) {
-    return moment(val).format(format)
+    return moment(val).format(format);
   }
-  return ""
+  return "";
 }
 
 export function convertEpochToDate(val) {
-  console.log("convertEpochToDate", val)
   if (val) {
-    const myDate = new Date(val*1000);
-      return myDate
+    const myDate = new Date(val * 1000);
+    return myDate;
   }
-  return 0
+  return 0;
 }
 
 export function epochToDateTime(val) {
   if (val) {
-    const convertedEpoch = convertEpochToDate(val)
-    return formatDate(convertedEpoch, "MMM DD YYYY, HH:mm")
+    const convertedEpoch = convertEpochToDate(val);
+    return formatDate(convertedEpoch, "MMM DD YYYY, HH:mm");
   }
-  return ""
+  return "";
 }
