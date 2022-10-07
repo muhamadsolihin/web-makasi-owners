@@ -54,8 +54,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/view/pages/users/DetailEmployee.vue"),
       },
 
-
-
       {
         path: "/voucher",
         name: "voucher",
@@ -64,7 +62,7 @@ const routes: Array<RouteRecordRaw> = [
       },
 
       {
-        path: "/voucher/Add",
+        path: "/voucher/add",
         name: "add-voucher",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
         component: () => import("@/view/pages/voucher/Add.vue"),
@@ -90,7 +88,7 @@ const routes: Array<RouteRecordRaw> = [
       //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
       //   component: () => import("@/view/pages/outletlist/ListOutlet.vue"),
       // },
-      
+
       // {
       //   path: "outlets/outlet",
       //   name: "outlet-detail",
@@ -137,18 +135,6 @@ const routes: Array<RouteRecordRaw> = [
       //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
       //   component: () => import(("@/view/pages/outletlist/DetailPemesanan.vue"),),
       // },
-
-
-
-
-
-
-
-
-
-
-
-
 
       {
         path: "/my-profile",
