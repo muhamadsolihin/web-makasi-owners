@@ -42,12 +42,17 @@
                   <Field
                     type="number"
                     name="amount"
-                    maxLength="13"
                     v-model="amount"
                     :disabled="typeVoucher == 1 ? true : false"
-                    :rules="typeVoucher == 1 ? '' : 'required'"
+                    :rules="typeVoucher == 2 ? 'required' : ''"
                     :class="{ 'border-danger': errors.amount }"
-                    class="form-control form-control-solid border border-2"
+                    class="form-control form-control-solid border border-2 d-none"
+                  />
+                  <InputCurrency
+                    :value="typeVoucher == 2 ? amount : '0'"
+                    :disabled="typeVoucher == 1 ? true : false"
+                    :class="{ 'border-danger': errors.amount }"
+                    @update:value="(newValue) => (amount = newValue)"
                   />
                   <p class="text-danger mt-2">{{ errors.amount }}</p>
                 </div>
@@ -60,7 +65,7 @@
                       v-model="percentage"
                       :class="{ 'border-danger': errors.percentage }"
                       :disabled="typeVoucher == 2 ? true : false"
-                      :rules="typeVoucher == 2 ? '' : 'required|minMax:1,100'"
+                      :rules="typeVoucher == 1 ? 'required|minMax:1,100' : ''"
                       class="form-control form-control-solid border border-2"
                     />
                     <span class="input-group-text">%</span>
@@ -75,13 +80,18 @@
                   <Field
                     type="number"
                     name="max_amount"
-                    :disabled="typeVoucher == 2 ? true : false"
-                    :rules="typeVoucher == 2 ? '' : 'required|minMax:1,100'"
                     v-model="maxAmount"
-                    :class="{ 'border-danger': errors.maxAmount }"
-                    class="form-control form-control-solid border border-2"
+                    :disabled="typeVoucher == 2 ? true : false"
+                    :rules="typeVoucher == 1 ? 'required' : ''"
+                    class="form-control form-control-solid border border-2 d-none"
                   />
-                  <p class="text-danger mt-2">{{ errors.maxAmount }}</p>
+                  <InputCurrency
+                    :value="typeVoucher == 1 ? maxAmount : '0'"
+                    :disabled="typeVoucher == 2 ? true : false"
+                    :class="{ 'border-danger': errors.max_amount }"
+                    @update:value="(newValue) => (maxAmount = newValue)"
+                  />
+                  <p class="text-danger mt-2">{{ errors.max_amount }}</p>
                 </div>
                 <div class="col-6 pt-5">
                   <label class="form-label" rules="required"
@@ -106,6 +116,7 @@
                   <Field
                     type="number"
                     name="qty"
+                    rules="required"
                     v-model="qty"
                     :class="{ 'border-danger': errors.qty }"
                     class="form-control form-control-solid border border-2"
@@ -118,63 +129,66 @@
                     <Field
                       type="number"
                       name="duration"
-                      v-model="isDuration"
-                      :class="{ 'border-danger': errors.isDuration }"
+                      rules="required"
+                      v-model="duration"
+                      :class="{ 'border-danger': errors.duration }"
                       class="form-control form-control-solid border border-2"
                     />
                     <span class="input-group-text">
-                    <span v-if="isYearly == '0'">
-                      Bulan
-                    </span>
-                    <span v-else-if="isYearly == '1'">
-                      Tahun
-                    </span>
+                      <span v-if="isYearly == 0">
+                        Bulan
+                      </span>
+                      <span v-else-if="isYearly == 1">
+                        Tahun
+                      </span>
                     </span>
                   </div>
+                  <p class="text-danger mt-2">{{ errors.duration }}</p>
                 </div>
               </div>
 
-
               <div class="row">
                 <div class="col-6">
-                  <label class="form-label">Deskripsi </label>
-                  <Field
-                    name="deskripsi"
-                    as="textarea"
-                    rules="required"
-                    v-model="Description"
-                    :class="{ 'border-danger': errors.Description }"
-                    class="form-control form-control-solid border border-2"
-                  />
-                </div>
-
-                <div class="col-6  ">
-                  <label class="form-label">Judul Voucher</label>
-
+                  <label class="form-label">Kode Voucher</label>
                   <Field
                     name="voucher_string"
                     type="text"
                     rules="required"
                     v-model="voucherString"
-                    :class="{ 'border-danger': errors.voucherString }"
+                    :class="{ 'border-danger': errors.voucher_string }"
                     class="form-control form-control-solid border border-2"
                   />
+                  <p class="text-danger mt-2">{{ errors.voucher_string }}</p>
+                </div>
+
+                <div class="col-6">
+                  <label class="form-label">Kadaluarsa </label>
+                  <Field
+                    name="expiredAt"
+                    rules="required"
+                    :min="expiredAt"
+                    v-model="expiredAt"
+                    type="datetime-local"
+                    :class="{ 'border-danger': errors.expiredAt }"
+                    class="form-control form-control-solid border border-2"
+                  />
+                  <p class="text-danger mt-2">{{ errors.expiredAt }}</p>
                 </div>
               </div>
-
               <div class="row">
-                <div class="col-6 pt-5" style="margin-top:15px">
-                  <label class="form-label">Kadaluwarsa </label>
-                  <el-date-picker
-                    v-model="expiredAt"
-                    type="datetime"
-                    placeholder="Pick a Date"
-                    style="margin-left:10px"
-                    format="YYYY/MM/DD hh:mm:ss"
-                    value-format="YYYY-MM-DD hh:mm:ss"
+                <div class="col">
+                  <label class="form-label">Deskripsi</label>
+                  <Field
+                    rows="5"
+                    as="textarea"
+                    name="description"
+                    rules="required"
+                    v-model="description"
+                    :class="{ 'border-danger': errors.description }"
+                    class="form-control form-control-solid border border-2"
                   />
+                  <p class="text-danger mt-2">{{ errors.description }}</p>
                 </div>
-
               </div>
             </div>
             <div
@@ -214,13 +228,9 @@
 
 <script lang="ts">
 import { useStore } from "vuex";
-import http from "@/http-common";
 import { Form, Field } from "vee-validate";
-import moment from "moment";
-import { defineComponent, ref, onMounted, computed } from "vue";
-import InputPinPassword from "@/components/InputPinPassword.vue";
+import { defineComponent, ref, onMounted } from "vue";
 import { getModule } from "vuex-module-decorators";
-import AuthModule from "@/store/modules/AuthModule";
 import VoucherModule from "@/store/modules/VoucherModule";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
 
@@ -232,13 +242,12 @@ import {
   epochToDateTime,
   convertEpochToDate,
   formatDate,
-  handleNullToString,
 } from "@/helper";
-import { string } from "yup/lib/locale";
-import _Descriptions from "element-plus/lib/el-descriptions";
+import InputCurrency from "@/components/InputCurrency.vue";
+
 export default defineComponent({
   name: "add-voucher",
-  components: { Form, Field },
+  components: { Form, Field, InputCurrency },
   setup() {
     const name = ref<string | Blob>("");
     const typeVoucher = ref<number>(1);
@@ -246,10 +255,10 @@ export default defineComponent({
     const percentage = ref<string | Blob>("");
     const maxAmount = ref<string | Blob>("");
     const qty = ref<any>(null);
-    const isDuration = ref<string | Blob>("");
-    const voucherString = ref<string | Blob>("");
-    const isYearly = ref<string | Blob>("");
-    const Description = ref<string | Blob>("");
+    const duration = ref<string>("1");
+    const voucherString = ref<string>("1");
+    const isYearly = ref<number>(0);
+    const description = ref<string | Blob>("");
     const route = useRoute();
 
     const expiredAt = ref<string | Blob>("");
@@ -278,26 +287,29 @@ export default defineComponent({
       formData.append("percentage", percentage.value);
       formData.append("max_amount", maxAmount.value);
       formData.append("qty", qty.value);
-      formData.append("is_yearly", isYearly.value);
-      formData.append("is_duration", isDuration.value);
-      formData.append("expired_at", expiredAt.value);
+      formData.append("is_yearly", isYearly.value as any);
+      formData.append("is_duration", duration.value);
+      formData.append(
+        "expired_at",
+        formatDate(expiredAt.value, "YYYY-MM-DD HH:mm:ss")
+      );
       formData.append("voucher_string", voucherString.value);
-      formData.append("description", Description.value);
+      formData.append("description", description.value);
       loading.value = true;
       VoucherState.updateVoucher({
         uuid: route.params.uuid,
         formData: formData,
       })
         .then((res) => {
-          const response = res.data;
+          const response = res;
 
           if (response.status) {
             ElNotification({
-              title: "Error",
-              type: "error",
+              title: "Success",
+              type: "success",
               duration: 2000,
-              customClass: "errorNotif",
-              message: "Terjadi kesalahan server",
+              customClass: "successNotif",
+              message: "Berhasil Edit Diskon!",
             });
 
             setTimeout(() => {
@@ -307,17 +319,6 @@ export default defineComponent({
                 store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "page-loading");
               }, 1000);
             }, 2000);
-
-            name.value = "";
-            typeVoucher.value as any;
-            "";
-            amount.value = "";
-            percentage.value = "";
-            maxAmount.value = "";
-            qty.value = null;
-            isDuration.value = "";
-            expiredAt.value = "";
-            voucherString.value = "";
           } else {
             ElNotification({
               title: "Error",
@@ -330,15 +331,16 @@ export default defineComponent({
         })
         .catch(() => {
           ElNotification({
-            title: "Success",
-            type: "success",
+            title: "Error",
+            type: "error",
             duration: 2000,
-            customClass: "successNotif",
-            message: "Berhasil Edit Diskon!",
+            customClass: "errorNotif",
+            message: "Terjadi kesalahan server",
           });
         })
         .finally(() => {
-          location.reload();
+          // better way not there is reload
+          // location.reload();
           loading.value = false;
         });
     };
@@ -351,20 +353,21 @@ export default defineComponent({
           if (res.status) {
             name.value = res.data.name;
             typeVoucher.value = res.data.type_voucher;
-            amount.value = res.data.amount.toString();
+            amount.value = res.data.amount ? res.data.amount.toString() : "";
             percentage.value = res.data.percentage.toString();
-            maxAmount.value = res.data.max_amount;
-            qty.value = res.data.qty;
-            Description.value = res.data.qty;
-            isYearly.value = handleNullToString(res.data.is_yearly);
-            isDuration.value = res.data.is_duration;
+            maxAmount.value = res.data.max_amount
+              ? res.data.max_amount.toString()
+              : "";
+            qty.value = res.data.qty.toString();
+            description.value = res.data.description;
+            isYearly.value = res.data.is_yearly ? res.data.is_yearly : 0;
+            duration.value = res.data.is_duration.toString();
             expiredAt.value = formatDate(
               convertEpochToDate(res.data.expired_at),
-              "YYYY/MM/DD hh:mm:ss"
+              "YYYY-MM-DD hh:mm"
             );
             voucherString.value = res.data.voucher_string;
           }
-          console.log(isYearly.value);
         })
         .finally(() =>
           store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "page-loading")
@@ -379,9 +382,9 @@ export default defineComponent({
       percentage,
       loading,
       maxAmount,
-      Description,
+      description,
       qty,
-      isDuration,
+      duration,
       expiredAt,
       isLoadingMultiple,
       voucherString,
