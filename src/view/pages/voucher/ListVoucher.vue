@@ -96,7 +96,7 @@
           <div class="col-6">
             <!-- <button class="btn btn-sm btn-primary"></button> -->
             <el-button
-              @click="$router.push(`/voucher/Add`)"
+              @click="$router.push(`/voucher/add`)"
               type="danger"
               size="small"
               style="margin-right:10px; margin-left: 100px;"
@@ -691,7 +691,7 @@ export default defineComponent({
       console.log(selectsItem.value);
 
       const dataForm = new FormData();
-      
+
       selectsItem.value.forEach((el, indexEl) => {
         dataForm.append(`uuid[${indexEl}]`, el.uuid);
       });
@@ -729,7 +729,7 @@ export default defineComponent({
             type: "success",
             duration: 2000,
             customClass: "successNotif",
-            message: "Voucher berhasil diupdate!" ,
+            message: "Voucher berhasil diupdate!",
           });
         })
         .finally(() => {
