@@ -1,22 +1,27 @@
 <template>
   <div>
     <Loader />
-      <div class="col-12 d-flex justify-content-end ">
-        <button class=" btn btn-sm btn-success ms-2" @click="selectUpdate(route.params)">
-          Update
-        </button>
-        <button class=" btn btn-sm btn-primary ms-2" @click="selectItem(route.params)">
-          Delete
-        </button>
-        <button class="btn btn-secondary" style="margin-left:10px" @click="$router.back">
-          Kembali
-        </button>
- 
-      </div>
+    <div class="col-12 d-flex justify-content-end ">
+      <button
+        class=" btn btn-sm btn-success"
+        @click="selectUpdate(route.params)"
+      >
+        Update
+      </button>
+      <button
+        class=" btn btn-sm btn-primary mx-2"
+        @click="selectItem(route.params)"
+      >
+        Delete
+      </button>
+      <button class="btn btn-sm btn-secondary" @click="$router.back">
+        Kembali
+      </button>
     </div>
-  
+  </div>
+
   <DetailVoucher />
- 
+
   <el-dialog title="Konfirmasi" v-model="deleteDialog" width="30%">
     <div class="mb-5">
       <i
@@ -84,7 +89,7 @@
 <script lang="ts">
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import { defineComponent, onMounted, ref, computed, reactive, } from "vue";
+import { defineComponent, onMounted, ref, computed, reactive } from "vue";
 import { getModule } from "vuex-module-decorators";
 import VoucherModule, { Voucher } from "@/store/modules/VoucherModule";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
@@ -93,7 +98,7 @@ import { Actions } from "@/store/enums/store.enums";
 import Loader from "@/view/content/Loader.vue";
 import AuthModule from "@/store/modules/AuthModule";
 import { ElMessage, ElNotification } from "element-plus";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 import {
   handleNullToString,
@@ -123,7 +128,6 @@ export default defineComponent({
     const router = useRouter();
     const updateDialog = ref(false);
 
-
     const selectItem = (item) => {
       selectedItem.value = item;
       deleteDialog.value = true;
@@ -132,7 +136,6 @@ export default defineComponent({
       selectedItem.value = item;
       updateDialog.value = true;
     };
-
 
     const confirmUpdate = () => {
       loadingBtnDialog.value = true;
@@ -188,7 +191,6 @@ export default defineComponent({
               duration: 3000,
               customClass: "successNotif",
               message: "Voucher berhasil dihapus!",
-              
             });
           } else {
             ElNotification({
@@ -217,10 +219,6 @@ export default defineComponent({
         });
     };
 
-
-
-
-
     // onMounted(() => {
     //   setCurrentPageBreadcrumbs("Dashboard", "Detail Voucher");
 
@@ -241,7 +239,7 @@ export default defineComponent({
       route,
       AuthState,
       store,
-      selectUpdate, 
+      selectUpdate,
       selectItem,
       userID,
       updateDialog,

@@ -20,7 +20,7 @@
                 </div>
                 <div class="col-6 pt-5">
                   <label class="form-label" rules="required"
-                    >Tipe Voucher :
+                    >Tipe Voucher
                   </label>
                   <Field
                     as="select"
@@ -44,7 +44,7 @@
                     name="amount"
                     v-model="amount"
                     :disabled="typeVoucher == 1 ? true : false"
-                    :rules="typeVoucher == 2 ? 'required' : ''"
+                    :rules="typeVoucher == 2 ? 'required|min:1' : ''"
                     :class="{ 'border-danger': errors.amount }"
                     class="form-control form-control-solid border border-2 d-none"
                   />
@@ -114,9 +114,10 @@
                 <div class="col-6 pt-5">
                   <label class="form-label">Jumlah Voucher</label>
                   <Field
+                    min="0"
                     type="number"
                     name="qty"
-                    rules="required"
+                    rules="required|min:0"
                     v-model="qty"
                     :class="{ 'border-danger': errors.qty }"
                     class="form-control form-control-solid border border-2"
@@ -129,14 +130,14 @@
                     <Field
                       type="number"
                       name="duration"
-                      rules="required"
+                      rules="required|min:0"
                       v-model="duration"
                       :class="{ 'border-danger': errors.duration }"
                       class="form-control form-control-solid border border-2"
                     />
                     <span class="input-group-text">
                       <span v-if="isYearly == 0">
-                        Bulan
+                        Bulan / Tahun
                       </span>
                       <span v-else-if="isYearly == 1">
                         Tahun
@@ -164,9 +165,9 @@
                 <div class="col-6">
                   <label class="form-label">Kadaluarsa </label>
                   <Field
+                    rules=""
                     name="expiredAt"
-                    rules="required"
-                    :min="expiredAt"
+                    :min="minExpiredAt"
                     v-model="expiredAt"
                     type="datetime-local"
                     :class="{ 'border-danger': errors.expiredAt }"
@@ -257,7 +258,10 @@ export default defineComponent({
     const voucherString = ref<string | Blob>("");
     const temporaryDiscPercentage = ref<string | Blob>("");
 
-    const expiredAt = ref<string>(formatDate(Date.now(), "YYYY-MM-DD HH:mm"));
+    const expiredAt = ref<string>("");
+    const minExpiredAt = ref<string>(
+      formatDate(Date.now(), "YYYY-MM-DD HH:mm")
+    );
     const loading = ref<boolean>(false);
 
     const isLoadingMultiple = ref<boolean>(false);
@@ -297,10 +301,12 @@ export default defineComponent({
       formData.append("description", description.value);
       formData.append("qty", qty.value);
       formData.append("is_duration", duration.value);
-      formData.append(
-        "expired_at",
-        formatDate(expiredAt.value, "YYYY-MM-DD HH:mm:ss")
-      );
+      if (expiredAt.value) {
+        formData.append(
+          "expired_at",
+          formatDate(expiredAt.value, "YYYY-MM-DD HH:mm:ss")
+        );
+      }
       formData.append("voucher_string", voucherString.value);
       formData.append("is_yearly", isYearly.value as any);
       loading.value = true;
@@ -365,6 +371,7 @@ export default defineComponent({
       qty,
       duration,
       expiredAt,
+      minExpiredAt,
       isYearly,
       isLoadingMultiple,
       voucherString,
