@@ -11,10 +11,10 @@ export interface Voucher {
   id: number | null;
   name: string | null;
   description: string | null;
-  type_voucher: string | null;
-  amount: string;
-  percentage: string | null;
-  max_amount: string | null;
+  type_voucher: string;
+  amount: number;
+  percentage: number;
+  max_amount: number;
   is_yearly: string | null;
   is_duration: string | null;
   unix_time: string | null;
@@ -22,51 +22,13 @@ export interface Voucher {
   status: string;
   qty: string | null;
   qty_used: string | null;
-  voucher_string:string | null;
+  voucher_string: string | null;
 }
 
 @Module({ name: "VoucherModule", dynamic: true, store })
 export default class VoucherModule extends VuexModule {
-  vouchers: Voucher[] = [
-    {
-      uuid: "",
-      id: null,
-      name: null,
-      description: null,
-      type_voucher: null,
-      amount: "",
-      percentage: null,
-      max_amount: null,
-      is_yearly: null,
-      is_duration: null,
-      unix_time: null,
-      expired_at: null,
-      status: "",
-      qty: "",
-      qty_used: null,
-      voucher_string: null,
-
-      
-    },
-  ];
-  voucher: Voucher = {
-    uuid: "",
-    id: null,
-    name: null,
-    description: null,
-    type_voucher: null,
-    amount: "",
-    percentage: null,
-    max_amount: null,
-    is_yearly: null,
-    is_duration: null,
-    unix_time: null,
-    expired_at: null,
-    status: "",
-    qty: "",
-    qty_used: null,
-    voucher_string: null,
-  };
+  vouchers: Voucher[] = [];
+  voucher: Voucher = {} as Voucher;
   metaPagination: { next_cursor: string | null; prev_cursor: string | null } = {
     next_cursor: null,
     prev_cursor: null,
@@ -76,7 +38,6 @@ export default class VoucherModule extends VuexModule {
     return this.vouchers;
   }
 
-
   get getMetaPaginationEmployee() {
     return this.metaPagination;
   }
@@ -85,13 +46,11 @@ export default class VoucherModule extends VuexModule {
     return this.voucher;
   }
 
-
   @Mutation
   SET_VOUCHERS(payload) {
     this.vouchers = payload;
   }
 
-  
   @Mutation
   ADD_VOUCHER(payload) {
     this.vouchers.push(payload);
@@ -105,19 +64,15 @@ export default class VoucherModule extends VuexModule {
     itemWillUpdate = payload;
   }
 
-
   @Mutation
   DELETE_VOUCHER(payload) {
-    this.vouchers = this.vouchers.filter(item => item.uuid != payload);
+    this.vouchers = this.vouchers.filter((item) => item.uuid != payload);
   }
 
-  
   @Mutation
   DELETE_MULTIVOUCHER(payload) {
-    this.vouchers = this.vouchers.filter(item => item.uuid[0] != payload);
+    this.vouchers = this.vouchers.filter((item) => item.uuid[0] != payload);
   }
-
-
 
   @Mutation
   SET_META_PAGINATION(payload) {
@@ -130,7 +85,6 @@ export default class VoucherModule extends VuexModule {
     this.voucher = payload;
   }
 
-  
   @Action
   getVouchersAPI(payload) {
     return http
@@ -159,13 +113,10 @@ export default class VoucherModule extends VuexModule {
       .catch((err) => console.log(err));
   }
 
-
   @Action
   addVouchers(payload) {
     return http
-      .post(
-        `/dusky_lory/v1/voucher/california ` ,payload
-      )
+      .post(`/dusky_lory/v1/voucher/california `, payload)
       .then((res) => {
         if (res.data.status) {
           this.context.commit("ADD_VOUCHER", res.data.data);
@@ -192,7 +143,7 @@ export default class VoucherModule extends VuexModule {
   @Action
   updateVoucher(payload): Promise<any> {
     return http
-      .post(`/dusky_lory/v1/voucher/oklahoma/${payload.uuid}` , payload.formData)
+      .post(`/dusky_lory/v1/voucher/oklahoma/${payload.uuid}`, payload.formData)
       .then((res) => {
         if (res.data.status) {
           this.context.commit("UPDATE_VOUCHER", res.data.data);
@@ -202,11 +153,10 @@ export default class VoucherModule extends VuexModule {
       .catch((err) => console.log(err));
   }
 
-
   @Action
   deleteVoucher(payload): Promise<any> {
     return http
-      .delete(`/dusky_lory/v1/voucher/nevada/${payload.uuid}` )
+      .delete(`/dusky_lory/v1/voucher/nevada/${payload.uuid}`)
       .then((res) => {
         if (res.data.status) {
           this.context.commit("DELETE_VOUCHER", res.data.data);
@@ -219,9 +169,9 @@ export default class VoucherModule extends VuexModule {
   @Action
   deletemultiVoucher(payload): Promise<any> {
     // console.log(payload)
-    let listDelete=''
+    let listDelete = "";
     payload.forEach((el, indexEl) => {
-      listDelete += `&uuid[${indexEl}]=${el.uuid}`
+      listDelete += `&uuid[${indexEl}]=${el.uuid}`;
     });
     return http
       .delete(`/dusky_lory/v1/voucher/nevada/multiple?${listDelete}`)
@@ -248,6 +198,4 @@ export default class VoucherModule extends VuexModule {
       })
       .catch((err) => console.log(err));
   }
-
- 
 }

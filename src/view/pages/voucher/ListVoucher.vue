@@ -1,239 +1,215 @@
 <template>
-  <div
-    class="mb-5 justity-content-right d-flex justify-content-between align-items-center md:flex-row md:justiify-content-between"
-  >
-    <div class="d-flex ">
-      <div class="input-group input-group-sm">
-        <input
-          type="text"
-          v-model="search"
-          @keyup="textSearch"
-          class="form-control form-control-sm"
-          :class="{
-            'border-right-white': clearable,
-            'border-right-default': !clearable,
-            'rounded-end': !clearable,
-          }"
-          placeholder="Search..."
-          style="border-right-color: white"
-        />
-        <span
-          class="input-group-text"
-          :class="{
-            'border-left-white': clearable,
-            'd-inline-block': clearable,
-            'd-none': !clearable,
-          }"
-          style="background-color: white;"
-        >
-          <i
-            class="bi bi-x-lg fw-bold"
-            style="cursor: pointer"
-            @click="clearSearch"
-          ></i>
-        </span>
+  <div class="card">
+    <div class="card-body">
+      <div
+        class="mb-5 justity-content-right d-flex justify-content-between align-items-center md:flex-row md:justiify-content-between"
+      >
+        <div class="d-flex ">
+          <div class="input-group input-group-sm">
+            <input
+              type="text"
+              v-model="search"
+              @keyup="textSearch"
+              class="form-control form-control-sm"
+              :class="{
+                'border-right-white': clearable,
+                'border-right-default': !clearable,
+                'rounded-end': !clearable,
+              }"
+              placeholder="Search..."
+              style="border-right-color: white"
+            />
+            <span
+              class="input-group-text"
+              :class="{
+                'border-left-white': clearable,
+                'd-inline-block': clearable,
+                'd-none': !clearable,
+              }"
+              style="background-color: white;"
+            >
+              <i
+                class="bi bi-x-lg fw-bold"
+                style="cursor: pointer"
+                @click="clearSearch"
+              ></i>
+            </span>
+          </div>
+          <button class="btn btn-sm btn-primary ms-2" @click="searchData">
+            Search
+          </button>
+        </div>
+
+        <div class="row g-5 g-xxl-8">
+          <div class="col-12 d-flex justify-content-end ">
+            <div class="d-flex align-items-center">
+              <button
+                class="btn btn-sm btn-success"
+                @click="$router.push(`/voucher/add`)"
+              >
+                Tambah
+              </button>
+              <button
+                class="btn btn-sm mx-2"
+                style="background-color: #0d6efd; color: white;"
+                @click="SelectmultiUpdate"
+              >
+                Update
+              </button>
+              <button class="btn btn-sm btn-primary" @click="SelectDelete">
+                Hapus
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-      <button class="btn btn-sm btn-primary ms-2" @click="searchData">
-        Search
-      </button>
-    </div>
+      <div class="rounded border border-1 p-2">
+        <el-table
+          ref="multipleTableRef"
+          :data="vouchers"
+          style="width: 100%"
+          v-loading="loadingDatatable"
+          :default-sort="{ prop: 'name', order: 'descending' }"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column type="selection" width="55" fixed />
 
-    <div class="row g-5 g-xxl-8">
-      <div class="col-12 d-flex justify-content-end ">
-        <div class="d-flex align-items-center">
-          <!-- begin::filter date -->
-          <!-- <el-date-picker
-            v-if="typeFilter == 1"
-            v-model="filterRangeDate"
-            @change="changeFilterDateRange"
-            start-placeholder="Start date"
-            end-placeholder="End date"
-            value-format="YYYY-MM-DD"
-            class="form-control"
-            type="daterange"
-            unlink-panels
-            size="large"
-          /> -->
-          <!-- end::filter date -->
+          <el-table-column prop="name" label="Nama Voucher" width="200" fixed>
+            <template #default="scope">
+              <router-link
+                :to="`/voucher/${scope.row.uuid}`"
+                class="text-decoration-underline text-truncate"
+              >
+                {{ handleNullToString(scope.row.name) }}
+              </router-link>
+            </template>
+          </el-table-column>
 
-          <!-- begin::filter year -->
-          <!-- <div
-            class="d-flex align-items-center"
-            style="width: 300px"
-            v-if="typeFilter == 2"
+          <el-table-column prop="name" label="Kode Voucher" width="200">
+            <template #default="scope">
+              {{ handleNullToString(scope.row.voucher_string) }}
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            prop="percentage"
+            label="Diskon"
+            width="150"
+            show-overflow-tooltip
           >
-            <el-date-picker
-              type="year"
-              @change="changeStartYear"
-              v-model="filterRangeStartYear"
-              placeholder="Start year"
-              value-format="YYYY"
-            />
+            <template #default="prop">
+              <span v-if="prop.row.type_voucher == 1">
+                {{ prop.row.percentage }}%
+              </span>
+              <span v-else> Rp. {{ formatCurrency(prop.row.amount) }} </span>
+            </template>
+          </el-table-column>
 
-            <span class="mx-2">-</span>
+          <el-table-column property="qty" label="QTY" show-overflow-tooltip>
+            <template #default="prop">
+              <span v-if="handleNull(prop.row.qty)">
+                {{ prop.row.qty }} pcs
+              </span>
+            </template>
+          </el-table-column>
 
-            <el-date-picker
-              type="year"
-              @change="changeEndYear"
-              v-model="filterRangeEndYear"
-              placeholder="End year"
-              value-format="YYYY"
-            />
-          </div> -->
-          <!-- end::filter year -->
+          <el-table-column prop="status" label="Status" width="150px" sortable>
+            <template #default="scope">
+              <span v-if="scope.row.status" class="ms-2 badge badge-success">
+                Aktif
+              </span>
+              <span v-else class="ms-2 badge badge-light">
+                Tidak Aktif
+              </span>
+            </template>
+          </el-table-column>
 
-          <!-- begin::filter month -->
-          <!-- <el-date-picker
-            type="monthrange"
-            v-if="typeFilter == 3"
-            v-model="filterRangeMonth"
-            @change="changeFilterMonthRange"
-            start-placeholder="Start month"
-            end-placeholder="End month"
-            value-format="YYYY-MM"
-          /> -->
-          <!-- end::filter month -->
-          <div class="col-6">
-            <!-- <button class="btn btn-sm btn-primary"></button> -->
-            <el-button
-              @click="$router.push(`/voucher/add`)"
-              type="danger"
-              size="small"
-              style="margin-right:10px; margin-left: 100px;"
-            >
-              <span>Add</span>
-            </el-button>
-          </div>
-          <!-- <div class="col-md-2 ">
-            <el-upload
-              v-model:file-list="fileList"
-              class="upload-demo"
-              action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-              multiple
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :before-remove="beforeRemove"
-              :limit="3"
-              :on-exceed="handleExceed"
-            >
-              <el-button type="danger" size="small">Export Data</el-button>
-            </el-upload>
-          </div> -->
-          <div class="col-3">
-            <el-button
-              @click="SelectmultiUpdate"
-              type="success"
-              style="margin-left:0.5em"
-              size="small"
-              >Update</el-button
-            >
-          </div>
-          <div class="col-md-2">
-            <el-button
-              @click="SelectDelete"
-              type="danger"
-              style="margin-left:0.5em"
-              size="small"
-              >Hapus</el-button
-            >
-          </div>
+          <el-table-column
+            label="Expired Date"
+            width="200"
+            show-overflow-tooltip
+          >
+            <template #default="scope">
+              <span
+                :class="[
+                  `${
+                    isVoucherExpired(scope.row.expired_at) ? 'text-primary' : ''
+                  }`,
+                ]"
+              >
+                {{ epochToDateTime(scope.row.expired_at) }}
+              </span>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            fixed="right"
+            label="Aksi"
+            width="150"
+            align="center"
+          >
+            <template #default="scope">
+              <div class="d-flex justify-content-center my-3">
+                <el-button
+                  @click="selectUpdate(scope.row)"
+                  size="small"
+                  type="success"
+                  circle
+                >
+                  <i class="bi bi-arrow-repeat text-white"></i>
+                </el-button>
+
+                <el-button
+                  color="#5710B2"
+                  type="primary"
+                  size="small"
+                  circle
+                  @click="$router.push(`/voucher/update/${scope.row.uuid}`)"
+                >
+                  <i class="bi bi-pencil-square text-white"></i>
+                </el-button>
+
+                <el-button
+                  type="danger"
+                  size="small"
+                  circle
+                  @click="selectItem(scope.row)"
+                >
+                  <i class="bi bi-trash text-white"></i>
+                </el-button>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <div class="d-flex justify-content-end mt-5">
+          <button
+            class="btn btn-sm"
+            @click="prevPage"
+            :disabled="!metaPagination.prev_cursor"
+            :class="{
+              'text-primary': metaPagination.prev_cursor,
+              'text-secondary': !metaPagination.prev_cursor,
+            }"
+          >
+            PREV
+          </button>
+          <button
+            class="btn btn-sm"
+            @click="nextPage"
+            :disabled="!metaPagination.next_cursor"
+            :class="{
+              'text-primary': metaPagination.next_cursor,
+              'text-secondary': !metaPagination.next_cursor,
+            }"
+          >
+            NEXT
+          </button>
         </div>
       </div>
     </div>
   </div>
-  <el-table
-    ref="multipleTableRef"
-    :data="vouchers"
-    style="width: 100%"
-    :default-sort="{ prop: 'name', order: 'descending' }"
-    @selection-change="handleSelectionChange"
-  >
-    <el-table-column type="selection" width="55" fixed />
 
-    <el-table-column prop="name" label="Nama Voucher" width="200">
-      <template #default="scope">
-        <button
-          style="border:none; background-color: transparent; text-align: left; "
-          @click="$router.push(`/voucher/${scope.row.uuid}`)"
-        >
-          {{ handleNullToString(scope.row.name) }}
-        </button>
-      </template>
-    </el-table-column>
-    <!-- <el-table-column
-      prop="type_voucher"
-      label="Tipe Voucher"
-      show-overflow-tooltip
-    /> -->
-    <el-table-column prop="percentage" label="Diskon %" show-overflow-tooltip>
-      <template #default="prop">
-        <span v-if="handleNull(prop.row.percentage)">
-          {{ prop.row.percentage }}%
-        </span>
-      </template>
-    </el-table-column>
-
-    <el-table-column prop="amount" label="Diskon Rupiah" show-overflow-tooltip>
-      <template #default="prop">
-        <span v-if="handleNull(prop.row.amount)">
-          Rp. {{ formatCurrency(prop.row.amount) }}
-        </span>
-      </template>
-    </el-table-column>
-    <el-table-column property="qty" label="QTY" show-overflow-tooltip>
-      <template #default="prop">
-        <span v-if="handleNull(prop.row.qty)"> {{ prop.row.qty }} pcs </span>
-      </template>
-    </el-table-column>
-    <el-table-column prop="status" label="Status" width="150px" sortable>
-      <template #default="scope">
-        <span v-if="scope.row.status" class="ms-2 badge badge-success">
-          Aktif
-        </span>
-        <span v-else class="ms-2 badge badge-light">
-          Tidak Aktif
-        </span>
-      </template>
-    </el-table-column>
-    <el-table-column label="Expired Date" show-overflow-tooltip>
-      <template #default="scope">
-        {{ epochToDateTime(scope.row.expired_at) }}
-      </template>
-    </el-table-column>
-    <el-table-column fixed="right" label="Aksi" align="center">
-      <template #default="scope">
-        <div class="d-flex justify-content-center my-3">
-          <el-button
-            @click="selectUpdate(scope.row)"
-            size="small"
-            type="danger"
-            circle
-          >
-            <i class="bi bi-arrow-repeat text-white"></i>
-          </el-button>
-
-          <el-button
-            type="danger"
-            size="small"
-            circle
-            @click="selectItem(scope.row)"
-          >
-            <i class="bi bi-trash text-white"></i>
-          </el-button>
-
-          <el-button
-            type="success"
-            size="small"
-            circle
-            @click="$router.push(`/voucher/update/${scope.row.uuid}`)"
-          >
-            <i class="bi bi-pencil-square text-white"></i>
-          </el-button>
-          <!-- @click="$router.push(`/voucher/update/${scope.row.uuid}`)" -->
-        </div>
-      </template>
-    </el-table-column>
-  </el-table>
   <el-dialog title="Konfirmasi" v-model="deleteDialog" width="30%">
     <div class="mb-5">
       <i
@@ -365,14 +341,7 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  reactive,
-  onMounted,
-  computed,
-  watch,
-} from "vue";
+import { defineComponent, ref, reactive, onMounted, computed } from "vue";
 import moment from "moment";
 import { useRoute } from "vue-router";
 import VoucherModule, { Voucher } from "@/store/modules/VoucherModule";
@@ -386,9 +355,7 @@ import {
   formatCurrency,
 } from "@/helper";
 
-import { ElNotification, ElTable, ElMessage } from "element-plus";
-import { uniqueId } from "lodash";
-import { number } from "yup/lib/locale";
+import { ElNotification, ElTable } from "element-plus";
 
 export default defineComponent({
   name: "voucher",
@@ -445,6 +412,15 @@ export default defineComponent({
       () => VoucherState.getMetaPaginationEmployee
     );
     const myOutletId = computed(() => AuthState.getMyOutletId);
+
+    const isVoucherExpired = (val: number) => {
+      // const currentDate = new Date.now();
+      // currentDate.setUTCHours(0, 0, 0, 0);
+      const currentEpoch = Math.floor(new Date().getTime() / 1000.0);
+      console.log(val);
+      console.log(currentEpoch);
+      return val <= currentEpoch;
+    };
 
     const SelectDelete = (item) => {
       // selectsItem.value = item;
@@ -791,6 +767,7 @@ export default defineComponent({
       handleNull,
       confirmRemove,
       confirmDelete,
+      isVoucherExpired,
     };
   },
 });
