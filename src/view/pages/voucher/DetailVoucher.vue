@@ -60,6 +60,30 @@
                   <p class="fw-bold">{{ voucher.qty_used }} pcs</p>
                 </div>
               </div>
+              <div class="row">
+                <div class="col">
+                  <p class="fw-bold">Syarat dan Ketentuan:</p>
+                </div>
+                <div class="col">
+                  <p class="fw-bold">
+                    {{ voucher.is_yearly ? "Tahunan" : "Tanpa Syarat" }}
+                  </p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <p class="fw-bold">Durasi:</p>
+                </div>
+                <div class="col">
+                  <p class="fw-bold">
+                    {{
+                      `${voucher.is_duration} ${
+                        voucher.is_yearly ? "(Tahun)" : "(Bulan / Tahun)"
+                      }`
+                    }}
+                  </p>
+                </div>
+              </div>
             </div>
             <div class="col-6">
               <div class="row">

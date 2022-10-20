@@ -164,16 +164,30 @@
 
                 <div class="col-6">
                   <label class="form-label">Kadaluarsa </label>
-                  <Field
-                    rules=""
-                    name="expiredAt"
-                    :min="minExpiredAt"
-                    v-model="expiredAt"
-                    type="datetime-local"
-                    :class="{ 'border-danger': errors.expiredAt }"
-                    class="form-control form-control-solid border border-2"
-                  />
-                  <p class="text-danger mt-2">{{ errors.expiredAt }}</p>
+                  <div class="row">
+                    <div class="col-6">
+                      <Field
+                        rules=""
+                        type="date"
+                        name="expiredAt"
+                        :min="minExpiredAt"
+                        v-model="expiredAt"
+                        :class="{ 'border-danger': errors.expiredAt }"
+                        class="form-control form-control-solid border border-2"
+                      />
+                      <!-- <p class="text-danger mt-2">{{ errors.expiredAt }}</p> -->
+                    </div>
+                    <div class="col-6">
+                      <Field
+                        rules=""
+                        type="time"
+                        name="expiredAtTime"
+                        v-model="expiredAtTime"
+                        :class="{ 'border-danger': errors.expiredAtTime }"
+                        class="form-control form-control-solid border border-2"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -259,9 +273,8 @@ export default defineComponent({
     const temporaryDiscPercentage = ref<string | Blob>("");
 
     const expiredAt = ref<string>("");
-    const minExpiredAt = ref<string>(
-      formatDate(Date.now(), "YYYY-MM-DD HH:mm")
-    );
+    const expiredAtTime = ref<string>("");
+    const minExpiredAt = ref<string>(formatDate(Date.now(), "YYYY-MM-DD"));
     const loading = ref<boolean>(false);
 
     const isLoadingMultiple = ref<boolean>(false);
@@ -302,10 +315,20 @@ export default defineComponent({
       formData.append("qty", qty.value);
       formData.append("is_duration", duration.value);
       if (expiredAt.value) {
-        formData.append(
-          "expired_at",
-          formatDate(expiredAt.value, "YYYY-MM-DD HH:mm:ss")
-        );
+        if (expiredAtTime.value) {
+          formData.append(
+            "expired_at",
+            formatDate(
+              `${expiredAt.value} ${expiredAtTime.value}`,
+              "YYYY-MM-DD HH:mm:ss"
+            )
+          );
+        } else {
+          formData.append(
+            "expired_at",
+            formatDate(`${expiredAt.value}`, "YYYY-MM-DD")
+          );
+        }
       }
       formData.append("voucher_string", voucherString.value);
       formData.append("is_yearly", isYearly.value as any);
@@ -371,6 +394,7 @@ export default defineComponent({
       qty,
       duration,
       expiredAt,
+      expiredAtTime,
       minExpiredAt,
       isYearly,
       isLoadingMultiple,
