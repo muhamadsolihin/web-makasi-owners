@@ -318,7 +318,7 @@ export default defineComponent({
         } else {
           formData.append(
             "expired_at",
-            formatDate(`${expiredAt.value}`, "YYYY-MM-DD")
+            formatDate(`${expiredAt.value} 00:00:00`, "YYYY-MM-DD HH:mm:ss")
           );
         }
       }
