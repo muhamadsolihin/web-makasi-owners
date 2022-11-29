@@ -1,8 +1,6 @@
 <template>
   <div class="row g-5 g-xxl-8">
-    <div class="col-12 d-flex justify-content-end mb-5">
-
-      </div>
+    <div class="col-12 d-flex justify-content-end mb-5"></div>
     <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
       <WidgetEntity :value="widgets.entity" />
       <!-- <StatsWidget3></StatsWidget3> -->
@@ -40,7 +38,6 @@
       <!-- <StatsWidget4></StatsWidget4> -->
     </div>
 
-
     <!-- <div class="py-0 my-0 col-xl-3 col-sm-6 col-md-4">
       <WidgetTransactionCash :value="widgets.transaction_cash" />
        <StatsWidget5></StatsWidget5> 
@@ -49,10 +46,7 @@
       <WidgetTransactionNonCash :value="widgets.transaction_non_cash" />
        <StatsWidget5></StatsWidget5> 
     </div> -->
-
   </div>
-
- 
 </template>
 
 <script lang="ts">
@@ -81,12 +75,9 @@ import WidgetTipeProduk from "@/view/content/widgets/stats/detailoutlet/WidgetTi
 
 import WidgetPembayaran from "@/view/content/widgets/stats/detailoutlet/WidgetPembayaran.vue";
 
-
-
-
 import { getModule } from "vuex-module-decorators";
 import DashboardModule from "@/store/modules/DashboardModule";
-import WidgetPemesanan from "../../content/widgets/stats/detailoutlet/WidgetPemesanan.vue";
+import WidgetPemesanan from "../../../content/widgets/stats/detailoutlet/WidgetPemesanan.vue";
 
 export default defineComponent({
   name: "light",
@@ -108,8 +99,8 @@ export default defineComponent({
     WidgetTipeProduk,
     WidgetTransaksi,
     WidgetPembayaran,
-    WidgetPemesanan
-},
+    WidgetPemesanan,
+  },
   setup() {
     const filteredOutlet = ref<string>("");
     const typeFilter = ref<number>(1);
@@ -256,7 +247,6 @@ export default defineComponent({
       filterRangeMonth,
       filterRangeStartYear,
       filterRangeEndYear,
-
 
       changeTypeFilter,
       changeFilterDateRange,

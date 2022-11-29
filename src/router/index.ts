@@ -89,7 +89,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/view/pages/outletlist/ListOutlet.vue"),
       },
       {
-        path: "outlets/detail",
+        path: "outlets/detail/:uuid",
         name: "outlet-detail",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
         component: () => import("@/view/pages/outletlist/DetailOutlet.vue"),

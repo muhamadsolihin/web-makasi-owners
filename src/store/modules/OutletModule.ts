@@ -1,6 +1,7 @@
 import store from "@/store";
 import http from "@/http-common";
 import { List } from "@/types/outlet/List.interface";
+import { DetailOutlet } from "@/types/outlet/DetailOutlet.interface";
 import { MetaPagination } from "@/types/pagination/MetaPagination.interface";
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 
@@ -9,10 +10,15 @@ const CORE_URL_API = "/cockatoo";
 @Module({ name: "OutletModule", dynamic: true, store })
 export default class OutletModule extends VuexModule {
   outlets: List[] = [];
+  detailOutlet: DetailOutlet = {} as DetailOutlet;
   metaPagination: MetaPagination = {} as MetaPagination;
 
   get getterOutlets(): List[] {
     return this.outlets;
+  }
+
+  get getterDetailOutlet(): DetailOutlet {
+    return this.detailOutlet;
   }
 
   get getterMetaPagiantionOutlet(): MetaPagination {
@@ -22,6 +28,11 @@ export default class OutletModule extends VuexModule {
   @Mutation
   SET_OUTLETS(payload: List[]): void {
     this.outlets = payload;
+  }
+
+  @Mutation
+  SET_DETAIL_OUTLET(payload: DetailOutlet): void {
+    this.detailOutlet = payload;
   }
 
   @Mutation
@@ -48,6 +59,37 @@ export default class OutletModule extends VuexModule {
         }
         return res.data;
       })
+      .catch((err) => err);
+  }
+
+  @Action
+  getDetailOutlet(payload: string): Promise<any> {
+    return http
+      .get(`${CORE_URL_API}/v1/outlet/${payload}`)
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("SET_DETAIL_OUTLET", res.data.data);
+        }
+        return res.data;
+      })
+      .catch((err) => err);
+  }
+
+  @Action
+  getHistoryTransactionOutlet(payload: {
+    cursor: string;
+    perPage: number;
+    outletId: string;
+    dateFrom: string;
+    dateTo: string;
+    isCashReceipt: number;
+    isOnlineOrder: number;
+  }): Promise<any> {
+    return http
+      .get(
+        `/kiwi/v1/?cursor=${payload.cursor}&perpage=${payload.perPage}&outlet_id=${payload.outletId}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}&is_kasbon=${payload.isCashReceipt}&is_online_order=${payload.isOnlineOrder}`
+      )
+      .then((res) => res.data)
       .catch((err) => err);
   }
 }

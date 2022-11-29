@@ -65,16 +65,18 @@
               width="200px"
             />
 
-            <el-table-column label="Aksi" align="center">
-              <div class="d-flex justify-content-center my-3">
-                <el-button
-                  @click="$router.push(`/outlets/detail`)"
-                  type="danger"
-                  size="small"
-                >
-                  <i class="bi bi-eye-fill text-white"></i>
-                </el-button>
-              </div>
+            <el-table-column label="Aksi" align="center" fixed="right">
+              <template #default="scope">
+                <div class="d-flex justify-content-center my-3">
+                  <el-button
+                    @click="$router.push(`/outlets/detail/${scope.row.uuid}`)"
+                    type="danger"
+                    size="small"
+                  >
+                    <i class="bi bi-eye-fill text-white"></i>
+                  </el-button>
+                </div>
+              </template>
             </el-table-column>
           </el-table>
 
