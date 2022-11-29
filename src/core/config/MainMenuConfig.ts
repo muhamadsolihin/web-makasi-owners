@@ -4,28 +4,28 @@ const MainMenuConfig = [
     pages: [
       {
         heading: "Beranda",
-        icon: require('@/assets/icons/aside/cashier.svg'),
-        route: "/dashboard"
+        icon: require("@/assets/icons/aside/cashier.svg"),
+        route: "/dashboard",
       },
-      // {
-      //   heading: "Outlet",
-      //   icon: require('@/assets/icons/aside/outlet.svg'),
-      //   route: "/outlet/list",
-      //   // sub: [
-      //   //   {
-      //   //     heading: "List Outlet",
-      //   //     route: "/outlet/list"
-      //   //   },
-      //   //   {
-      //   //     heading: "Add Outlet",
-      //   //     route: "/outlet/add"
-      //   //   },
-      //   // ]
-      // },
+      {
+        heading: "Outlet",
+        icon: require("@/assets/icons/aside/outlet.svg"),
+        route: "/outlets",
+        // sub: [
+        //   {
+        //     heading: "List Outlet",
+        //     route: "/outlet/list"
+        //   },
+        //   {
+        //     heading: "Add Outlet",
+        //     route: "/outlet/add"
+        //   },
+        // ]
+      },
       {
         heading: "Pengguna",
-        icon: require('@/assets/icons/aside/produk.svg'),
-        route: "/users"
+        icon: require("@/assets/icons/aside/produk.svg"),
+        route: "/users",
         // sub: [
         //   {
         //     heading: "Product List",
@@ -46,11 +46,10 @@ const MainMenuConfig = [
         // ]
       },
 
-
       {
         heading: "Voucher",
-        icon: require('@/assets/icons/aside/Voucher.svg'),
-        route: "/voucher"
+        icon: require("@/assets/icons/aside/Voucher.svg"),
+        route: "/voucher",
       },
 
       // {
@@ -58,10 +57,6 @@ const MainMenuConfig = [
       //   icon: require('@/assets/icons/aside/outlet.svg'),
       //   route: "/outlets"
       // },
-
-
-
-    
 
       // {
       //   heading: "Customer",
@@ -135,7 +130,7 @@ const MainMenuConfig = [
       // //     },
       // //   ]
       // // },
-      
+
       // {
       //   sectionTitle: "Settings",
       //   icon: require('@/assets/icons/aside/setting.svg'),
@@ -196,7 +191,7 @@ const MainMenuConfig = [
       //   route: "/dashboards/compact",
       //   pro: true
       // }
-    ]
+    ],
   },
 
   // {

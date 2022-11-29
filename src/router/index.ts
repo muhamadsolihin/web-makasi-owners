@@ -82,19 +82,19 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/view/pages/voucher/Update.vue"),
       },
 
-      // {
-      //   path: "/outlets",
-      //   name: "outlet-list",
-      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
-      //   component: () => import("@/view/pages/outletlist/ListOutlet.vue"),
-      // },
+      {
+        path: "/outlets",
+        name: "outlet-list",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/outletlist/ListOutlet.vue"),
+      },
+      {
+        path: "outlets/detail",
+        name: "outlet-detail",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/outletlist/DetailOutlet.vue"),
+      },
 
-      // {
-      //   path: "outlets/outlet",
-      //   name: "outlet-detail",
-      //   meta: { asideEnabled: true, asidePrimaryDisabled: true},
-      //   component: () => import(("@/view/pages/outletlist/DetailOutlet.vue"),),
-      // },
       // {
       //   path: "outlets/outlet/omset",
       //   meta: { asideEnabled: true, asidePrimaryDisabled: true},

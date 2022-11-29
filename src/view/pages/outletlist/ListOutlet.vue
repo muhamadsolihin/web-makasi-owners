@@ -2,70 +2,73 @@
   <div>
     <div class="card">
       <div class="card-body">
-        <div
-          class="mb-5 justity-content-right d-flex justify-content-between align-items-center md:flex-row md:justiify-content-between"
-        >
-          <div class="d-flex ">
-            <div class="input-group input-group-sm">
-              <input
-                type="text"
-                v-model="search"
-                @keyup="textSearch"
-                class="form-control form-control-sm"
-                :class="{
-                  'border-right-white': clearable,
-                  'border-right-default': !clearable,
-                  'rounded-end': !clearable,
-                }"
-                placeholder="Search..."
-                style="border-right-color: white"
-              />
-              <span
-                class="input-group-text"
-                :class="{
-                  'border-left-white': clearable,
-                  'd-inline-block': clearable,
-                  'd-none': !clearable,
-                }"
-                style="background-color: white;"
-              >
-                <i
-                  class="bi bi-x-lg fw-bold"
-                  style="cursor: pointer"
-                  @click="clearSearch"
-                ></i>
-              </span>
-            </div>
-            <button class="btn btn-sm btn-primary ms-2" @click="searchData">
-              Search
-            </button>
-          </div>
+        <div class="mb-5 d-flex justify-content-end align-items-center">
+          <el-date-picker
+            v-model="filterDateRange"
+            class="me-auto"
+            type="daterange"
+            style="width: 300px;"
+            start-placeholder="Start date"
+            end-placeholder="End date"
+            size="small"
+          />
+          <el-input
+            type="text"
+            v-model="search"
+            @clear="searchData"
+            @change="searchData"
+            placeholder="Search..."
+            style="width: 300px;"
+            size="small"
+            clearable
+          />
+          <button class="btn btn-sm btn-primary ms-2" @click="searchData">
+            Search
+          </button>
         </div>
 
         <div class="rounded border border-1 p-2">
           <el-table
-            :data="Outlets"
+            :data="outlets"
             style="width: 100%"
-            @selection-change="handleSelectionChange"
             v-loading="loadingDatatable"
             table-layout="fixed"
           >
-            <el-table-column property="name" label="Nama Pemilik" width="140">
+            <el-table-column
+              property="owner_name"
+              label="Nama Pemilik"
+              width="200px"
+            >
             </el-table-column>
-            <!-- <el-table-column prop="outlet_sum" label="Jumlah Outlet"/> -->
-            <el-table-column prop="namaoutlet" label="Nama Outlet" width="140" />
-            <el-table-column prop="phone" label="Phone" width="140" />
-            <el-table-column prop="kategori" label="Kategori" />
-            <el-table-column prop="tipetoko" label="Tipe" />
-            <el-table-column prop="address"  label="Address">
+            <el-table-column prop="name" label="Nama Outlet" width="200px" />
+            <el-table-column prop="email" label="Email" width="200px" />
+            <el-table-column prop="phone" label="Phone" width="150px" />
+            <el-table-column prop="category" label="Kategori" width="200px">
+              <template #default="scope">
+                {{ showCategory(scope.row.category) }}
+              </template>
             </el-table-column>
-            <el-table-column prop="deskripsi" label="Deskripsi" width="140" />
-            <el-table-column prop="lokasi" label="Lokasi" />
+            <el-table-column prop="type" label="Tipe" width="230px">
+              <template #default="scope">
+                {{ showType(scope.row.type) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="address" label="Address" width="250px" />
+            <el-table-column
+              prop="description"
+              label="Deskripsi"
+              width="250px"
+            />
+            <el-table-column
+              prop="village_name"
+              label="Kelurahan"
+              width="200px"
+            />
 
             <el-table-column label="Aksi" align="center">
               <div class="d-flex justify-content-center my-3">
                 <el-button
-                  @click="$router.push(`/outlets/outlet`)"
+                  @click="$router.push(`/outlets/detail`)"
                   type="danger"
                   size="small"
                 >
@@ -79,10 +82,10 @@
             <button
               class="btn btn-sm"
               @click="prevPage"
-              :disabled="!metaPagination.prev_cursor"
+              :disabled="!metaPagination.prev"
               :class="{
-                'text-primary': metaPagination.prev_cursor,
-                'text-secondary': !metaPagination.prev_cursor,
+                'text-primary': metaPagination.prev,
+                'text-secondary': !metaPagination.prev,
               }"
             >
               PREV
@@ -90,10 +93,10 @@
             <button
               class="btn btn-sm"
               @click="nextPage"
-              :disabled="!metaPagination.next_cursor"
+              :disabled="!metaPagination.next"
               :class="{
-                'text-primary': metaPagination.next_cursor,
-                'text-secondary': !metaPagination.next_cursor,
+                'text-primary': metaPagination.next,
+                'text-secondary': !metaPagination.next,
               }"
             >
               NEXT
@@ -102,227 +105,116 @@
         </div>
       </div>
     </div>
-
-    <el-dialog title="Konfirmasi" v-model="deleteDialog" width="30%">
-      <div class="mb-5">
-        <i
-          class="bi bi-exclamation-triangle text-danger me-3"
-          style="font-size: 1.5rem"
-        ></i>
-        <span>Are you sure you want to proceed?</span>
-      </div>
-      <template #footer>
-        <button @click="deleteDialog = false" class="btn btn-sm btn-secondary">
-          No
-        </button>
-        <button
-          @click="confirmRemove"
-          class="btn btn-sm btn-primary ms-3"
-          :disabled="loadingBtnDialog"
-          :data-kt-indicator="!loadingBtnDialog ? 'off' : 'on'"
-        >
-          <span v-if="!loadingBtnDialog" class="indicator-label">
-            Yes
-          </span>
-          <span v-else class="indicator-progress">
-            Please wait...
-            <span
-              class="spinner-border spinner-border-sm align-middle ms-2"
-            ></span>
-          </span>
-        </button>
-      </template>
-    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, onMounted, computed } from "vue";
-import EmployeeModule from "@/store/modules/EmployeeModule";
-import AuthModule from "@/store/modules/AuthModule";
+import moment from "moment";
+import { defineComponent, ref, onMounted, computed } from "vue";
+
 import { getModule } from "vuex-module-decorators";
+import OutletModule from "@/store/modules/OutletModule";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
 import { handleNull, epochToDateTime } from "@/helper";
-
-import { ElNotification } from "element-plus";
 
 export default defineComponent({
   name: "outlet-list",
   components: {},
   setup() {
-    const deleteDialog = ref(false);
-    const loadingBtnDialog = ref(false);
     const loadingDatatable = ref(false);
-    const employee = ref("");
-    const FilterSubmission = ref([
-      {
-        name: "Sudah Mengajukan",
-        value: "1",
-      },
-      {
-        name: "Belum Mengajukan",
-        value: "0",
-      },
+    const filterDateRange = ref<string[]>([
+      moment()
+        .subtract(1, "months")
+        .format("YYYY-MM-DD"),
+      moment().format("YYYY-MM-DD"),
     ]);
-
-    const filter = ref("");
     const search = ref<string | null>("");
     const cursor = ref<string | null>("");
     const perPage = ref<number>(15);
     const clearable = ref<boolean>(false);
 
-    const selectedItem: any = reactive({});
+    const outletState = getModule(OutletModule);
 
-    const EmployeeState = getModule(EmployeeModule);
-    const AuthState = getModule(AuthModule);
-    const employees = computed(() => EmployeeState.getEmployees);
+    const outlets = computed(() => outletState.getterOutlets);
     const metaPagination = computed(
-      () => EmployeeState.getMetaPaginationEmployee
+      () => outletState.getterMetaPagiantionOutlet
     );
-    const myOutletId = computed(() => AuthState.getMyOutletId);
 
-    const Outlets = ref([
-      {
-        name: "Asep Saepudin",
-        namaoutlet: "Jabrigs",
-        phone: "0897678987",
-        kategori: "retail",
-        tipetoko: "online",
-        address: "bogor",
-        deskripsi: "kebutuhan ",
-        lokasi:"bogors"
-      },
-      {
-        name: "Asep Saepuloh",
-        namaoutlet: "Jabrigs",
-        phone: "0897678987",
-        kategori: "retail",
-        tipetoko: "online",
-        address: "bogor",
-        deskripsi: "kebutuhan ",
-        lokasi:"bogors"
-      },
-      {
-        name: "Asep Samsudin",
-        namaoutlet: "Jabrigs",
-        phone: "0897678987",
-        kategori: "retail",
-        tipetoko: "online",
-        address: "bogor",
-        deskripsi: "kebutuhan ",
-        lokasi:"bogors"
-      },
-    ]);
-
-    const selectItem = (item) => {
-      selectedItem.value = item;
-      deleteDialog.value = true;
+    const showCategory = (key: number): string => {
+      switch (key) {
+        case 1:
+          return "Makanan dan Minuman";
+        case 2:
+          return "Pakaian";
+        case 3:
+          return "Retail";
+        default:
+          return "Lainnya";
+      }
     };
 
-    const textSearch = () => {
-      if (search.value) clearable.value = true;
-      else clearable.value = false;
+    const showType = (key: number): string => {
+      switch (key) {
+        case 1:
+          return "Online";
+        case 2:
+          return "Offline";
+        default:
+          return "Keudanya (Online & Offline)";
+      }
     };
 
-    const searchSubs = () => {
+    const getOutlets = async () => {
       loadingDatatable.value = true;
+      try {
+        await outletState.getOutlets({
+          perPage: perPage.value,
+          search: search.value || "",
+          cursor: cursor.value || "",
+          from: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
+          to: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
+        });
+      } catch (error) {
+        return error;
+      } finally {
+        loadingDatatable.value = false;
+      }
+    };
+
+    const searchData = async () => {
       cursor.value = "";
-      EmployeeState.SET_EMPLOYEES([]);
-      EmployeeState.getEmployeesAPI({
-        outletId: myOutletId.value,
-        search: search.value,
-        FilterSubmission: filter.value,
-        cursor: cursor.value,
-        perPage: perPage.value,
-      }).finally(() => (loadingDatatable.value = false));
+      await getOutlets();
     };
 
-    const clearSearch = () => {
-      search.value = "";
-      cursor.value = "";
-      clearable.value = false;
-      loadingDatatable.value = true;
-      EmployeeState.SET_EMPLOYEES([]);
-      EmployeeState.getEmployeesAPI({
-        outletId: myOutletId.value,
-        search: search.value,
-        cursor: cursor.value,
-        filter: filter.value,
-        perPage: perPage.value,
-      }).finally(() => (loadingDatatable.value = false));
+    const prevPage = async () => {
+      cursor.value = metaPagination.value.prev;
+      await getOutlets();
     };
 
-    const searchData = () => {
-      loadingDatatable.value = true;
-      cursor.value = "";
-      EmployeeState.SET_EMPLOYEES([]);
-      EmployeeState.getEmployeesAPI({
-        outletId: myOutletId.value,
-        search: search.value,
-        FilterSubmission: filter.value,
-        cursor: cursor.value,
-        perPage: perPage.value,
-      }).finally(() => (loadingDatatable.value = false));
+    const nextPage = async () => {
+      cursor.value = metaPagination.value.next;
+      await getOutlets();
     };
 
-    const prevPage = () => {
-      loadingDatatable.value = true;
-      cursor.value = metaPagination.value.prev_cursor;
-      EmployeeState.getEmployeesAPI({
-        outletId: myOutletId.value,
-        search: search.value,
-        cursor: cursor.value,
-        filter: filter.value,
-        perPage: perPage.value,
-      }).finally(() => (loadingDatatable.value = false));
-    };
-
-    const nextPage = () => {
-      loadingDatatable.value = true;
-      cursor.value = metaPagination.value.next_cursor;
-      EmployeeState.getEmployeesAPI({
-        outletId: myOutletId.value,
-        search: search.value,
-        cursor: cursor.value,
-        perPage: perPage.value,
-      }).finally(() => (loadingDatatable.value = false));
-    };
-
-    onMounted(() => {
+    onMounted(async () => {
       setCurrentPageBreadcrumbs("Dashboard", "Daftar Outlet");
-      loadingDatatable.value = true;
-      EmployeeState.SET_EMPLOYEES([]);
-      EmployeeState.getEmployeesAPI({
-        outletId: myOutletId.value,
-        search: search.value,
-        filter: filter.value,
-        cursor: cursor.value,
-        perPage: perPage.value,
-      }).finally(() => (loadingDatatable.value = false));
+      await getOutlets();
     });
 
     return {
-      employees,
-      FilterSubmission,
-      deleteDialog,
-      loadingBtnDialog,
+      outlets,
       loadingDatatable,
-      selectedItem,
-      filter,
-      Outlets,
+      filterDateRange,
       search,
       clearable,
       metaPagination,
-      employee,
       epochToDateTime,
-      searchSubs,
-      textSearch,
-      clearSearch,
-      searchData,
-      selectItem,
+      handleNull,
+      showCategory,
+      showType,
       prevPage,
       nextPage,
-      handleNull,
+      searchData,
     };
   },
 });
