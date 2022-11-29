@@ -1,8 +1,8 @@
 <template>
     <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
       <el-tab-pane label="Karyawan" name="first"><CardEmployee/></el-tab-pane>
-      <!-- <el-tab-pane label="Config" name="second">Config</el-tab-pane>
-      <el-tab-pane label="Role" name="third">Role</el-tab-pane>
+       <el-tab-pane label="Produk" name="second"><CardProducts/></el-tab-pane>
+      <!--<el-tab-pane label="Role" name="third">Role</el-tab-pane>
       <el-tab-pane label="Task" name="fourth">Task</el-tab-pane> -->
     </el-tabs>
   </template>
@@ -10,6 +10,7 @@
   import { ref } from 'vue'
   import type { TabsPaneContext } from 'element-plus'
 import CardEmployee from './CardEmployee.vue';
+import CardProducts from './CardProducts.vue';
   
   const activeName = ref('first')
   
