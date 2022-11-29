@@ -1,118 +1,173 @@
 <template>
-  <div>
-    <Loader />
-    <div class="row ">
-      <div class="col d-flex justify-content-end ">
-        <button class="btn btn-secondary" @click="$router.back">
-          Kembali
-        </button>
-      </div>
-    </div>
-  </div>
-  <CardEntity/>
+  <Loader />
+
   <div class="row mt-5">
-    <div class="col">
+    <div class="col-12 col-md-6">
       <div class="card">
         <div class="card-body">
-          <div class="row mb-5"></div>
-          <div class="row" v-for="o in FilterSubmission" :key="o">
-            <div class="col-md-3">
-              <p class="fw-bold">Nama Pemilik:</p>
-            </div>
-            <div class="col-md-3">
-              <p class="fw-bold">
-                {{ o.name }}
-              </p>
-            </div>
-            <div class="col-md-2 pl-5">
-              <p class="fw-bold">Nama Outlet:</p>
-            </div>
-            <div class="col-md-2">
-              <p class="fw-bold">
-                {{ o.namaoutlet }}
-              </p>
-            </div>
-            <div class="col-md-3">
-              <p class="fw-bold">Deskripsi :</p>
-            </div>
-            <div class="col-md-3">
-              <p class="fw-bold">
-                {{ o.deskripsi }}
-              </p>
-            </div>
-          </div>
+          <h2>Informasi Outlet</h2>
           <div class="row">
-            <div class="col-md-3">
-              <p class="fw-bold">Phone :</p>
+            <div class="col-4">
+              <p class="mb-0">Nama Pemilik:</p>
             </div>
-            <div class="col-md-3">
-              <p class="fw-bold">
-                {{ handleNullToString(employee.village_name) }}
-              </p>
+            <div class="col">
+              <p class="mb-0">{{ handleNullToString(outlet.owner_name) }}</p>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-3">
-              <p class="fw-bold">Kategori :</p>
+          <div class="row mt-3">
+            <div class="col-4">
+              <p class="mb-0">Nama Outlet:</p>
             </div>
-            <div class="col-md-3">
-              <p class="fw-bold">
-                {{ handleNullToString(employee.outlet_sum) }}
-              </p>
+            <div class="col">
+              <p class="mb-0">{{ handleNullToString(outlet.name) }}</p>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-3">
-              <p class="fw-bold">Tipe Toko :</p>
+          <div class="row mt-3">
+            <div class="col-4">
+              <p class="mb-0">Email:</p>
             </div>
-            <div class="col-md-3">
-              <p class="fw-bold">
-                {{ handleNullToString(employee.outlet_name) }}
-              </p>
+            <div class="col">
+              <p class="mb-0">{{ handleNullToString(outlet.email) }}</p>
             </div>
           </div>
+          <div class="row mt-3">
+            <div class="col-4">
+              <p class="mb-0">Phone:</p>
+            </div>
+            <div class="col">
+              <p class="mb-0">{{ handleNullToString(outlet.phone) }}</p>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-4">
+              <p class="mb-0">Kategori:</p>
+            </div>
+            <div class="col">
+              <p class="mb-0">{{ showCategory(outlet.category) }}</p>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-4">
+              <p class="mb-0">Tipe Toko:</p>
+            </div>
+            <div class="col">
+              <p class="mb-0">{{ showType(outlet.type) }}</p>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-4">
+              <p class="mb-0">Alamat:</p>
+            </div>
+            <div class="col">
+              <p class="mb-0">{{ handleNullToString(outlet.address) }}</p>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-4">
+              <p class="mb-0">Kelurahan:</p>
+            </div>
+            <div class="col">
+              <p class="mb-0">{{ handleNullToString(outlet.village_name) }}</p>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-4">
+              <p class="mb-0">Deskripsi:</p>
+            </div>
+            <div class="col">
+              <p class="mb-0">{{ handleNullToString(outlet.description) }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <div class="row">
-            <div class="col-md-3">
-              <p class="fw-bold">Address :</p>
-            </div>
-            <div class="col-md-3">
-              <p class="fw-bold">
-                {{ handleNullToString(employee.bank?.bank_code) }}
-                - {{ handleNullToString(employee.bank?.bank_account_number) }}
-              </p>
-            </div>
+      <div class="card mt-5">
+        <div class="card-body">
+          <Maps :latitude="outlet.latitude" :longitude="outlet.longitude" />
+        </div>
+      </div>
+    </div>
 
-            <div class="col-md-3">
-              <p class="fw-bold">Lokasi :</p>
+    <div class="col-12 col-md-6">
+      <div class="row">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="mb-0">Layanan</h2>
+            <div
+              class="mt-3"
+              :key="service.services_id"
+              v-for="service in outlet.services_online_order"
+            >
+              <div
+                class="d-flex align-items-center p-4 border border-2 rounded"
+              >
+                <h4 class="mb-0">{{ service.services_name }}</h4>
+                <div class="form-check form-switch me-0 mt-0 mb-0 ms-auto">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    disabled
+                    :id="service.services_name"
+                    :checked="service.services_status ? true : false"
+                  />
+                </div>
+              </div>
             </div>
-            <div class="col-md-3">
-              <p class="fw-bold">
-                {{ handleNullToString(employee.bank?.bank_code) }}
-                - {{ handleNullToString(employee.bank?.bank_account_number) }}
-              </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="mb-0">Delivery</h2>
+            <div
+              :key="delivery.id"
+              class="mt-3 border border-2 rounded d-flex align-items-center p-4"
+              v-for="delivery in outlet.delivery_setting_response"
+            >
+              <h4 class="mb-0">{{ delivery.company_name }}</h4>
+              <div class="form-check form-switch me-0 mt-0 mb-0 ms-auto">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  disabled
+                  :id="delivery.company_name"
+                  :checked="delivery.status ? true : false"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <Maps />
   </div>
-  <TabMenu />
+
+  <div class="row mt-5">
+    <TabMenu />
+  </div>
+
+  <div class="row">
+    <div class="col d-flex justify-content-end ">
+      <button class="btn btn-secondary" @click="$router.back">
+        Kembali
+      </button>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import { defineComponent, onMounted, ref, computed } from "vue";
+import { defineComponent, onMounted, computed } from "vue";
+
 import { getModule } from "vuex-module-decorators";
-import EmployeeModule from "@/store/modules/EmployeeModule";
+import OutletModule from "@/store/modules/OutletModule";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
-import moment from "moment";
 import { Actions } from "@/store/enums/store.enums";
 import Loader from "@/view/content/Loader.vue";
-import AuthModule from "@/store/modules/AuthModule";
-import { ElMessage } from "element-plus";
 import TabMenu from "@/view/pages/outletlist/TabMenu.vue";
 
 import {
@@ -123,88 +178,57 @@ import {
   handleNull,
 } from "@/helper";
 import Maps from "./Maps.vue";
-import CardEntity from "./CardEntity.vue";
-
 
 export default defineComponent({
   name: "detail-pengguna",
-  components: { Loader, TabMenu, Maps, CardEntity },
+  components: { Loader, TabMenu, Maps },
   setup() {
-    const Employeedetail = ref<string | null>("");
-    const loading = ref<boolean>(true);
-    const AuthState = getModule(AuthModule);
-    const userID = ref<string>("");
     const store = useStore();
     const route = useRoute();
-    const EmployeeState = getModule(EmployeeModule);
-    const employee = computed(() => EmployeeState.getEmployee);
-    const selectedEntity = ref<string>('Omset');
 
-    const FilterSubmission = ref([
-      {
-        name: "Asep Saepuloh",
-        deskripsi: "Menjual Peralatan Dapur",
-        phone: "0998763673",
-        kategori: "Retail",
-        tipetoko: "Online",
-        address: "Bogor utama setiabudi",
-        namaoutlet: "Makmur Jaya Abadi",
-        lokasi: "bogor",
-      },
-    ]);
+    const OutletState = getModule(OutletModule);
 
-    const onSubmit = () => {
-      EmployeeState.SET_EMPLOYEES([]);
-      ElMessage("Success Verified. ");
-      EmployeeState.addverified(route.params.uuid)
-        .then(() => {
-          const employee = EmployeeState.getEmployee;
-        })
-        .finally(() => {
-          loading.value = false;
-        });
+    const outlet = computed(() => OutletState.getterDetailOutlet);
+
+    const showCategory = (key: number): string => {
+      switch (key) {
+        case 1:
+          return "Makanan dan Minuman";
+        case 2:
+          return "Pakaian";
+        case 3:
+          return "Retail";
+        default:
+          return "Lainnya";
+      }
     };
 
-    const Submit = () => {
-      EmployeeState.SET_EMPLOYEES([]);
-      ElMessage("Success Logout. ");
-      EmployeeState.forceLogout(route.params.id)
-        .then(() => {
-          const employee = EmployeeState.getEmployee;
-        })
-        .finally(() => {
-          loading.value = false;
-        });
+    const showType = (key: number): string => {
+      switch (key) {
+        case 1:
+          return "Online";
+        case 2:
+          return "Offline";
+        default:
+          return "Keudanya (Online & Offline)";
+      }
     };
 
     onMounted(() => {
       setCurrentPageBreadcrumbs("Dashboard", "Detail Outlet");
 
       store.dispatch(Actions.ADD_BODY_CLASSNAME, "page-loading");
-      EmployeeState.getDetailEmployee(route.params.uuid)
-        .then(() => {
-          const employee = EmployeeState.getEmployee;
-        })
-        .finally(() =>
-          store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "page-loading")
-        );
+
+      OutletState.getDetailOutlet(route.params.uuid as string);
+
+      store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "page-loading");
     });
 
     return {
-      Employeedetail,
-      loading,
-      employee,
-      moment,
-      EmployeeModule,
-      FilterSubmission,
-      route,
-      AuthState,
-      store,
-      userID,
-      selectedEntity,
+      outlet,
 
-      onSubmit,
-      Submit,
+      showCategory,
+      showType,
       formatDate,
       handleNull,
       formatCurrency,

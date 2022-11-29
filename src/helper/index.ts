@@ -57,7 +57,7 @@ export function handleNull(val: string): boolean {
 }
 
 export function handleNullToString(val: string): string {
-  if (val == null || val == "null") return "-";
+  if (val == null || val == "null" || val == "") return "-";
   return val;
 }
 
