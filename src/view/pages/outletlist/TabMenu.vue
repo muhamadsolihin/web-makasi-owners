@@ -13,9 +13,9 @@
             :outlet-id="outletId"
           />
         </el-tab-pane>
-        <el-tab-pane label="Pesanan Online" name="orderOnline"
-          >Pesanan Online</el-tab-pane
-        >
+        <el-tab-pane label="Pesanan Online" name="orderOnline">
+          <CardOrderOnline :show="activeTab" :outlet-id="outletId" />
+        </el-tab-pane>
         <el-tab-pane label="Pelanggan" name="customer">
           <CardCustomer />
         </el-tab-pane>
@@ -35,6 +35,7 @@ import { getModule } from "vuex-module-decorators";
 import OutletModule from "@/store/modules/OutletModule";
 
 import CardEmployee from "@/view/pages/outletlist/components/CardEmployee.vue";
+import CardOrderOnline from "./components/CardOrderOnline.vue";
 import CardCustomer from "@/view/pages/outletlist/components/CardCustomer.vue";
 import CardTransaction from "@/view/pages/outletlist/components/CardTransaction.vue";
 import CardCashReceipt from "@/view/pages/outletlist/components/CardCashReceipt.vue";
