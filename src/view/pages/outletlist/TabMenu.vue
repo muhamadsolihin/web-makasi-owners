@@ -2,7 +2,7 @@
   <div class="row mt-5">
     <div class="col-md-12 justify-content-right align-items-end">
       <div class="card">
-        <div class="card-body py-5 justify-content-between align-items-end">
+        <div class="card-body justify-content-between align-items-end">
           <el-tabs
             v-model="activeName"
             class="col demo-tabs tabs-pills fill justified"
@@ -12,19 +12,19 @@
             justified
           >
             <el-tab-pane label="karyawan" name="first">
-              <CardKaryawan />
+              <CardEmployee />
             </el-tab-pane>
             <el-tab-pane label="Pesanan Online" name="second"
               >Pesanan Online</el-tab-pane
             >
             <el-tab-pane label="Pelanggan" name="third">
-              <CardPelanggan />
+              <CardCustomer />
             </el-tab-pane>
             <el-tab-pane label="Riwayat Transaksi" name="fourth">
-              <TransaksiList />
+              <CardTransaction />
             </el-tab-pane>
             <el-tab-pane label="Transaksi Kasbon" name="seven"
-              ><CardKasbon
+              ><CardCashReceipt
             /></el-tab-pane>
           </el-tabs>
         </div>
@@ -34,23 +34,22 @@
 </template>
 <script lang="ts">
 import { useRoute } from "vue-router";
-import { defineComponent, onMounted, ref, computed } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import { getModule } from "vuex-module-decorators";
 import EmployeeModule from "@/store/modules/EmployeeModule";
-import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
 import moment from "moment";
 import { Actions } from "@/store/enums/store.enums";
 import Loader from "@/view/content/Loader.vue";
 import AuthModule from "@/store/modules/AuthModule";
 import { ElMessage } from "element-plus";
-import CardKaryawan from "@/view/pages/outletlist/CardKaryawan.vue";
-import CardPelanggan from "@/view/pages/outletlist/CardPelanggan.vue";
-import TransaksiList from "@/view/pages/outletlist/components/TransaksiList.vue";
-import CardKasbon from "@/view/pages/outletlist/CardKasbon.vue";
+import CardEmployee from "@/view/pages/outletlist/components/CardEmployee.vue";
+import CardCustomer from "@/view/pages/outletlist/components/CardCustomer.vue";
+import CardTransaction from "@/view/pages/outletlist/components/CardTransaction.vue";
+import CardCashReceipt from "@/view/pages/outletlist/components/CardCashReceipt.vue";
 
 export default defineComponent({
   name: "detail-Voucher",
-  components: { CardKaryawan, CardPelanggan, TransaksiList, CardKasbon },
+  components: { CardEmployee, CardCustomer, CardTransaction, CardCashReceipt },
   setup() {
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);
