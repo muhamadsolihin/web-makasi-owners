@@ -146,15 +146,13 @@
   </div>
 
   <div class="row mt-5">
-    <TabMenu />
+    <TabMenu :outlet-id="outlet.id" />
   </div>
 
-  <div class="row">
-    <div class="col d-flex justify-content-end ">
-      <button class="btn btn-secondary" @click="$router.back">
-        Kembali
-      </button>
-    </div>
+  <div class="mt-5 d-flex justify-content-end">
+    <button class="btn btn-secondary" @click="$router.back">
+      Kembali
+    </button>
   </div>
 </template>
 

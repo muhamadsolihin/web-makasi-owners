@@ -12,6 +12,7 @@ export default class OutletModule extends VuexModule {
   outlets: List[] = [];
   detailOutlet: DetailOutlet = {} as DetailOutlet;
   metaPagination: MetaPagination = {} as MetaPagination;
+  metaPaginationHistoryTransaction: MetaPagination = {} as MetaPagination;
 
   get getterOutlets(): List[] {
     return this.outlets;
@@ -23,6 +24,10 @@ export default class OutletModule extends VuexModule {
 
   get getterMetaPagiantionOutlet(): MetaPagination {
     return this.metaPagination;
+  }
+
+  get getterMetaPagiantionHistoryTransaction(): MetaPagination {
+    return this.metaPaginationHistoryTransaction;
   }
 
   @Mutation
@@ -38,6 +43,11 @@ export default class OutletModule extends VuexModule {
   @Mutation
   SET_META_PAGINATION(payload: MetaPagination): void {
     this.metaPagination = payload;
+  }
+
+  @Mutation
+  SET_META_PAGINATION_HISTORY_TRANSACTION(payload: MetaPagination): void {
+    this.metaPaginationHistoryTransaction = payload;
   }
 
   @Action
@@ -89,7 +99,20 @@ export default class OutletModule extends VuexModule {
       .get(
         `/kiwi/v1/?cursor=${payload.cursor}&perpage=${payload.perPage}&outlet_id=${payload.outletId}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}&is_kasbon=${payload.isCashReceipt}&is_online_order=${payload.isOnlineOrder}`
       )
-      .then((res) => res.data)
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("SET_META_PAGINATION_HISTORY_TRANSACTION", {
+            prev: "",
+            next: res.data.meta.next,
+          });
+        } else {
+          this.context.commit("SET_META_PAGINATION_HISTORY_TRANSACTION", {
+            prev: "",
+            next: "",
+          });
+        }
+        return res.data;
+      })
       .catch((err) => err);
   }
 }

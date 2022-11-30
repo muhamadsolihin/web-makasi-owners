@@ -2,6 +2,7 @@ import { Service } from "../service/Service.interface";
 import { Delivery } from "../service/Delivery.interface";
 
 export interface DetailOutlet {
+  id: string;
   uuid: string;
   user_id: number;
   email: string;
