@@ -183,7 +183,7 @@ const props = defineProps({
     require: true,
   },
   outletId: {
-    type: String,
+    type: Number,
     require: true,
   },
 });

@@ -146,7 +146,7 @@
   </div>
 
   <div class="row mt-5">
-    <TabMenu :outlet-id="outlet.id" />
+    <TabMenu :user-id="outlet.user_id" :outlet-id="outlet.id" />
   </div>
 
   <div class="mt-5 d-flex justify-content-end">

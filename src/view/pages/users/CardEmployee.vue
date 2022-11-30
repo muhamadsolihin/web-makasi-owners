@@ -33,10 +33,7 @@
               sortable
             >
               <template #default="scope">
-                <span
-                  v-if="scope.row.is_active"
-                  t
-                >
+                <span v-if="scope.row.is_active" t>
                   Aktif
                 </span>
                 <span v-else class="ms-2 badge badge-light">
@@ -49,7 +46,7 @@
               <template #default="scope">
                 <div class="d-flex justify-content-center my-3">
                   <el-button
-                    @click="$router.push(`/employee/${scope.row.uuid}/${scope.row.id}`)"
+                    @click="$router.push(`/employee/${scope.row.uuid}`)"
                     type="danger"
                     size="small"
                   >

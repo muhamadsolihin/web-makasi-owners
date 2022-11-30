@@ -12,7 +12,11 @@ export default class OutletModule extends VuexModule {
   outlets: List[] = [];
   detailOutlet: DetailOutlet = {} as DetailOutlet;
   metaPagination: MetaPagination = {} as MetaPagination;
+  metaPaginationEmployee: MetaPagination = {} as MetaPagination;
+  metaPaginationOrderOnline: MetaPagination = {} as MetaPagination;
+  metaPaginationCustomer: MetaPagination = {} as MetaPagination;
   metaPaginationHistoryTransaction: MetaPagination = {} as MetaPagination;
+  metaPaginationTransactionCashReceipt: MetaPagination = {} as MetaPagination;
 
   get getterOutlets(): List[] {
     return this.outlets;
@@ -26,8 +30,24 @@ export default class OutletModule extends VuexModule {
     return this.metaPagination;
   }
 
+  get getterMetaPagiantionEmployee(): MetaPagination {
+    return this.metaPaginationEmployee;
+  }
+
+  get getterMetaPagiantionOrderOnline(): MetaPagination {
+    return this.metaPaginationOrderOnline;
+  }
+
+  get getterMetaPagiantionCustomer(): MetaPagination {
+    return this.metaPaginationCustomer;
+  }
+
   get getterMetaPagiantionHistoryTransaction(): MetaPagination {
     return this.metaPaginationHistoryTransaction;
+  }
+
+  get getterMetaPagiantionTransactionCashReceipt(): MetaPagination {
+    return this.metaPaginationTransactionCashReceipt;
   }
 
   @Mutation
@@ -46,8 +66,28 @@ export default class OutletModule extends VuexModule {
   }
 
   @Mutation
+  SET_META_PAGINATION_EMPLOYEE(payload: MetaPagination): void {
+    this.metaPaginationEmployee = payload;
+  }
+
+  @Mutation
+  SET_META_PAGINATION_ORDER_ONLINE(payload: MetaPagination): void {
+    this.metaPaginationOrderOnline = payload;
+  }
+
+  @Mutation
+  SET_META_PAGINATION_CUSTOMER(payload: MetaPagination): void {
+    this.metaPaginationCustomer = payload;
+  }
+
+  @Mutation
   SET_META_PAGINATION_HISTORY_TRANSACTION(payload: MetaPagination): void {
     this.metaPaginationHistoryTransaction = payload;
+  }
+
+  @Mutation
+  SET_META_PAGINATION_TRANSACTION_CASH_RECEIPT(payload: MetaPagination): void {
+    this.metaPaginationTransactionCashReceipt = payload;
   }
 
   @Action
@@ -89,7 +129,7 @@ export default class OutletModule extends VuexModule {
   getHistoryTransactionOutlet(payload: {
     cursor: string;
     perPage: number;
-    outletId: string;
+    outletId: number;
     dateFrom: string;
     dateTo: string;
     isCashReceipt: number;
@@ -107,6 +147,33 @@ export default class OutletModule extends VuexModule {
           });
         } else {
           this.context.commit("SET_META_PAGINATION_HISTORY_TRANSACTION", {
+            prev: "",
+            next: "",
+          });
+        }
+        return res.data;
+      })
+      .catch((err) => err);
+  }
+
+  @Action getEmployeeOutlet(payload: {
+    cursor: string;
+    perPage: number;
+    userId: number;
+    outletId: number;
+  }): Promise<any> {
+    return http
+      .get(
+        `/dusky_lory/v1/employee/${payload.userId}/?cursor=${payload.cursor}&perpage=${payload.perPage}&outlet_id=${payload.outletId}`
+      )
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("SET_META_PAGINATION_EMPLOYEE", {
+            prev: res.data.meta.prev_cursor,
+            next: res.data.meta.next_cursor,
+          });
+        } else {
+          this.context.commit("SET_META_PAGINATION_EMPLOYEE", {
             prev: "",
             next: "",
           });

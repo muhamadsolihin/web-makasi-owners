@@ -6,8 +6,12 @@
         class="demo-tabs tabs-pills fill justified"
         style="width: 100%;"
       >
-        <el-tab-pane label="karyawan" name="employee">
-          <CardEmployee />
+        <el-tab-pane label="Karyawan" name="employee">
+          <CardEmployee
+            :show="activeTab"
+            :user-id="userId"
+            :outlet-id="outletId"
+          />
         </el-tab-pane>
         <el-tab-pane label="Pesanan Online" name="orderOnline"
           >Pesanan Online</el-tab-pane
@@ -36,8 +40,12 @@ import CardTransaction from "@/view/pages/outletlist/components/CardTransaction.
 import CardCashReceipt from "@/view/pages/outletlist/components/CardCashReceipt.vue";
 
 const props = defineProps({
+  userId: {
+    type: Number,
+    require: true,
+  },
   outletId: {
-    type: String,
+    type: Number,
     require: true,
   },
 });

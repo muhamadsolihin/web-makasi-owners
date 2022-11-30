@@ -48,7 +48,7 @@ const routes: Array<RouteRecordRaw> = [
       //   component: () => import("@/view/pages/users/DetailOutlet.vue"),
       // },
       {
-        path: "employee/:uuid/:id",
+        path: "employee/:uuid",
         name: "DetailOutlet",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
         component: () => import("@/view/pages/users/DetailEmployee.vue"),
