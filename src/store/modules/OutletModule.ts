@@ -126,6 +126,34 @@ export default class OutletModule extends VuexModule {
   }
 
   @Action
+  getEmployeeOutlet(payload: {
+    cursor: string;
+    perPage: number;
+    userId: number;
+    outletId: number;
+  }): Promise<any> {
+    return http
+      .get(
+        `/dusky_lory/v1/employee/${payload.userId}/?cursor=${payload.cursor}&perpage=${payload.perPage}&outlet_id=${payload.outletId}`
+      )
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("SET_META_PAGINATION_EMPLOYEE", {
+            prev: res.data.meta.prev_cursor,
+            next: res.data.meta.next_cursor,
+          });
+        } else {
+          this.context.commit("SET_META_PAGINATION_EMPLOYEE", {
+            prev: "",
+            next: "",
+          });
+        }
+        return res.data;
+      })
+      .catch((err) => err);
+  }
+
+  @Action
   getHistoryTransactionOutlet(payload: {
     cursor: string;
     perPage: number;
@@ -147,33 +175,6 @@ export default class OutletModule extends VuexModule {
           });
         } else {
           this.context.commit("SET_META_PAGINATION_HISTORY_TRANSACTION", {
-            prev: "",
-            next: "",
-          });
-        }
-        return res.data;
-      })
-      .catch((err) => err);
-  }
-
-  @Action getEmployeeOutlet(payload: {
-    cursor: string;
-    perPage: number;
-    userId: number;
-    outletId: number;
-  }): Promise<any> {
-    return http
-      .get(
-        `/dusky_lory/v1/employee/${payload.userId}/?cursor=${payload.cursor}&perpage=${payload.perPage}&outlet_id=${payload.outletId}`
-      )
-      .then((res) => {
-        if (res.data.status) {
-          this.context.commit("SET_META_PAGINATION_EMPLOYEE", {
-            prev: res.data.meta.prev_cursor,
-            next: res.data.meta.next_cursor,
-          });
-        } else {
-          this.context.commit("SET_META_PAGINATION_EMPLOYEE", {
             prev: "",
             next: "",
           });

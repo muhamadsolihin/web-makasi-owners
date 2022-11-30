@@ -276,7 +276,11 @@ const nextPage = async () => {
       dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
     });
 
-    items.value = items.value.concat(data);
+    if (data != null) {
+      items.value = items.value.concat(data);
+    } else {
+      loadingDatatable.value = false;
+    }
   } catch (err) {
     return err;
   } finally {

@@ -22,9 +22,9 @@
         <el-tab-pane label="Riwayat Transaksi" name="historyTransaction">
           <CardTransaction :show="activeTab" :outlet-id="outletId" />
         </el-tab-pane>
-        <el-tab-pane label="Transaksi Kasbon" name="cashReceipt"
-          ><CardCashReceipt
-        /></el-tab-pane>
+        <el-tab-pane label="Transaksi Kasbon" name="cashReceipt">
+          <CardCashReceipt :show="activeTab" :outlet-id="outletId" />
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
