@@ -41,6 +41,30 @@ const routes: Array<RouteRecordRaw> = [
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
         component: () => import("@/view/pages/users/CardDetail.vue"),
       },
+      {
+        path: "balance",
+        name: "balance",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/users/HistoryDisbursment.vue"),
+      },
+      // {
+      //   path: 'balance',
+      //   name: 'balance',
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import('@/view/pages/balance/index.vue'),
+      // },
+      // {
+      //   path: '/balance/refund',
+      //   name: 'refund-balance',
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import('@/view/pages/balance/create/index.vue'),
+      // },
+      // {
+      //   path: '/balance/refund/:id',
+      //   name: 'detail-refund-balance',
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import('@/view/pages/balance/detail/Refund.vue'),
+      // },
       // {
       //   path: "users/DetailOutlet",
       //   name: "DetailOutlet",

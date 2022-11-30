@@ -53,22 +53,22 @@ const MainMenuConfig = [
         route: "/voucher"
       },
 
-      // {
-      //   heading: "Outlet",
-      //   icon: require('@/assets/icons/aside/outlet.svg'),
-      //   route: "/outlets"
-      // },
-      // {
-      //   sectionTitle: 'Produk',
-      //   icon: require('@/assets/icons/aside/produk.svg'),
-      //   route: '/product',
-      //   sub: [
-      //     {
-      //       heading: 'Kelola Produk',
-      //       route: '/product/list',
-      //     },
-      //   ],
-      // },
+      {
+        heading: "Outlet",
+        icon: require('@/assets/icons/aside/outlet.svg'),
+        route: "/outlets"
+      },
+      {
+        sectionTitle: 'Produk',
+        icon: require('@/assets/icons/aside/produk.svg'),
+        route: '/product',
+        sub: [
+          {
+            heading: 'Kelola Produk',
+            route: '/product/list',
+          },
+        ],
+      },
 
 
 
