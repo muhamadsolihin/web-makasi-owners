@@ -7,6 +7,7 @@ import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 
 const CORE_URL_API = "/cockatoo";
 
+  
 @Module({ name: "OutletModule", dynamic: true, store })
 export default class OutletModule extends VuexModule {
   outlets: List[] = [];
@@ -128,6 +129,26 @@ export default class OutletModule extends VuexModule {
       })
       .catch((err) => err);
   }
+
+
+  @Action
+  getOutletsTransactions(payload) {
+    return http
+      .get(
+        `/kiwi/v1/?cursor=${payload.cursor}&perpage=${payload.perPage}&outlet_id=${payload.outletId}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}&is_kasbon&is_online_order`
+    
+      )
+      .then(res => {
+        if (res.data.status) {
+          this.context.commit('SET_OUTLETS', res.data.data);
+          this.context.commit('SET_META_PAGINATION', res.data.meta);
+        }
+        return res.data;
+      })
+      .catch(err => console.log(err));
+  }
+
+
 
   @Action
   getDetailOutlet(payload: string): Promise<any> {

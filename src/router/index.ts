@@ -41,6 +41,30 @@ const routes: Array<RouteRecordRaw> = [
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
         component: () => import("@/view/pages/users/CardDetail.vue"),
       },
+      {
+        path: "balance",
+        name: "balance",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/users/HistoryDisbursment.vue"),
+      },
+      // {
+      //   path: 'balance',
+      //   name: 'balance',
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import('@/view/pages/balance/index.vue'),
+      // },
+      // {
+      //   path: '/balance/refund',
+      //   name: 'refund-balance',
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import('@/view/pages/balance/create/index.vue'),
+      // },
+      // {
+      //   path: '/balance/refund/:id',
+      //   name: 'detail-refund-balance',
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import('@/view/pages/balance/detail/Refund.vue'),
+      // },
       // {
       //   path: "users/DetailOutlet",
       //   name: "DetailOutlet",
@@ -93,6 +117,38 @@ const routes: Array<RouteRecordRaw> = [
         name: "outlet-detail",
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
         component: () => import("@/view/pages/outletlist/DetailOutlet.vue"),
+      },
+
+      {
+        path: "product/list/",
+        name: "list-produk",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/products/ListProduct.vue"),
+      },
+      {
+        path: "product/detail/",
+        name: "Detail-produk",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/products/DetailProducts.vue"),
+      },
+      {
+        path: "transaction/list/",
+        name: "List-Transaksi",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/transaction/Transaction.vue"),
+      },
+      {
+        path: "transaction/list-kasbon/",
+        name: "List-Transaksi-kasbon",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/transaction/TransactionKasbon.vue"),
+      },
+      {
+        path: 'transaction/detail/:trxId',
+        name: 'detail-transaction',
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () =>
+          import('@/view/pages/transaction/TransactionDetail.vue'),
       },
 
       // {
