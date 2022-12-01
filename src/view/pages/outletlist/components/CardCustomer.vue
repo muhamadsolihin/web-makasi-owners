@@ -1,111 +1,57 @@
 <template>
-  <div>
-    <div class="card">
-      <div class="card-body">
-        <div class="rounded border border-1 p-2">
-          <div class="col-12 d-flex flex-column justify-content-end" id="chart">
-            <!-- begin::filter date -->
-            <el-date-picker
-              v-model="filterRangeDate"
-              @change="changeFilterDateRange"
-              start-placeholder="Start date"
-              end-placeholder="End date"
-              value-format="YYYY-MM-DD"
-              class="form-control mb-3 ms-auto"
-              type="daterange"
-              unlink-panels
-              size="large"
-            />
-            <!-- end::filter date -->
+  <div class="card">
+    <div class="rounded border border-1 p-2">
+      <el-table
+        :data="Outlets"
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+        v-loading="loadingDatatable"
+        table-layout="fixed"
+      >
+        <!-- <el-table-column prop="outlet_sum" label="Jumlah Outlet"/> -->
+        <el-table-column prop="name" label="Nama" width="250" />
+        <el-table-column
+          prop="email"
+          label="email"
+          width="250"
+        ></el-table-column>
+        <el-table-column prop="phone" label="Phone" />
 
-            <!-- begin::chart -->
-
-            <!-- end::chart -->
-          </div>
-
-          <el-table
-            :data="Outlets"
-            style="width: 100%"
-            @selection-change="handleSelectionChange"
-            v-loading="loadingDatatable"
-            table-layout="fixed"
-          >
-            <!-- <el-table-column prop="outlet_sum" label="Jumlah Outlet"/> -->
-            <el-table-column prop="name" label="Nama" width="250" />
-            <el-table-column prop="email" label="email" width="250"></el-table-column>
-            <el-table-column prop="phone" label="Phone" />
-
-            <el-table-column label="Aksi" align="center">
-              <div class="d-flex justify-content-center my-3">
-                <el-button
-                  @click="$router.push(`/outlets/outlet`)"
-                  type="danger"
-                  size="small"
-                >
-                  <i class="bi bi-eye-fill text-white"></i>
-                </el-button>
-              </div>
-            </el-table-column>
-          </el-table>
-
-          <div class="d-flex justify-content-end mt-5">
-            <button
-              class="btn btn-sm"
-              @click="prevPage"
-              :disabled="!metaPagination.prev_cursor"
-              :class="{
-                'text-primary': metaPagination.prev_cursor,
-                'text-secondary': !metaPagination.prev_cursor,
-              }"
+        <el-table-column label="Aksi" align="center">
+          <div class="d-flex justify-content-center my-3">
+            <el-button
+              @click="$router.push(`/outlets/outlet`)"
+              type="primary"
+              size="small"
+              circle
             >
-              PREV
-            </button>
-            <button
-              class="btn btn-sm"
-              @click="nextPage"
-              :disabled="!metaPagination.next_cursor"
-              :class="{
-                'text-primary': metaPagination.next_cursor,
-                'text-secondary': !metaPagination.next_cursor,
-              }"
-            >
-              NEXT
-            </button>
+              <i class="bi bi-eye-fill text-white"></i>
+            </el-button>
           </div>
-        </div>
-      </div>
-    </div>
+        </el-table-column>
+      </el-table>
 
-    <el-dialog title="Konfirmasi" v-model="deleteDialog" width="30%">
-      <div class="mb-5">
-        <i
-          class="bi bi-exclamation-triangle text-danger me-3"
-          style="font-size: 1.5rem"
-        ></i>
-        <span>Are you sure you want to proceed?</span>
-      </div>
-      <template #footer>
-        <button @click="deleteDialog = false" class="btn btn-sm btn-secondary">
-          No
+      <div class="d-flex justify-content-end mt-5">
+        <button
+          class="btn btn-sm"
+          @click="prevPage"
+          :disabled="!metaPagination.prev_cursor"
+          :class="{
+            'text-primary': metaPagination.prev_cursor,
+            'text-secondary': !metaPagination.prev_cursor,
+          }"
+        >
+          PREV
         </button>
         <button
-          @click="confirmRemove"
-          class="btn btn-sm btn-primary ms-3"
-          :disabled="loadingBtnDialog"
-          :data-kt-indicator="!loadingBtnDialog ? 'off' : 'on'"
+          class="btn btn-sm text-secondary"
+          @click="nextPage"
+          :disabled="true"
         >
-          <span v-if="!loadingBtnDialog" class="indicator-label">
-            Yes
-          </span>
-          <span v-else class="indicator-progress">
-            Please wait...
-            <span
-              class="spinner-border spinner-border-sm align-middle ms-2"
-            ></span>
-          </span>
+          NEXT
         </button>
-      </template>
-    </el-dialog>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -117,8 +63,6 @@ import moment from "moment";
 import { getModule } from "vuex-module-decorators";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
 import { handleNull, epochToDateTime } from "@/helper";
-
-import { ElNotification } from "element-plus";
 
 export default defineComponent({
   name: "outlet-list",
@@ -162,14 +106,7 @@ export default defineComponent({
       moment().format("YYYY-MM-DD"),
     ]);
 
-    const Outlets = ref([
-      {
-        name: "Alda Budi",
-        email: "Alda@gmail.com",
-        phone : "08977689899",
-      },
-
-    ]);
+    const Outlets = ref([]);
 
     const selectItem = (item) => {
       selectedItem.value = item;

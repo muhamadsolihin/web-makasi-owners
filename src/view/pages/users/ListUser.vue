@@ -105,12 +105,11 @@
                 <div class="d-flex justify-content-center my-3">
                   <el-button
                     @click="
-                      $router.push(
-                        `/users/${scope.row.uuid}/${scope.row.id}`
-                      )
+                      $router.push(`/users/${scope.row.uuid}/${scope.row.id}`)
                     "
-                    type="danger"
+                    type="primary"
                     size="small"
+                    circle
                   >
                     <i class="bi bi-eye-fill text-white"></i>
                   </el-button>
@@ -224,7 +223,6 @@ export default defineComponent({
       () => EmployeeState.getMetaPaginationEmployee
     );
     const myOutletId = computed(() => AuthState.getMyOutletId);
-    
 
     const selectItem = (item) => {
       selectedItem.value = item;

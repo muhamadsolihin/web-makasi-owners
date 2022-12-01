@@ -37,8 +37,9 @@
             <div class="d-flex justify-content-center my-3">
               <el-button
                 @click="$router.push(`/outlets/detail/${scope.row.uuid}`)"
-                type="danger"
+                type="primary"
                 size="small"
+                circle
               >
                 <i class="bi bi-eye-fill text-white"></i>
               </el-button>
