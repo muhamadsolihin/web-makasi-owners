@@ -31,8 +31,6 @@
 </template>
 <script lang="ts" setup>
 import { defineProps, ref } from "vue";
-import { getModule } from "vuex-module-decorators";
-import OutletModule from "@/store/modules/OutletModule";
 
 import CardEmployee from "@/view/pages/outletlist/components/CardEmployee.vue";
 import CardOrderOnline from "./components/CardOrderOnline.vue";
@@ -50,8 +48,6 @@ const props = defineProps({
     require: true,
   },
 });
-
-const outletState = getModule(OutletModule);
 
 const activeTab = ref("employee");
 </script>

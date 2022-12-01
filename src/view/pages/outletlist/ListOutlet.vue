@@ -42,29 +42,23 @@
             >
             </el-table-column>
             <el-table-column prop="name" label="Nama Outlet" width="200px" />
-            <el-table-column prop="email" label="Email" width="200px" />
-            <el-table-column prop="phone" label="Phone" width="150px" />
-            <el-table-column prop="category" label="Kategori" width="200px">
+            <el-table-column prop="is_active" label="Status">
               <template #default="scope">
-                {{ showCategory(scope.row.category) }}
+                <span v-if="scope.row.is_active" class="badge badge-primary"
+                  >Active</span
+                >
+                <span class="badge badge-secondary" v-else>Tidak Active</span>
               </template>
             </el-table-column>
-            <el-table-column prop="type" label="Tipe" width="230px">
-              <template #default="scope">
-                {{ showType(scope.row.type) }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="address" label="Address" width="250px" />
             <el-table-column
-              prop="description"
-              label="Deskripsi"
+              prop="created_at"
+              label="Tanggal Pembuatan"
               width="250px"
-            />
-            <el-table-column
-              prop="village_name"
-              label="Kelurahan"
-              width="200px"
-            />
+            >
+              <template #default="scope">
+                {{ formatDate(scope.row.created_at, "DD MMMM YYYY") }}
+              </template>
+            </el-table-column>
 
             <el-table-column label="Aksi" align="center" fixed="right">
               <template #default="scope">
@@ -118,7 +112,7 @@ import { defineComponent, ref, onMounted, computed, watch } from "vue";
 import { getModule } from "vuex-module-decorators";
 import OutletModule from "@/store/modules/OutletModule";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
-import { handleNull, epochToDateTime } from "@/helper";
+import { handleNull, formatDate } from "@/helper";
 
 export default defineComponent({
   name: "outlet-list",
@@ -224,7 +218,7 @@ export default defineComponent({
       search,
       clearable,
       metaPagination,
-      epochToDateTime,
+      formatDate,
       handleNull,
       showCategory,
       showType,

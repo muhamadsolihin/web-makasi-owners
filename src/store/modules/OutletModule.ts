@@ -104,6 +104,7 @@ export default class OutletModule extends VuexModule {
 
   @Action
   getOutlets(payload: {
+    userId?: number;
     perPage: number;
     cursor: string;
     search: string;
@@ -112,7 +113,11 @@ export default class OutletModule extends VuexModule {
   }) {
     return http
       .get(
-        `${CORE_URL_API}/v1/outlet/?limit=${payload.perPage}&cursor=${payload.cursor}&search=${payload.search}&from=${payload.from}&to=${payload.to}`
+        `${CORE_URL_API}/v1/outlet/?user_id=${payload.userId || ""}&limit=${
+          payload.perPage
+        }&cursor=${payload.cursor}&search=${payload.search}&from=${
+          payload.from
+        }&to=${payload.to}`
       )
       .then((res) => {
         if (res.data.status) {
