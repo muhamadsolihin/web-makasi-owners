@@ -7,21 +7,21 @@ const MainMenuConfig = [
         icon: require("@/assets/icons/aside/cashier.svg"),
         route: "/dashboard",
       },
-      {
-        heading: "Outlet",
-        icon: require("@/assets/icons/aside/outlet.svg"),
-        route: "/outlets",
-        // sub: [
-        //   {
-        //     heading: "List Outlet",
-        //     route: "/outlet/list"
-        //   },
-        //   {
-        //     heading: "Add Outlet",
-        //     route: "/outlet/add"
-        //   },
-        // ]
-      },
+      // {
+      //   heading: "Outlet",
+      //   icon: require("@/assets/icons/aside/outlet.svg"),
+      //   route: "/outlets",
+      //   // sub: [
+      //   //   {
+      //   //     heading: "List Outlet",
+      //   //     route: "/outlet/list"
+      //   //   },
+      //   //   {
+      //   //     heading: "Add Outlet",
+      //   //     route: "/outlet/add"
+      //   //   },
+      //   // ]
+      // },
       {
         heading: "Pengguna",
         icon: require("@/assets/icons/aside/produk.svg"),
@@ -47,6 +47,30 @@ const MainMenuConfig = [
       },
 
       {
+        sectionTitle: 'Transaksi',
+        icon: require('@/assets/icons/aside/transaction.svg'),
+        route: '/transaction',
+        sub: [
+          {
+            heading: 'Riwayat Transaksi',
+            route: '/transaction/list',
+          },
+          {
+            heading: 'Transaksi Kasbon',
+            route: '/transaction/list-kasbon',
+          },
+          // {
+          //   heading: 'Laporan Transaksi',
+          //   route: '/transaction/report',
+          // },
+          // {
+          //   heading: 'Transaksi Kasbon',
+          //   route: '/transaction/kasbon',
+          // },
+        ],
+      },
+
+      {
         heading: "Voucher",
         icon: require("@/assets/icons/aside/Voucher.svg"),
         route: "/voucher",
@@ -57,17 +81,17 @@ const MainMenuConfig = [
         icon: require('@/assets/icons/aside/outlet.svg'),
         route: "/outlets"
       },
-      {
-        sectionTitle: 'Produk',
-        icon: require('@/assets/icons/aside/produk.svg'),
-        route: '/product',
-        sub: [
-          {
-            heading: 'Kelola Produk',
-            route: '/product/list',
-          },
-        ],
-      },
+      // {
+      //   sectionTitle: 'Produk',
+      //   icon: require('@/assets/icons/aside/produk.svg'),
+      //   route: '/product',
+      //   sub: [
+      //     {
+      //       heading: 'Kelola Produk',
+      //       route: '/product/list',
+      //     },
+      //   ],
+      // },
 
       // {
       //   heading: "Customer",

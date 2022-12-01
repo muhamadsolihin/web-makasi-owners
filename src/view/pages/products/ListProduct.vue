@@ -297,7 +297,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      setCurrentPageBreadcrumbs("Dashboard", "Daftar Outlet");
+      setCurrentPageBreadcrumbs("Dashboard", "Daftar Produk");
       loadingDatatable.value = true;
       EmployeeState.SET_EMPLOYEES([]);
       EmployeeState.getEmployeesAPI({
