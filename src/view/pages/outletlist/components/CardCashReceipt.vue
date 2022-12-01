@@ -245,7 +245,7 @@ const getHistoryTransactions = async () => {
       cursor: cursor.value,
       perPage: 10,
       outletId: props.outletId!,
-      isCashReceipt: 0,
+      isCashReceipt: 1,
       isOnlineOrder: 0,
       dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
       dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),

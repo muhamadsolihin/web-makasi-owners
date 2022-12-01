@@ -47,17 +47,23 @@ const MainMenuConfig = [
       },
 
       {
-        sectionTitle: 'Transaksi',
-        icon: require('@/assets/icons/aside/transaction.svg'),
-        route: '/transaction',
+        heading: "Outlet",
+        icon: require("@/assets/icons/aside/outlet.svg"),
+        route: "/outlets",
+      },
+
+      {
+        sectionTitle: "Transaksi",
+        icon: require("@/assets/icons/aside/transaction.svg"),
+        route: "/transaction",
         sub: [
           {
-            heading: 'Riwayat Transaksi',
-            route: '/transaction/list',
+            heading: "Riwayat Transaksi",
+            route: "/transaction/list",
           },
           {
-            heading: 'Transaksi Kasbon',
-            route: '/transaction/list-kasbon',
+            heading: "Transaksi Kasbon",
+            route: "/transaction/list-kasbon",
           },
           // {
           //   heading: 'Laporan Transaksi',
@@ -76,11 +82,6 @@ const MainMenuConfig = [
         route: "/voucher",
       },
 
-      {
-        heading: "Outlet",
-        icon: require('@/assets/icons/aside/outlet.svg'),
-        route: "/outlets"
-      },
       // {
       //   sectionTitle: 'Produk',
       //   icon: require('@/assets/icons/aside/produk.svg'),

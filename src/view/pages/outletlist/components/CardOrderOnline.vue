@@ -271,7 +271,7 @@ const nextPage = async () => {
       perPage: 10,
       outletId: props.outletId!,
       isCashReceipt: 0,
-      isOnlineOrder: 0,
+      isOnlineOrder: 1,
       dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
       dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
     });
