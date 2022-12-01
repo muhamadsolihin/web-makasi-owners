@@ -50,6 +50,18 @@ export default class OutletModule extends VuexModule {
     return this.metaPaginationTransactionCashReceipt;
   }
 
+  get getterFilterTransactionOutlet() {
+    return function(items: any[]) {
+      const txList = items.filter((tx) => {
+        const isDineIn = tx.order_status != 3 && tx.delivery_method == 2; // Condition: Not canceled and method is dine in
+        const isFinished = tx.order_status == 5;
+        const isOnlineOrder = tx.is_online_order == 1;
+        return !isOnlineOrder || (isOnlineOrder && (isFinished || isDineIn));
+      });
+      return txList;
+    };
+  }
+
   @Mutation
   SET_OUTLETS(payload: List[]): void {
     this.outlets = payload;

@@ -10,6 +10,7 @@
             style="width: 300px;"
             start-placeholder="Start date"
             end-placeholder="End date"
+            :clearable="false"
             size="small"
           />
           <el-input
@@ -112,7 +113,7 @@
 
 <script lang="ts">
 import moment from "moment";
-import { defineComponent, ref, onMounted, computed } from "vue";
+import { defineComponent, ref, onMounted, computed, watch } from "vue";
 
 import { getModule } from "vuex-module-decorators";
 import OutletModule from "@/store/modules/OutletModule";
@@ -126,7 +127,7 @@ export default defineComponent({
     const loadingDatatable = ref(false);
     const filterDateRange = ref<string[]>([
       moment()
-        .subtract(1, "months")
+        .subtract(1, "years")
         .format("YYYY-MM-DD"),
       moment().format("YYYY-MM-DD"),
     ]);
@@ -173,8 +174,12 @@ export default defineComponent({
           perPage: perPage.value,
           search: search.value || "",
           cursor: cursor.value || "",
-          from: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
-          to: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
+          from: filterDateRange.value[0]
+            ? moment(filterDateRange.value[0]).format("DD-MM-YYYY")
+            : "",
+          to: filterDateRange.value[1]
+            ? moment(filterDateRange.value[1]).format("DD-MM-YYYY")
+            : "",
         });
       } catch (error) {
         return error;
@@ -197,6 +202,15 @@ export default defineComponent({
       cursor.value = metaPagination.value.next;
       await getOutlets();
     };
+
+    watch(
+      () => filterDateRange.value,
+      async (newVal, oldVal) => {
+        console.log(newVal, oldVal);
+        await getOutlets();
+      },
+      { deep: true }
+    );
 
     onMounted(async () => {
       setCurrentPageBreadcrumbs("Dashboard", "Daftar Outlet");

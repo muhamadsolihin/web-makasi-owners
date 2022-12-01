@@ -251,7 +251,7 @@ const getHistoryTransactions = async () => {
       dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
     });
 
-    items.value = data;
+    items.value = outletState.getterFilterTransactionOutlet(data);
   } catch (err) {
     return err;
   } finally {
@@ -277,7 +277,8 @@ const nextPage = async () => {
     });
 
     if (data != null) {
-      items.value = items.value.concat(data);
+      const [txList] = outletState.getterFilterTransactionOutlet(data);
+      items.value = items.value.concat(txList);
     } else {
       loadingDatatable.value = false;
     }
