@@ -13,6 +13,11 @@ export default class OutletModule extends VuexModule {
   outlets: List[] = [];
   detailOutlet: DetailOutlet = {} as DetailOutlet;
   metaPagination: MetaPagination = {} as MetaPagination;
+  metaPaginationEmployee: MetaPagination = {} as MetaPagination;
+  metaPaginationOrderOnline: MetaPagination = {} as MetaPagination;
+  metaPaginationCustomer: MetaPagination = {} as MetaPagination;
+  metaPaginationHistoryTransaction: MetaPagination = {} as MetaPagination;
+  metaPaginationTransactionCashReceipt: MetaPagination = {} as MetaPagination;
 
   get getterOutlets(): List[] {
     return this.outlets;
@@ -24,6 +29,38 @@ export default class OutletModule extends VuexModule {
 
   get getterMetaPagiantionOutlet(): MetaPagination {
     return this.metaPagination;
+  }
+
+  get getterMetaPagiantionEmployee(): MetaPagination {
+    return this.metaPaginationEmployee;
+  }
+
+  get getterMetaPagiantionOrderOnline(): MetaPagination {
+    return this.metaPaginationOrderOnline;
+  }
+
+  get getterMetaPagiantionCustomer(): MetaPagination {
+    return this.metaPaginationCustomer;
+  }
+
+  get getterMetaPagiantionHistoryTransaction(): MetaPagination {
+    return this.metaPaginationHistoryTransaction;
+  }
+
+  get getterMetaPagiantionTransactionCashReceipt(): MetaPagination {
+    return this.metaPaginationTransactionCashReceipt;
+  }
+
+  get getterFilterTransactionOutlet() {
+    return function(items: any[]) {
+      const txList = items.filter((tx) => {
+        const isDineIn = tx.order_status != 3 && tx.delivery_method == 2; // Condition: Not canceled and method is dine in
+        const isFinished = tx.order_status == 5;
+        const isOnlineOrder = tx.is_online_order == 1;
+        return !isOnlineOrder || (isOnlineOrder && (isFinished || isDineIn));
+      });
+      return txList;
+    };
   }
 
   @Mutation
@@ -41,8 +78,34 @@ export default class OutletModule extends VuexModule {
     this.metaPagination = payload;
   }
 
+  @Mutation
+  SET_META_PAGINATION_EMPLOYEE(payload: MetaPagination): void {
+    this.metaPaginationEmployee = payload;
+  }
+
+  @Mutation
+  SET_META_PAGINATION_ORDER_ONLINE(payload: MetaPagination): void {
+    this.metaPaginationOrderOnline = payload;
+  }
+
+  @Mutation
+  SET_META_PAGINATION_CUSTOMER(payload: MetaPagination): void {
+    this.metaPaginationCustomer = payload;
+  }
+
+  @Mutation
+  SET_META_PAGINATION_HISTORY_TRANSACTION(payload: MetaPagination): void {
+    this.metaPaginationHistoryTransaction = payload;
+  }
+
+  @Mutation
+  SET_META_PAGINATION_TRANSACTION_CASH_RECEIPT(payload: MetaPagination): void {
+    this.metaPaginationTransactionCashReceipt = payload;
+  }
+
   @Action
   getOutlets(payload: {
+    userId?: number;
     perPage: number;
     cursor: string;
     search: string;
@@ -51,7 +114,11 @@ export default class OutletModule extends VuexModule {
   }) {
     return http
       .get(
-        `${CORE_URL_API}/v1/outlet/?limit=${payload.perPage}&cursor=${payload.cursor}&search=${payload.search}&from=${payload.from}&to=${payload.to}`
+        `${CORE_URL_API}/v1/outlet/?user_id=${payload.userId || ""}&limit=${
+          payload.perPage
+        }&cursor=${payload.cursor}&search=${payload.search}&from=${
+          payload.from
+        }&to=${payload.to}`
       )
       .then((res) => {
         if (res.data.status) {
@@ -97,10 +164,38 @@ export default class OutletModule extends VuexModule {
   }
 
   @Action
+  getEmployeeOutlet(payload: {
+    cursor: string;
+    perPage: number;
+    userId: number;
+    outletId: number;
+  }): Promise<any> {
+    return http
+      .get(
+        `/dusky_lory/v1/employee/${payload.userId}/?cursor=${payload.cursor}&perpage=${payload.perPage}&outlet_id=${payload.outletId}`
+      )
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("SET_META_PAGINATION_EMPLOYEE", {
+            prev: res.data.meta.prev_cursor,
+            next: res.data.meta.next_cursor,
+          });
+        } else {
+          this.context.commit("SET_META_PAGINATION_EMPLOYEE", {
+            prev: "",
+            next: "",
+          });
+        }
+        return res.data;
+      })
+      .catch((err) => err);
+  }
+
+  @Action
   getHistoryTransactionOutlet(payload: {
     cursor: string;
     perPage: number;
-    outletId: string;
+    outletId: number;
     dateFrom: string;
     dateTo: string;
     isCashReceipt: number;
@@ -110,7 +205,20 @@ export default class OutletModule extends VuexModule {
       .get(
         `/kiwi/v1/?cursor=${payload.cursor}&perpage=${payload.perPage}&outlet_id=${payload.outletId}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}&is_kasbon=${payload.isCashReceipt}&is_online_order=${payload.isOnlineOrder}`
       )
-      .then((res) => res.data)
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("SET_META_PAGINATION_HISTORY_TRANSACTION", {
+            prev: "",
+            next: res.data.meta.next,
+          });
+        } else {
+          this.context.commit("SET_META_PAGINATION_HISTORY_TRANSACTION", {
+            prev: "",
+            next: "",
+          });
+        }
+        return res.data;
+      })
       .catch((err) => err);
   }
 }

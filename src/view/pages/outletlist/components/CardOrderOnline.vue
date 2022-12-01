@@ -246,12 +246,12 @@ const getHistoryTransactions = async () => {
       perPage: 10,
       outletId: props.outletId!,
       isCashReceipt: 0,
-      isOnlineOrder: 0,
+      isOnlineOrder: 1,
       dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
       dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
     });
 
-    items.value = outletState.getterFilterTransactionOutlet(data);
+    items.value = data;
   } catch (err) {
     return err;
   } finally {
@@ -271,14 +271,13 @@ const nextPage = async () => {
       perPage: 10,
       outletId: props.outletId!,
       isCashReceipt: 0,
-      isOnlineOrder: 0,
+      isOnlineOrder: 1,
       dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
       dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
     });
 
     if (data != null) {
-      const [txList] = outletState.getterFilterTransactionOutlet(data);
-      items.value = items.value.concat(txList);
+      items.value = items.value.concat(data);
     } else {
       loadingDatatable.value = false;
     }
@@ -292,7 +291,7 @@ const nextPage = async () => {
 watch(
   () => props.show,
   async (newVal: string) => {
-    if (newVal == "historyTransaction") {
+    if (newVal == "orderOnline") {
       await getHistoryTransactions();
     }
   }

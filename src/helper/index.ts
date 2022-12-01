@@ -75,7 +75,9 @@ export function isEmailValid(val: string): boolean {
 
 export function formatDate(val, format) {
   if (val) {
-    return moment(val).format(format);
+    return moment(val)
+      .locale("id-ID")
+      .format(format);
   }
   return "";
 }

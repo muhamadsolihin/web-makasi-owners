@@ -1,7 +1,7 @@
 <template>
   <div>
     <Loader />
-    <div class="row ">
+    <div class="row">
       <div class="col-md-6 ">
         <span v-if="employee.verified == '0'">
           <span v-if="employee.is_submission == '1'">
@@ -199,12 +199,11 @@
         </div>
       </div>
     </div>
- 
+
     <el-dialog v-model="previewImg" width="60%" height="60%">
       <div class="row">
-        <div class="col-12" >
+        <div class="col-12">
           <el-image
-
             style="width: 100%; height: 100%;"
             class="rounded"
             :src="employee.identity_image"
@@ -352,8 +351,8 @@
     </el-dialog>
   </div>
   <!-- <DetailUser /> -->
-  <div>
-    <ListEmployee />
+  <div class="mt-5" v-if="Object.keys(employee).length">
+    <TabMenu :user-id="employee.id!" />
   </div>
 </template>
 
@@ -369,9 +368,7 @@ import { Actions } from "@/store/enums/store.enums";
 import Loader from "@/view/content/Loader.vue";
 import AuthModule from "@/store/modules/AuthModule";
 import { ElMessage, ElNotification } from "element-plus";
-import CardDetail from "@/view/pages/users/CardDetail.vue";
-import DetailUser from "@/view/pages/users/DetailUser.vue";
-import ListEmployee from "@/view/pages/users/ListEmployee.vue";
+import TabMenu from "./components/TabMenu.vue";
 
 import {
   handleNullToString,
@@ -384,7 +381,7 @@ import { identity } from "lodash";
 
 export default defineComponent({
   name: "detail-pengguna",
-  components: { Loader, ListEmployee },
+  components: { Loader, TabMenu },
   setup() {
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);
