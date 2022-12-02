@@ -168,7 +168,7 @@
                 - {{ handleNullToString(employee.bank?.bank_account_number) }}
               </p>
             </div>
-            <div class="col-md-2">
+            <!-- <div class="col-md-2">
               <p class="fw-bold">Saldo :</p>
             </div>
             <div class="col-md-2">
@@ -185,7 +185,7 @@
                     <i class="bi bi-eye-fill text-white"></i>
                   </el-button>
               </p>
-            </div>
+            </div> -->
           </div>
           <div class="col d-flex justify-content-end ">
             <span v-if="employee.jwt_token_mbl == '1'">

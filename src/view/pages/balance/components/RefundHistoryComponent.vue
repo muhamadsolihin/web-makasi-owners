@@ -12,34 +12,54 @@
         width="100px"
         sortable
       ></el-table-column>
-      <el-table-column prop="fee_trx" label="Biaya (Rp)" align="right" width="150px" sortable>
+      <el-table-column
+        prop="fee_trx"
+        label="Biaya (Rp)"
+        align="right"
+        width="150px"
+        sortable
+      >
         <template #default="scope">
           {{ formatCurrency(scope.row.fee_trx) }}
         </template>
       </el-table-column>
-      <el-table-column prop="subsidy_fee" label="Subsidi (Rp)" align="right" width="150px" sortable>
+      <el-table-column
+        prop="subsidy_fee"
+        label="Subsidi (Rp)"
+        align="right"
+        width="150px"
+        sortable
+      >
         <template #default="scope">
           {{ formatCurrency(scope.row.subsidy_fee) }}
         </template>
       </el-table-column>
-      <el-table-column prop="total" label="Jumlah (Rp)" align="right" width="140px" sortable>
+      <el-table-column
+        prop="total"
+        label="Jumlah (Rp)"
+        align="right"
+        width="140px"
+        sortable
+      >
         <template #default="scope">
           {{ formatCurrency(scope.row.total) }}
         </template>
       </el-table-column>
       <el-table-column prop="created_at" label="Waktu" width="180px" sortable>
         <template #default="scope">
-          {{ formatDate(scope.row.created_at, 'DD MMM YYYY, HH:mm') }}
+          {{ formatDate(scope.row.created_at, "DD MMM YYYY, HH:mm") }}
         </template>
       </el-table-column>
       <el-table-column prop="outlet_name" label="Outlet" width="180px" sortable>
         <template #default="scope">
-          {{ scope.row.outlet_name || '-' }}
+          {{ scope.row.outlet_name || "-" }}
         </template></el-table-column
       >
       <el-table-column prop="is_move" label="Status" width="140px" sortable>
         <template #default="scope">
-          <p class="mb-0 text-success" v-if="scope.row.is_move == 1">Dapat dicairkan</p>
+          <p class="mb-0 text-success" v-if="scope.row.is_move == 1">
+            Dapat dicairkan
+          </p>
           <p class="mb-0 text-danger" v-else>Tertahan</p>
         </template>
       </el-table-column>
@@ -89,12 +109,12 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, computed, watch, defineProps, defineEmits } from 'vue';
-import { getModule } from 'vuex-module-decorators';
-import moment from 'moment';
+import { onMounted, ref, computed, watch, defineProps, defineEmits } from "vue";
+import { getModule } from "vuex-module-decorators";
+import moment from "moment";
 
-import BalanceModule from '@/store/modules/BalanceModules';
-import { formatDate, formatCurrency } from '@/helper';
+import BalanceModule from "@/store/modules/BalanceModules";
+import { formatDate, formatCurrency } from "@/helper";
 
 const balanceState = getModule(BalanceModule);
 const props = defineProps({
@@ -102,13 +122,13 @@ const props = defineProps({
     type: String,
     require: true,
     default: moment()
-      .subtract(7, 'days')
-      .format('YYYY-MM-DD'),
+      .subtract(7, "days")
+      .format("YYYY-MM-DD"),
   },
   dateTo: {
     type: String,
     require: true,
-    default: moment().format('YYYY-MM-DD'),
+    default: moment().format("YYYY-MM-DD"),
   },
   triggerFetch: {
     type: Boolean,
@@ -118,16 +138,16 @@ const props = defineProps({
 });
 watch(
   () => props.triggerFetch,
-  val => {
+  (val) => {
     if (val) {
       // cursor.value = '';
       // getTxList();
     }
   }
 );
-const emits = defineEmits(['update:triggerFetch']);
+const emits = defineEmits(["update:triggerFetch"]);
 
-const cursor = ref<string | null>('');
+const cursor = ref<string | null>("");
 const perPage = ref<number>(10);
 const loading = ref<boolean>(false);
 const transactions = computed(() => balanceState.getTransactions);
