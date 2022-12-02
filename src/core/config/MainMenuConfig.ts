@@ -82,17 +82,17 @@ const MainMenuConfig = [
         route: "/voucher",
       },
 
-      // {
-      //   sectionTitle: 'Produk',
-      //   icon: require('@/assets/icons/aside/produk.svg'),
-      //   route: '/product',
-      //   sub: [
-      //     {
-      //       heading: 'Kelola Produk',
-      //       route: '/product/list',
-      //     },
-      //   ],
-      // },
+      {
+        sectionTitle: 'Produk',
+        icon: require('@/assets/icons/aside/produk.svg'),
+        route: '/product',
+        sub: [
+          {
+            heading: 'Kelola Produk',
+            route: '/product/list',
+          },
+        ],
+      },
 
       // {
       //   heading: "Customer",
