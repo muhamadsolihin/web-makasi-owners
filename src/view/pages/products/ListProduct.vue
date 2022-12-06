@@ -111,10 +111,10 @@
             <button
               class="btn btn-sm"
               @click="prevPage"
-              :disabled="!metaPagination.prev_cursor"
+              :disabled="!metaPagination.prev"
               :class="{
-                'text-primary': metaPagination.prev_cursor,
-                'text-secondary': !metaPagination.prev_cursor,
+                'text-primary': metaPagination.prev,
+                'text-secondary': !metaPagination.prev,
               }"
             >
               PREV
@@ -122,10 +122,10 @@
             <button
               class="btn btn-sm"
               @click="nextPage"
-              :disabled="!metaPagination.next_cursor"
+              :disabled="!metaPagination.next"
               :class="{
-                'text-primary': metaPagination.next_cursor,
-                'text-secondary': !metaPagination.next_cursor,
+                'text-primary': metaPagination.next,
+                'text-secondary': !metaPagination.next,
               }"
             >
               NEXT
@@ -209,10 +209,10 @@ export default defineComponent({
         .then(() => {
           if (
             Products.value.length == 0 &&
-            metaPagination.value.next_cursor != undefined &&
-            metaPagination.value.next_cursor != null
+            metaPagination.value.next != undefined &&
+            metaPagination.value.next != null
           ) {
-            cursor.value = metaPagination.value.next_cursor;
+            cursor.value = metaPagination.value.next;
             setTimeout(() => {
               fetchProducts();
             }, 1000);
@@ -249,7 +249,7 @@ export default defineComponent({
 
     const prevPage = () => {
       loadingDatatable.value = true;
-      cursor.value = metaPagination.value.prev_cursor;
+      cursor.value = metaPagination.value.prev;
       fetchProducts();
       ProductsState.getProductsAPI({
         cursor: cursor.value,
@@ -262,7 +262,7 @@ export default defineComponent({
 
     const nextPage = () => {
       loadingDatatable.value = true;
-      cursor.value = metaPagination.value.prev_cursor;
+      cursor.value = metaPagination.value.next;
       fetchProducts();
       ProductsState.getProductsAPI({
         cursor: cursor.value,

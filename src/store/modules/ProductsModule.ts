@@ -21,9 +21,9 @@ export default class ProductsModule extends VuexModule {
   } as Product;
 
 
-  metaPagination: { next_cursor: string | null; prev_cursor: string | null } = {
-    next_cursor: null,
-    prev_cursor: null,
+  metaPagination: { next: string | null; prev: string | null } = {
+    next: null,
+    prev: null,
   };
   get getProducts()  {
     return this.products;
@@ -51,8 +51,8 @@ export default class ProductsModule extends VuexModule {
 
   @Mutation
   SET_META_PAGINATION_PRODUCTS(payload) {
-    this.metaPagination.prev_cursor = payload.prev_cursor;
-    this.metaPagination.next_cursor = payload.next_cursor;
+    this.metaPagination.prev = payload.prev;
+    this.metaPagination.next = payload.next;
   }
 
 
