@@ -126,10 +126,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/view/pages/products/ListProduct.vue"),
       },
       {
-        path: "product/detail/",
-        name: "Detail-produk",
+        path: 'product/detail/:uuid',
+        name: 'detail-product',
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/products/DetailProducts.vue"),
+        component: () =>
+          import('@/view/pages/products/Detail.vue'),
       },
       {
         path: "transaction/list/",

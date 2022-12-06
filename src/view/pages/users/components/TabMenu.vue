@@ -12,6 +12,9 @@
         <el-tab-pane label="Outlet" name="outlet">
           <CardOutlet :show="activeTab" :user-id="userId" />
         </el-tab-pane>
+        <el-tab-pane label="Pengguna" name="pengguna">
+          <CardUser :show="activeTab" :user-id="userId" />
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -21,6 +24,7 @@ import { defineProps, ref } from "vue";
 
 import CardEmployee from "./CardEmployee.vue";
 import CardOutlet from "./CardOutlet.vue";
+import CardUser from "./CardUser.vue";
 
 const props = defineProps({
   userId: {

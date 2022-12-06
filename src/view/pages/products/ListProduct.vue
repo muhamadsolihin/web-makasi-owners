@@ -1,87 +1,111 @@
 <template>
-  <div>
+  <div ref="scrollComponent">
     <div class="card">
       <div class="card-body">
         <div
-          class="mb-5 justity-content-right d-flex justify-content-between align-items-center md:flex-row md:justiify-content-between"
+          class="mb-5 d-flex flex-wrap justify-content-end align-items-end md:flex-row md:justify-content-between"
         >
-          <div class="d-flex ">
-            <div class="input-group input-group-sm">
-              <input
-                type="text"
-                v-model="search"
-                @keyup="textSearch"
-                class="form-control form-control-sm"
-                :class="{
-                  'border-right-white': clearable,
-                  'border-right-default': !clearable,
-                  'rounded-end': !clearable,
-                }"
-                placeholder="Search..."
-                style="border-right-color: white"
-              />
-              <span
-                class="input-group-text"
-                :class="{
-                  'border-left-white': clearable,
-                  'd-inline-block': clearable,
-                  'd-none': !clearable,
-                }"
-                style="background-color: white;"
-              >
-                <i
-                  class="bi bi-x-lg fw-bold"
-                  style="cursor: pointer"
-                  @click="clearSearch"
-                ></i>
-              </span>
-            </div>
+          <!-- begin::filter date -->
+          <el-date-picker
+            v-model="filterRangeDate"
+            @change="fetchProducts"
+            start-placeholder="Start date"
+            end-placeholder="End date"
+            value-format="YYYY-MM-DD"
+            class="me-auto mb-3"
+            type="daterange"
+            unlink-panel
+          />
+          <!-- end::filter date -->
+          <el-select
+            v-model="filterOutlet"
+            placeholder="Select"
+            @change="changeOutlet"
+            class="mb-3"
+            clearable
+            filterable
+          >
+            <el-option
+              v-for="o in FilterOutlet"
+              :key="o"
+              :value="o.outlet_id"
+              placeholder="select"
+              :label="o.outlet_name"
+            />
+          </el-select>
+          <div class="d-flex align-items-center mb-3 ms-3">
+            <el-input
+              v-model="search"
+              placeholder="Search"
+              @keyup="textSearch"
+              @clear="clearSearch"
+            >
+            </el-input>
             <button class="btn btn-sm btn-primary ms-2" @click="searchData">
               Search
             </button>
+            <!-- <button class="btn btn-sm btn-info ms-2" @click="exportData">
+              Export
+            </button> -->
           </div>
         </div>
 
         <div class="rounded border border-1 p-2">
           <el-table
-            :data="Outlets"
+            :data="Products"
             style="width: 100%"
-            @selection-change="handleSelectionChange"
-            v-loading="loadingDatatable"
-            table-layout="fixed"
+            height="550"
           >
-            <el-table-column property="name" label="Name" width="240">
-            </el-table-column>
-            <!-- <el-table-column prop="outlet_sum" label="Jumlah Outlet"/> -->
-            <el-table-column prop="namaoutlet" label="Nama Toko" width="240" />
-            <el-table-column prop="phone" label="Harga" width="240">
-              <template #default="prop">
-              <span v-if="prop.row.type_voucher == 1">
-                {{ prop.row.phone }}%
-              </span>
-              <span v-else> Rp. {{ formatCurrency(prop.row.phone) }} </span>
-            </template>
+            <template> </template>
+            <el-table-column label="Name" width="150">
+              <template #default="scope">
+                {{ scope.row.name }}
+              </template>
             </el-table-column>
 
-           <el-table-column prop="kategori" label="Stock" />
-            <!-- <el-table-column prop="tipetoko" label="Tipe" />
-            <el-table-column prop="address"  label="Address">
+            <el-table-column width="250" label="Nama Toko" sortable>
+              <template #default="scope">
+                {{ scope.row.outlet_name }}
+              </template>
             </el-table-column>
-            <el-table-column prop="deskripsi" label="Deskripsi" width="140" />
-            <el-table-column prop="lokasi" label="Lokasi" /> -->
- 
+
+            <el-table-column width="200" label="Harga"  sortable>
+              <template #default="scope" >
+                Rp {{ formatCurrency( scope.row.price_list[0].price) }}
+              </template>
+            </el-table-column>
+            <el-table-column width="150" label="Status"  sortable>
+              <template #default="scope" >
+                <span v-if="scope.row.status" class="badge badge-success">
+                      Aktif
+                    </span>
+                    <span v-else class="badge badge-light">
+                      Tidak Aktif
+                    </span>
+              </template>
+            </el-table-column>
+            <el-table-column width="150px" label="Stock" sortable>
+              <template #default="scope" >
+                  {{ scope.row.stock.stock}} {{scope.row.stock.unit_name}}
+              </template>
+            </el-table-column>
             <el-table-column label="Aksi" align="center">
-              <div class="d-flex justify-content-center my-3">
+              <template #default="scope">
                 <el-button
-                  @click="$router.push(`/product/detail/`)"
-                  type="danger"
+                  @click="
+                    $router.push(
+                      `/product/detail/${encodeURIComponent(scope.row.uuid)}`
+                    )
+                  "
+                  type="primary"
                   size="small"
+                  circle
                 >
-                  <i class="bi bi-eye-fill text-white"></i>
+                  <i class="bi bi-eye text-white"></i>
                 </el-button>
-              </div>
+              </template>
             </el-table-column>
-          </el-table>
+          </el-table> 
 
           <div class="d-flex justify-content-end mt-5">
             <button
@@ -107,124 +131,101 @@
               NEXT
             </button>
           </div>
+
         </div>
       </div>
     </div>
-
-    <el-dialog title="Konfirmasi" v-model="deleteDialog" width="30%">
-      <div class="mb-5">
-        <i
-          class="bi bi-exclamation-triangle text-danger me-3"
-          style="font-size: 1.5rem"
-        ></i>
-        <span>Are you sure you want to proceed?</span>
-      </div>
-      <template #footer>
-        <button @click="deleteDialog = false" class="btn btn-sm btn-secondary">
-          No
-        </button>
-        <button
-          @click="confirmRemove"
-          class="btn btn-sm btn-primary ms-3"
-          :disabled="loadingBtnDialog"
-          :data-kt-indicator="!loadingBtnDialog ? 'off' : 'on'"
-        >
-          <span v-if="!loadingBtnDialog" class="indicator-label">
-            Yes
-          </span>
-          <span v-else class="indicator-progress">
-            Please wait...
-            <span
-              class="spinner-border spinner-border-sm align-middle ms-2"
-            ></span>
-          </span>
-        </button>
-      </template>
-    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, onMounted, computed } from "vue";
-import EmployeeModule from "@/store/modules/EmployeeModule";
-import AuthModule from "@/store/modules/AuthModule";
-import { getModule } from "vuex-module-decorators";
-import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
-import { handleNull, epochToDateTime,formatCurrency  } from "@/helper";
+import moment from "moment";
+import {
+  defineComponent,
+  ref,
+  onMounted,
+  computed,
+  onBeforeUnmount,
+} from "vue";
 
-import { ElNotification } from "element-plus";
+import { getModule } from "vuex-module-decorators";
+import ProductsModule from "@/store/modules/ProductsModule";
+import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
+import { Outlet, OutletListRes } from "@/types/outlet/Outlet.interface";
+import OutletModule from "@/store/modules/OutletModule";
+import { DrawerComponent } from "@/assets/ts/components/_DrawerOptions";
+import {
+  handleNull,
+  epochToDateTime,
+  formatCurrency,
+  formatDate,
+  convertEpochToDate,
+} from "@/helper";
+import { processExpression } from "vue/node_modules/@vue/compiler-core";
+import { Product } from "@/types/Product/Product.interface";
 
 export default defineComponent({
-  name: "outlet-list",
+  name: "List-Product",
   components: {},
   setup() {
-    const deleteDialog = ref(false);
-    const loadingBtnDialog = ref(false);
     const loadingDatatable = ref(false);
-    const employee = ref("");
-    const FilterSubmission = ref([
-      {
-        name: "Sudah Mengajukan",
-        value: "1",
-      },
-      {
-        name: "Belum Mengajukan",
-        value: "0",
-      },
+    const filterDateRange = ref<string[]>([
+      moment()
+        .subtract(1, "months")
+        .format("YYYY-MM-DD"),
+      moment().format("YYYY-MM-DD"),
     ]);
-
-    const filter = ref("");
-    const search = ref<string | null>("");
+    const search = ref<string>("");
     const cursor = ref<string | null>("");
-    const perPage = ref<number>(15);
+    const filterOutlet = ref<number>();
+    const perPage = ref<number>(10);
     const clearable = ref<boolean>(false);
-
-    const selectedItem: any = reactive({});
-
-    const EmployeeState = getModule(EmployeeModule);
-    const AuthState = getModule(AuthModule);
-    const employees = computed(() => EmployeeState.getEmployees);
+    const outletOptions = ref<Outlet[]>([]);
+    const ProductsState = getModule(ProductsModule);
+    const outletState = getModule(OutletModule);
+    const outlets = computed(() => outletState.getterOutlets);
+    const FilterOutlet = computed(() => ProductsState.getProducts);
+    const Products = computed(() => ProductsState.getProducts);
+    const priceList = computed(() => ProductsState.getProducts);
+    // const items = ref<any[]>([]);
     const metaPagination = computed(
-      () => EmployeeState.getMetaPaginationEmployee
+      () => ProductsState.getMetaPaginationProduct
     );
-    const myOutletId = computed(() => AuthState.getMyOutletId);
-
-    const Outlets = ref([
-      {
-        name: "Cakue",
-        namaoutlet: "Jabrigs",
-        phone: "20000",
-        kategori: "20",
-        tipetoko: "online",
-        address: "bogor",
-        deskripsi: "kebutuhan ",
-        lokasi:"bogors"
-      },
-      {
-        name: "Pisang Aromoa",
-        namaoutlet: "Jabrigs",
-        phone: "20000",
-        kategori: "20",
-        tipetoko: "online",
-        address: "bogor",
-        deskripsi: "kebutuhan ",
-        lokasi:"bogors"
-      },
-      {
-        name: "Kopi Tubruk",
-        namaoutlet: "Jabrigs",
-        phone: "20000",
-        kategori: "20",
-        tipetoko: "online",
-        address: "bogor",
-        deskripsi: "kebutuhan ",
-        lokasi:"bogors"
-      },
+    const filterRangeDate = ref<any[]>([
+      moment()
+        .subtract(7, "days")
+        .format("YYYY-MM-DD"),
+      moment().format("YYYY-MM-DD"),
     ]);
 
-    const selectItem = (item) => {
-      selectedItem.value = item;
-      deleteDialog.value = true;
+    const fetchProducts = () => {
+      ProductsState.getProductsAPI({
+        cursor: cursor.value,
+        search: search.value,
+        dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
+        dateTo: moment(filterRangeDate.value[1]).format("DD-MM-YYYY"),
+        outletID: filterOutlet.value?.toString() || "",
+      })
+        .then(() => {
+          if (
+            Products.value.length == 0 &&
+            metaPagination.value.next_cursor != undefined &&
+            metaPagination.value.next_cursor != null
+          ) {
+            cursor.value = metaPagination.value.next_cursor;
+            setTimeout(() => {
+              fetchProducts();
+            }, 1000);
+          }
+        })
+        .finally(() => {
+          loadingDatatable.value = false;
+        });
+    };
+
+    const changeOutlet = () => {
+      loadingDatatable.value = true;
+      (cursor.value = ""), fetchProducts();
     };
 
     const textSearch = () => {
@@ -232,106 +233,81 @@ export default defineComponent({
       else clearable.value = false;
     };
 
-    const searchSubs = () => {
-      loadingDatatable.value = true;
-      cursor.value = "";
-      EmployeeState.SET_EMPLOYEES([]);
-      EmployeeState.getEmployeesAPI({
-        outletId: myOutletId.value,
-        search: search.value,
-        FilterSubmission: filter.value,
-        cursor: cursor.value,
-        perPage: perPage.value,
-      }).finally(() => (loadingDatatable.value = false));
-    };
-
     const clearSearch = () => {
       search.value = "";
       cursor.value = "";
       clearable.value = false;
       loadingDatatable.value = true;
-      EmployeeState.SET_EMPLOYEES([]);
-      EmployeeState.getEmployeesAPI({
-        outletId: myOutletId.value,
-        search: search.value,
-        cursor: cursor.value,
-        filter: filter.value,
-        perPage: perPage.value,
-      }).finally(() => (loadingDatatable.value = false));
+      fetchProducts();
     };
 
-    const searchData = () => {
+    const searchData = async () => {
       loadingDatatable.value = true;
       cursor.value = "";
-      EmployeeState.SET_EMPLOYEES([]);
-      EmployeeState.getEmployeesAPI({
-        outletId: myOutletId.value,
-        search: search.value,
-        FilterSubmission: filter.value,
-        cursor: cursor.value,
-        perPage: perPage.value,
-      }).finally(() => (loadingDatatable.value = false));
+      await fetchProducts();
     };
 
     const prevPage = () => {
       loadingDatatable.value = true;
       cursor.value = metaPagination.value.prev_cursor;
-      EmployeeState.getEmployeesAPI({
-        outletId: myOutletId.value,
-        search: search.value,
+      fetchProducts();
+      ProductsState.getProductsAPI({
         cursor: cursor.value,
-        filter: filter.value,
-        perPage: perPage.value,
+        search: search.value,
+        dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
+        dateTo: moment(filterRangeDate.value[1]).format("DD-MM-YYYY"),
+        outletID: filterOutlet.value?.toString() || "",
       }).finally(() => (loadingDatatable.value = false));
     };
 
     const nextPage = () => {
       loadingDatatable.value = true;
-      cursor.value = metaPagination.value.next_cursor;
-      EmployeeState.getEmployeesAPI({
-        outletId: myOutletId.value,
-        search: search.value,
+      cursor.value = metaPagination.value.prev_cursor;
+      fetchProducts();
+      ProductsState.getProductsAPI({
         cursor: cursor.value,
-        perPage: perPage.value,
+        search: search.value,
+        dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
+        dateTo: moment(filterRangeDate.value[1]).format("DD-MM-YYYY"),
+        outletID: filterOutlet.value?.toString() || "",
       }).finally(() => (loadingDatatable.value = false));
     };
 
-    onMounted(() => {
+
+    onMounted(async () => {
       setCurrentPageBreadcrumbs("Dashboard", "Daftar Produk");
+      await fetchProducts();
+
       loadingDatatable.value = true;
-      EmployeeState.SET_EMPLOYEES([]);
-      EmployeeState.getEmployeesAPI({
-        outletId: myOutletId.value,
-        search: search.value,
-        filter: filter.value,
-        cursor: cursor.value,
-        perPage: perPage.value,
-      }).finally(() => (loadingDatatable.value = false));
     });
 
     return {
-      employees,
-      FilterSubmission,
-      deleteDialog,
-      loadingBtnDialog,
+      Products,
       loadingDatatable,
-      selectedItem,
-      filter,
-      Outlets,
+      filterDateRange,
+      filterRangeDate,
+      filterOutlet,
       search,
+      FilterOutlet,
+      cursor,
       clearable,
+      priceList,
       metaPagination,
-      employee,
-      epochToDateTime,
-      formatCurrency,
-      searchSubs,
-      textSearch,
-      clearSearch,
-      searchData,
-      selectItem,
+      outletOptions,
+      // getProductsAPI,
+      fetchProducts,
       prevPage,
       nextPage,
+      epochToDateTime,
+      formatCurrency,
       handleNull,
+      clearSearch,
+      textSearch,
+      changeOutlet,
+      searchData,
+      formatDate,
+      convertEpochToDate,
+      // showStatusPaid,
     };
   },
 });
