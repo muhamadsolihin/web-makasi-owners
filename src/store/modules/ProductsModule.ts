@@ -3,14 +3,14 @@ import http from "@/http-common";
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { string } from "yup";
 import { handleNullToString } from "@/helper";
-import {  Product } from "@/types/product/product.interface"
 
 /* eslint-disable */
 
-// export interface Product {
-//   price_list: string;
-//   stock: string | null;
-// }
+export interface Product {
+  price_list: string;
+  stock: string;
+}
+
 
 @Module({ name: "ProductsModule", dynamic: true, store })
 export default class ProductsModule extends VuexModule {
