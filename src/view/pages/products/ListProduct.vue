@@ -57,7 +57,7 @@
             height="550"
           >
             <template> </template>
-            <el-table-column label="Name" width="150">
+            <el-table-column label="Name" width="200">
               <template #default="scope">
                 {{ scope.row.name }}
               </template>
