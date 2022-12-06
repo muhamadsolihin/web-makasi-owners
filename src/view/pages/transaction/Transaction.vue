@@ -51,9 +51,12 @@
         </div>
 
         <div class="rounded border border-1 p-2">
-          <el-table :data="Transactions" 
-          v-loading="loadingDatatable"
-          style="width: 100%" height="550">
+          <el-table
+            :data="Transactions"
+            v-loading="loadingDatatable"
+            style="width: 100%"
+            height="550"
+          >
             <el-table-column prop="trx_id" label="No Transaksi" width="150" />
             <el-table-column
               width="200"
@@ -185,16 +188,27 @@
 
 <script lang="ts">
 import moment from "moment";
-import { defineComponent, ref, onMounted, computed, onBeforeUnmount, } from "vue";
+import {
+  defineComponent,
+  ref,
+  onMounted,
+  computed,
+  onBeforeUnmount,
+} from "vue";
 
 import { getModule } from "vuex-module-decorators";
 import TransaksiModule from "@/store/modules/TransaksiModule";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
-import { Outlet, OutletListRes } from '@/types/outlet/Outlet.interface';
-import OutletModule from '@/store/modules/OutletModule';
-import { DrawerComponent } from '@/assets/ts/components/_DrawerOptions';
-import { handleNull, epochToDateTime, formatCurrency, formatDate,
-  convertEpochToDate, } from "@/helper";
+import { Outlet, OutletListRes } from "@/types/outlet/Outlet.interface";
+import OutletModule from "@/store/modules/OutletModule";
+import { DrawerComponent } from "@/assets/ts/components/_DrawerOptions";
+import {
+  handleNull,
+  epochToDateTime,
+  formatCurrency,
+  formatDate,
+  convertEpochToDate,
+} from "@/helper";
 
 export default defineComponent({
   name: "Hirtori-Transaksi",
@@ -227,27 +241,27 @@ export default defineComponent({
 
       switch (status) {
         case 0:
-          statusPaid = ['badge-light-dark', 'Belum Lunas'];
+          statusPaid = ["badge-light-dark", "Belum Lunas"];
           break;
         case 1:
           if (orderStatus == 8) {
-            statusPaid = ['badge-light-danger', 'Batal'];
+            statusPaid = ["badge-light-danger", "Batal"];
           } else if (orderStatus == 9) {
-            statusPaid = ['badge-light-danger', 'Batal Sebagian'];
+            statusPaid = ["badge-light-danger", "Batal Sebagian"];
           } else if (orderStatus == 3) {
-            statusPaid = ['badge-light-danger', 'Batal'];
+            statusPaid = ["badge-light-danger", "Batal"];
           } else {
-            statusPaid = ['badge-light-success', 'Lunas'];
+            statusPaid = ["badge-light-success", "Lunas"];
           }
           break;
         case 2:
-          statusPaid = ['badge-light-warning', 'Tertunda'];
+          statusPaid = ["badge-light-warning", "Tertunda"];
           break;
         case 3:
-          statusPaid = ['badge-light-danger', 'Batal'];
+          statusPaid = ["badge-light-danger", "Batal"];
           break;
         case 4:
-          statusPaid = ['badge-light-info', 'Kasbon'];
+          statusPaid = ["badge-light-info", "Kasbon"];
           break;
         default:
           break;
@@ -258,22 +272,17 @@ export default defineComponent({
 
     const filterRangeDate = ref<any[]>([
       moment()
-        .subtract(7, 'days')
-        .format('YYYY-MM-DD'),
-      moment().format('YYYY-MM-DD'),
+        .subtract(7, "days")
+        .format("YYYY-MM-DD"),
+      moment().format("YYYY-MM-DD"),
     ]);
-
-
-
-
-
 
     const fetchTransaction = () => {
       TransaksiState.getTransactionsAPI({
-        dateFrom: moment(filterRangeDate.value[0]).format('DD-MM-YYYY'),
-        dateTo: moment(filterRangeDate.value[1]).format('DD-MM-YYYY'),
+        dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
+        dateTo: moment(filterRangeDate.value[1]).format("DD-MM-YYYY"),
         perPage: perPage.value,
-        outletId: filterOutlet.value?.toString() || '',
+        outletId: filterOutlet.value?.toString() || "",
         cursor: cursor.value,
         search: search.value,
       })
@@ -294,11 +303,9 @@ export default defineComponent({
         });
     };
 
-
     const changeOutlet = () => {
       loadingDatatable.value = true;
-      cursor.value = '',
-      fetchTransaction();
+      (cursor.value = ""), fetchTransaction();
     };
 
     const textSearch = () => {
@@ -307,13 +314,12 @@ export default defineComponent({
     };
 
     const clearSearch = () => {
-      search.value = '';
-      cursor.value = '';
+      search.value = "";
+      cursor.value = "";
       clearable.value = false;
       loadingDatatable.value = true;
       fetchTransaction();
     };
-
 
     const searchData = async () => {
       loadingDatatable.value = true;
@@ -326,10 +332,7 @@ export default defineComponent({
       await fetchTransaction();
 
       loadingDatatable.value = true;
-
-
-      });
-
+    });
 
     return {
       Transactions,
@@ -343,7 +346,6 @@ export default defineComponent({
       clearable,
       metaPagination,
       outletOptions,
-
 
       fetchTransaction,
       epochToDateTime,
