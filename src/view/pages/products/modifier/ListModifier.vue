@@ -144,7 +144,6 @@
     convertEpochToDate,
   } from "@/helper";
   import { processExpression } from "vue/node_modules/@vue/compiler-core";
-  import { Product } from "@/types/Product/Product.interface";
   
   export default defineComponent({
     name: "List-Product",
