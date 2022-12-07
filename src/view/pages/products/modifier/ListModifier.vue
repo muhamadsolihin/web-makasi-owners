@@ -8,7 +8,7 @@
             <!-- begin::filter date -->
             <el-date-picker
               v-model="filterRangeDate"
-              @change="fetchProducts"
+              @change="fetchModifier"
               start-placeholder="Start date"
               end-placeholder="End date"
               value-format="YYYY-MM-DD"
@@ -52,41 +52,23 @@
   
           <div class="rounded border border-1 p-2">
             <el-table
-              :data="Products"
+              :data="Modifiers"
               style="width: 100%"
               height="550"
             >
               <template> </template>
-              <el-table-column label="Name" width="150">
-                <template #default="scope">
-                  {{ scope.row.name }}
-                </template>
+              <el-table-column prop="name" label="Nama" width="250">
               </el-table-column>
   
-              <el-table-column width="250" label="Nama Toko" sortable>
+              <el-table-column width="250" label="Nama Outlet" sortable>
                 <template #default="scope">
                   {{ scope.row.outlet_name }}
                 </template>
               </el-table-column>
   
-              <el-table-column width="200" label="Harga"  sortable>
+              <el-table-column width="150" label="Tanggal"  sortable>
                 <template #default="scope" >
-                  Rp {{ formatCurrency( scope.row.price_list[0].price) }}
-                </template>
-              </el-table-column>
-              <el-table-column width="150" label="Status"  sortable>
-                <template #default="scope" >
-                  <span v-if="scope.row.status" class="badge badge-success">
-                        Aktif
-                      </span>
-                      <span v-else class="badge badge-light">
-                        Tidak Aktif
-                      </span>
-                </template>
-              </el-table-column>
-              <el-table-column width="150px" label="Stock" sortable>
-                <template #default="scope" >
-                    {{ scope.row.stock.stock}} {{scope.row.stock.unit_name}}
+                    {{ epochToDateTime(scope.row.unix_time) }}
                 </template>
               </el-table-column>
               <el-table-column label="Aksi" align="center">
@@ -94,7 +76,7 @@
                   <el-button
                     @click="
                       $router.push(
-                        `/product/detail/${encodeURIComponent(scope.row.uuid)}`
+                        `/modifier/detail/${scope.row.uuid}`
                       )
                     "
                     type="primary"
@@ -149,7 +131,7 @@
   } from "vue";
   
   import { getModule } from "vuex-module-decorators";
-  import ProductsModule from "@/store/modules/ProductsModule";
+  import ProductsModule from "@/store/modules/ModifierModule";
   import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
   import { Outlet, OutletListRes } from "@/types/outlet/Outlet.interface";
   import OutletModule from "@/store/modules/OutletModule";
@@ -181,15 +163,15 @@
       const perPage = ref<number>(10);
       const clearable = ref<boolean>(false);
       const outletOptions = ref<Outlet[]>([]);
-      const ProductsState = getModule(ProductsModule);
+      const ModifiersState = getModule(ProductsModule);
       const outletState = getModule(OutletModule);
       const outlets = computed(() => outletState.getterOutlets);
-      const FilterOutlet = computed(() => ProductsState.getProducts);
-      const Products = computed(() => ProductsState.getProducts);
-      const priceList = computed(() => ProductsState.getProducts);
+      const FilterOutlet = computed(() => ModifiersState.getModifiers);
+      const Modifiers = computed(() => ModifiersState.getModifiers);
+      const priceList = computed(() => ModifiersState.getModifiers);
       // const items = ref<any[]>([]);
       const metaPagination = computed(
-        () => ProductsState.getMetaPaginationProducts
+        () => ModifiersState.getMetaPaginationModifiers
       );
       const filterRangeDate = ref<any[]>([
         moment()
@@ -198,8 +180,8 @@
         moment().format("YYYY-MM-DD"),
       ]);
   
-      const fetchProducts = () => {
-        ProductsState.getProductsAPI({
+      const fetchModifier = () => {
+        ModifiersState.getModifierAPI({
           cursor: cursor.value,
           search: search.value,
           dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
@@ -208,13 +190,13 @@
         })
           .then(() => {
             if (
-              Products.value.length == 0 &&
+              Modifiers.value.length == 0 &&
               metaPagination.value.next != undefined &&
               metaPagination.value.next != null
             ) {
               cursor.value = metaPagination.value.next;
               setTimeout(() => {
-                fetchProducts();
+                fetchModifier();
               }, 1000);
             }
           })
@@ -225,7 +207,7 @@
   
       const changeOutlet = () => {
         loadingDatatable.value = true;
-        (cursor.value = ""), fetchProducts();
+        (cursor.value = ""), fetchModifier();
       };
   
       const textSearch = () => {
@@ -238,33 +220,34 @@
         cursor.value = "";
         clearable.value = false;
         loadingDatatable.value = true;
-        fetchProducts();
+        fetchModifier();
       };
   
       const searchData = async () => {
         loadingDatatable.value = true;
         cursor.value = "";
-        await fetchProducts();
+        await fetchModifier();
       };
   
       const prevPage = () => {
         loadingDatatable.value = true;
         cursor.value = metaPagination.value.prev;
-        fetchProducts();
-        ProductsState.getProductsAPI({
+        fetchModifier();
+        ModifiersState.getModifierAPI({
           cursor: cursor.value,
           search: search.value,
           dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
           dateTo: moment(filterRangeDate.value[1]).format("DD-MM-YYYY"),
           outletID: filterOutlet.value?.toString() || "",
+          
         }).finally(() => (loadingDatatable.value = false));
       };
   
       const nextPage = () => {
         loadingDatatable.value = true;
-        cursor.value = metaPagination.value.prev;
-        fetchProducts();
-        ProductsState.getProductsAPI({
+        cursor.value = metaPagination.value.next;
+        fetchModifier();
+        ModifiersState.getModifierAPI({
           cursor: cursor.value,
           search: search.value,
           dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
@@ -275,14 +258,14 @@
   
   
       onMounted(async () => {
-        setCurrentPageBreadcrumbs("Dashboard", "Daftar Produk");
-        await fetchProducts();
+        setCurrentPageBreadcrumbs("Dashboard", "Daftar Opsi Tambahan");
+        await fetchModifier();
   
         loadingDatatable.value = true;
       });
   
       return {
-        Products,
+        Modifiers,
         loadingDatatable,
         filterDateRange,
         filterRangeDate,
@@ -295,7 +278,7 @@
         metaPagination,
         outletOptions,
         // getProductsAPI,
-        fetchProducts,
+        fetchModifier,
         prevPage,
         nextPage,
         epochToDateTime,

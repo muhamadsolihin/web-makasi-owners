@@ -191,6 +191,34 @@ export default class OutletModule extends VuexModule {
       .catch((err) => err);
   }
 
+
+  @Action
+  getProductUser(payload: {
+    cursor: string;
+    userId: number;
+  }): Promise<any> {
+    return http
+      .get(
+        `/skylark/v1/new_product/?cursor=${payload.cursor}&limit=&user_id=${payload.userId}&outlet_id&search&from&to`
+        )
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("SET_META_PAGINATION_EMPLOYEE", {
+            prev: res.data.meta.prev_cursor,
+            next: res.data.meta.next_cursor,
+          });
+        } else {
+          this.context.commit("SET_META_PAGINATION_EMPLOYEE", {
+            prev: "",
+            next: "",
+          });
+        }
+        return res.data;
+      })
+      .catch((err) => err);
+  }
+
+
   @Action
   getHistoryTransactionOutlet(payload: {
     cursor: string;

@@ -3,14 +3,21 @@ import http from "@/http-common";
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { string } from "yup";
 import { handleNullToString } from "@/helper";
-import {  Product } from "@/types/product/product.interface"
 
 /* eslint-disable */
 
-// export interface Product {
-//   price_list: string;
-//   stock: string | null;
-// }
+export interface Product {
+  price_list: string;
+  stock: string;
+}
+
+export interface priceList {
+  price: string;
+  type_order_name: null;
+  type_order_id: null;
+}
+
+
 
 @Module({ name: "ProductsModule", dynamic: true, store })
 export default class ProductsModule extends VuexModule {
@@ -80,6 +87,30 @@ export default class ProductsModule extends VuexModule {
   }
 
   @Action
+  getProductsListAPI(payload: {
+    cursor: string | null;
+    userId?: number;
+
+  }) {
+    return http
+      .get(
+        `/skylark/v1/new_product/?cursor=${payload.cursor}&limit=&user_id=${payload.userId || ""}&outlet_id=&search=&from=&to=`
+        )
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("SET_PRODUCTS", res.data.data);
+          this.context.commit("SET_META_PAGINATION_PRODUCTS", res.data.meta);
+        }
+        return res.data;
+      })
+      .catch((err) => err);
+  }
+
+
+
+
+
+  @Action
   getDetailProducts(payload: {}): Promise<any> {
     console.log(payload);
     return http
@@ -88,7 +119,6 @@ export default class ProductsModule extends VuexModule {
       .then((res) => {
         if (res.data.status) {
           this.context.commit("SET_PRODUCT", res.data.data);
-          this.context.commit("SET_META_PAGINATION_PRODUCTS", res.data.meta);
         }
         return res;
       })

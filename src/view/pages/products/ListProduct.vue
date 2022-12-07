@@ -57,7 +57,7 @@
             height="550"
           >
             <template> </template>
-            <el-table-column label="Name" width="150">
+            <el-table-column label="Name" width="250">
               <template #default="scope">
                 {{ scope.row.name }}
               </template>
@@ -94,7 +94,7 @@
                 <el-button
                   @click="
                     $router.push(
-                      `/product/detail/${encodeURIComponent(scope.row.uuid)}`
+                      `/product/detail/${scope.row.uuid}`
                     )
                   "
                   type="primary"

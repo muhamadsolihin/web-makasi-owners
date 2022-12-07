@@ -25,7 +25,7 @@
                 </div>
                 <div class="col">
                   <p class="fw-bold">
-                    {{ handleNullToString(Product.outlet_name) }}
+                    {{ modifier.outlet_name }}
                   </p>
                 </div>
               </div>
@@ -35,29 +35,29 @@
                 </div>
                 <div class="col">
                   <p class="fw-bold">
-                    {{ handleNullToString(Product.name) }}
+                    {{ modifier.name }}
                   </p>
                 </div>
               </div>
               <div class="row">
                 <div class="col">
-                  <p class="fw-bold">Harga Produk :</p>
+                  <p class="fw-bold">Tanggal :</p>
                 </div>
                 <div class="col">
-                  <div :key="items" v-for="items in Product.price_list">
-                    <p class="fw-bold">Rp. {{ items.price }}</p>
-                  </div>
+                  <p class="fw-bold">
+                    {{epochToDateTime (modifier.unix_time) }}
+                  </p>
                 </div>
               </div>
 
-              <div class="row">
+              <!--<div class="row">
                 <div class="col">
                   <p class="fw-bold">Persediaan Stock :</p>
                 </div>
                 <div class="col">
-                  <span :key="p" v-for="p in Product">
+                  <div :key="p" v-for="p in Modifier">
                     <p class="fw-bold">{{ p.stock }} {{ p.unit_name }}</p>
-                  </span>
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -66,7 +66,7 @@
                 </div>
                 <div class="col">
                   <p class="fw-bold">
-                    {{ handleNullToString(Product.category_name) }}
+                    {{ handleNullToString(Modifier.category_name) }}
                   </p>
                 </div>
               </div>
@@ -76,7 +76,7 @@
                 </div>
                 <div class="col">
                   <p class="fw-bold">
-                    {{ handleNullToString(Product.merk) }}
+                    {{ handleNullToString(Modifier.merk) }}
                   </p>
                 </div>
               </div>
@@ -87,7 +87,7 @@
                   <p class="fw-bold">Status:</p>
                 </div>
                 <div class="col">
-                  <span v-if="Product.status" class="badge badge-success">
+                  <span v-if="Modifier.status" class="badge badge-success">
                     Aktif
                   </span>
                   <span v-else class="badge badge-light">
@@ -95,36 +95,46 @@
                   </span>
                 </div>
               </div>
-              <!-- <div class="row">
+              <div class="row">
                 <div class="col pl-5">
                   <p class="fw-bold">Harga Modal :</p>
                 </div>
-                <div :key="p" v-for="p in Product">
-                    <p class="fw-bold">Rp. {{ p.basic_price }}</p>
-                  </div> -->
-                <!-- <div class="col">
-               
-                  <div :key="o" v-for="o in Product">
+                <div class="col">
+                  <div :key="o" v-for="o in Modifier">
                     <p class="fw-bold">{{ o.basic_price }}</p>
                   </div>
-                </div> -->
-              <!-- </div> -->
+                </div>
+              </div>
               <div class="row">
                 <div class="col">
                   <p class="fw-bold">Deskripsi:</p>
                 </div>
                 <div class="col">
                   <p class="fw-bold">
-                    {{ handleNullToString(Product.description) }}
+                    {{ handleNullToString(Modifier.description) }}
                   </p>
                 </div>
-              </div>
-            </div>
+              </div>-->
+            </div> 
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <div class="row mt-5">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+
+            <!-- <OpsiTambahan /> -->
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div></div>
 </template>
 
@@ -133,12 +143,13 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { defineComponent, onMounted, ref, computed, reactive } from "vue";
 import { getModule } from "vuex-module-decorators";
-import ProductsModule from "@/store/modules/ProductsModule";
+import ModifierModule from "@/store/modules/ModifierModule";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
 import moment from "moment";
 import { Actions } from "@/store/enums/store.enums";
 import Loader from "@/view/content/Loader.vue";
 import AuthModule from "@/store/modules/AuthModule";
+// import OpsiTambahan from "./OpsiTambahan.vue";
 import { ElMessage, ElNotification } from "element-plus";
 
 import {
@@ -150,7 +161,7 @@ import {
 } from "@/helper";
 
 export default defineComponent({
-  name: "detail-Product",
+  name: "detail-Modifier",
   components: {},
   setup() {
     const Employeedetail = ref<string | null>("");
@@ -158,9 +169,9 @@ export default defineComponent({
     const AuthState = getModule(AuthModule);
     const store = useStore();
     const route = useRoute();
-    const ProductsState = getModule(ProductsModule);
-    const Product = computed(() => ProductsState.getProduct);
-    const Products = computed(() => ProductsState.getProducts);
+    const ModifiersState = getModule(ModifierModule);
+    const modifier = computed(() => ModifiersState.getModifier);
+    const Modifiers = computed(() => ModifiersState.getModifiers);
     const selectedItem: any = reactive({});
     const subscriptionDialog = ref(false);
     const loadingBtnDialog = ref(false);
@@ -176,12 +187,12 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      setCurrentPageBreadcrumbs("Dashboard", "Detail Produk");
+      setCurrentPageBreadcrumbs("Dashboard", "Detail Opsi Tambahan");
 
       store.dispatch(Actions.ADD_BODY_CLASSNAME, "page-loading");
-      ProductsState.getDetailProducts(route.params.uuid)
+      ModifiersState.getDetailModifier(route.params.uuid)
         .then(() => {
-          const Product = ProductsState.getProduct;
+          const modifier = ModifiersState.getModifier;
         })
         .finally(() =>
           store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "page-loading")
@@ -191,11 +202,11 @@ export default defineComponent({
     return {
       Employeedetail,
       loading,
-      Products,
+      Modifiers,
       subscriptionDialog,
-      Product,
+      modifier,
       moment,
-      ProductsModule,
+      ModifierModule,
       loadingBtnDialog,
       route,
       AuthState,
@@ -220,7 +231,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/assets/sass/style.scss";
 
-.Product__wrap {
+.Modifier__wrap {
   display: flex;
   overflow: hidden;
   max-width: 400px;
@@ -231,12 +242,12 @@ export default defineComponent({
   background-color: $primary-light;
 }
 
-.Product__wrap > div {
+.Modifier__wrap > div {
   border-radius: 15px;
   border: 1px dashed $primary;
 }
 
-.Product__wrap::before {
+.Modifier__wrap::before {
   content: "";
   left: -10px;
   background-color: white;
@@ -247,7 +258,7 @@ export default defineComponent({
   height: 20px;
 }
 
-.Product__wrap::after {
+.Modifier__wrap::after {
   content: "";
   right: -10px;
   background-color: white;
