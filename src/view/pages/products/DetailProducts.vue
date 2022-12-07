@@ -1,4 +1,5 @@
 <template>
+    <!-- <CardDetail /> -->
     <div>
       <Loader />
       <div class="row ">
@@ -12,97 +13,109 @@
         </div>
       </div>
     </div>
-
-  
     <div class="row mt-5">
       <div class="col">
         <div class="card">
           <div class="card-body">
             <div class="row mb-5"></div>
             <div class="row">
-              <div class="col-md-3">
-                <p class="fw-bold">Nama :</p>
+              <div class="col-6">
+                <div class="row">
+                  <div class="col">
+                    <p class="fw-bold">Nama Outlet :</p>
+                  </div>
+                  <div class="col">
+                    <p class="fw-bold">
+                      {{ Product.outlet_name }}
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <p class="fw-bold">Nama Produk :</p>
+                  </div>
+                  <div class="col">
+                    <p class="fw-bold">
+                      {{ Product.name }}
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <p class="fw-bold">Harga Produk :</p>
+                  </div>
+                  <div class="col">
+                    <p class="fw-bold">Rp. {{ Product.price_list[0].price }}</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <p class="fw-bold">Persediaan Stock :</p>
+                  </div>
+                  <div class="col">
+                    <p class="fw-bold">{{ Product.stock.stock }} {{ Product.stock.unit_name }} </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <p class="fw-bold">Kategori :</p>
+                  </div>
+                  <div class="col">
+                    <p class="fw-bold">{{ Product.category_name }} pcs</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <p class="fw-bold">Merk :</p>
+                  </div>
+                  <div class="col">
+                    <p class="fw-bold">
+                      {{ handleNullToString (Product.merk) }}
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div class="col-md-3">
-                <p class="fw-bold">
-                  {{ handleNullToString(Product.name) }}
-                </p>
-              </div>
-              <div class="col-md-2 pl-5">
-                <p class="fw-bold">Harga Modal:</p>
-              </div>
-              <div class="col-md-2">
-                <p class="fw-bold">
-                  {{(Product.price_list) }}
-                </p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-3">
-                <p class="fw-bold">Status:</p>
-                <span class="fw-bold text__grey">
-                  {{ Product.status }}
-                </span>
-                <span
-                  class="badge badge-light-success"
-                  v-if="Product.status == 1"
-                  >Aktif</span
-                >
-                <span
-                  class="badge badge-light-grey"
-                  v-if="(Product.status == 0)"
-                  >Offline</span
-                >
-              </div>
-              <div class="col-md-3">
-                <p class="fw-bold">
-                  {{ handleNullToString(product.phone_account) }}
-                </p>
-              </div>
-              <div class="col-md-2 pl-5">
-                <p class="fw-bold">Deskripsi :</p>
-              </div>
-              <div class="col-md-2">
-                <p class="fw-bold">
-                  {{ handleNullToString(product.description) }}
-                </p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-3">
-                <p class="fw-bold">Persediaan Stok :</p>
-              </div>
-              <div class="col-md-3">
-                <p class="fw-bold">
-                  {{ handleNullToString(product.village_name) }}
-                </p>
-              </div>
-              <div class="col-md-2 pl-5">
-                <p class="fw-bold">Kategori :</p>
-              </div>
-              <div class="col-md-2">
-                <p class="fw-bold">
-                  {{ epochToDateTime(product.category_name) }}
-                </p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-3">
-                <p class="fw-bold">Merk :</p>
-              </div>
-              <div class="col-md-3">
-                <p class="fw-bold">
-                  {{ handleNullToString(product.merk) }}
-                </p>
+              <div class="col-6">
+                <div class="row">
+                  <div class="col pl-5">
+                    <p class="fw-bold">Status:</p>
+                  </div>
+                  <div class="col">
+                    <span v-if="Product.status" class="badge badge-success">
+                      Aktif
+                    </span>
+                    <span v-else class="badge badge-light">
+                      Tidak Aktif
+                    </span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col pl-5">
+                    <p class="fw-bold">Harga Modal :</p>
+                  </div>
+                  <div class="col">
+                    <p class="fw-bold">
+                        Rp. {{ handleNullToString (Product.stock.basic_price) }}
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <p class="fw-bold">Deskripsi:</p>
+                  </div>
+                  <div class="col">
+                    <p class="fw-bold">
+                      {{ Product.description }}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    
     </div>
-    <div>
-    </div>
+    <div></div>
   </template>
   
   <script lang="ts">
@@ -117,9 +130,6 @@
   import Loader from "@/view/content/Loader.vue";
   import AuthModule from "@/store/modules/AuthModule";
   import { ElMessage, ElNotification } from "element-plus";
-  import CardDetail from "@/view/pages/users/CardDetail.vue";
-  import DetailUser from "@/view/pages/users/DetailUser.vue";
-//   import ListEmployee from "@/view/pages/users/ListEmployee.vue";
   
   import {
     handleNullToString,
@@ -128,48 +138,40 @@
     epochToDateTime,
     handleNull,
   } from "@/helper";
-  import { identity } from "lodash";
   
   export default defineComponent({
-    name: "detail-produk",
-    components: { Loader,  },
+    name: "detail-Product",
+    components: {},
     setup() {
       const Employeedetail = ref<string | null>("");
       const loading = ref<boolean>(true);
       const AuthState = getModule(AuthModule);
-      const userID = ref<string>("");
       const store = useStore();
       const route = useRoute();
       const ProductsState = getModule(ProductsModule);
       const Product = computed(() => ProductsState.getProduct);
       const Products = computed(() => ProductsState.getProducts);
       const selectedItem: any = reactive({});
-      const unlinkDialog = ref(false);
-      const verifyDialog = ref(false);
-      const previewImg = ref(false);
-      const rejectDialog = ref(false);
       const subscriptionDialog = ref(false);
       const loadingBtnDialog = ref(false);
       const period = ref<string | Blob>("");
-  
-      const srcList = (item) => {
-        selectedItem.value = item;
-        previewImg.value = true;
-      };
+      const deleteDialog = ref(false);
   
       const subsValue = ref<string | Blob>("");
       const Value = ref("");
-    
   
-      
+      const selectItem = (item) => {
+        selectedItem.value = item;
+        deleteDialog.value = true;
+      };
   
       onMounted(() => {
-        setCurrentPageBreadcrumbs("Dashboard", "Detail Produk");
+        setCurrentPageBreadcrumbs("Dashboard", "Detail Voucher");
   
         store.dispatch(Actions.ADD_BODY_CLASSNAME, "page-loading");
         ProductsState.getDetailProducts(route.params.uuid)
           .then(() => {
-            const Product = ProductsState.getProducts;
+            const Product = ProductsState.getProduct;
           })
           .finally(() =>
             store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "page-loading")
@@ -178,35 +180,72 @@
   
       return {
         Employeedetail,
-        unlinkDialog,
         loading,
         Products,
         subscriptionDialog,
         Product,
         moment,
         ProductsModule,
-        verifyDialog,
         loadingBtnDialog,
-        previewImg,
         route,
         AuthState,
         store,
         selectedItem,
-        userID,
         subsValue,
         Value,
         period,
-        rejectDialog,
   
-        // url,
-        srcList,
         formatDate,
         handleNull,
+        deleteDialog,
         formatCurrency,
+        selectItem,
         epochToDateTime,
         handleNullToString,
       };
     },
   });
   </script>
-    
+  
+  <style lang="scss" scoped>
+  @import "@/assets/sass/style.scss";
+  
+  .Product__wrap {
+    display: flex;
+    overflow: hidden;
+    max-width: 400px;
+    width: 100%;
+    height: 100px;
+    position: relative;
+    border-radius: 15px;
+    background-color: $primary-light;
+  }
+  
+  .Product__wrap > div {
+    border-radius: 15px;
+    border: 1px dashed $primary;
+  }
+  
+  .Product__wrap::before {
+    content: "";
+    left: -10px;
+    background-color: white;
+    border: 1px dashed $primary;
+    position: absolute;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .Product__wrap::after {
+    content: "";
+    right: -10px;
+    background-color: white;
+    border: 1px dashed $primary;
+    position: absolute;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+  }
+  </style>
+  

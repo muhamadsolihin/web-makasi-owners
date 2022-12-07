@@ -132,6 +132,25 @@ const routes: Array<RouteRecordRaw> = [
         component: () =>
           import('@/view/pages/products/Detail.vue'),
       },
+      // {
+      //   path: "modifier/list/",
+      //   name: "list-modifier",
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () => import("@/view/pages/products/modifier/ListModifier.vue"),
+      // },
+      // {
+      //   path: 'modifier/detail/:uuid',
+      //   name: 'detail-modifier',
+      //   meta: { asideEnabled: true, asidePrimaryDisabled: true },
+      //   component: () =>
+      //     import('@/view/pages/products/modifier/DetailModifier.vue'),
+      // },
+
+
+
+
+
+
       {
         path: "transaction/list/",
         name: "List-Transaksi",

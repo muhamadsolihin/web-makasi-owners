@@ -57,7 +57,7 @@
             height="550"
           >
             <template> </template>
-            <el-table-column label="Name" width="200">
+            <el-table-column label="Name" width="250">
               <template #default="scope">
                 {{ scope.row.name }}
               </template>
@@ -94,7 +94,7 @@
                 <el-button
                   @click="
                     $router.push(
-                      `/product/detail/${encodeURIComponent(scope.row.uuid)}`
+                      `/product/detail/${scope.row.uuid}`
                     )
                   "
                   type="primary"
@@ -189,7 +189,7 @@ export default defineComponent({
     const priceList = computed(() => ProductsState.getProducts);
     // const items = ref<any[]>([]);
     const metaPagination = computed(
-      () => ProductsState.getMetaPaginationProduct
+      () => ProductsState.getMetaPaginationProducts
     );
     const filterRangeDate = ref<any[]>([
       moment()
@@ -257,6 +257,7 @@ export default defineComponent({
         dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
         dateTo: moment(filterRangeDate.value[1]).format("DD-MM-YYYY"),
         outletID: filterOutlet.value?.toString() || "",
+        
       }).finally(() => (loadingDatatable.value = false));
     };
 
