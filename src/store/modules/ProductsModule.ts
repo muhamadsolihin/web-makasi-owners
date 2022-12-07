@@ -17,6 +17,15 @@ export interface priceList {
   type_order_id: null;
 }
 
+// export interface priceList {
+//   price: string;
+//   type_order_name: null;
+//   type_order_id: null;
+// }
+
+
+
+
 
 
 @Module({ name: "ProductsModule", dynamic: true, store })
