@@ -83,7 +83,7 @@ export default class ProductsModule extends VuexModule {
   }) {
     return http
       .get(
-        `/skylark/v1/new_product/?cursor=${payload.cursor}&limit=10&user_id=&outlet_id=${payload.outletID}&search=${payload.search}&from=${payload.dateFrom}&to=${payload.dateTo}`
+        `/skylark/v1/new_product?cursor=${payload.cursor}&limit=10&user_id=&outlet_id=${payload.outletID}&search=${payload.search}&from=${payload.dateFrom}&to=${payload.dateTo}`
         )
       .then((res) => {
         if (res.data.status) {
@@ -103,7 +103,7 @@ export default class ProductsModule extends VuexModule {
   }) {
     return http
       .get(
-        `/skylark/v1/new_product/?cursor=${payload.cursor}&limit=&user_id=${payload.userId || ""}&outlet_id=&search=&from=&to=`
+        `/skylark/v1/new_product?cursor=${payload.cursor}&limit=&user_id=${payload.userId || ""}&outlet_id=&search=&from=&to=`
         )
       .then((res) => {
         if (res.data.status) {

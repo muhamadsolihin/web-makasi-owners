@@ -51,11 +51,7 @@
         </div>
 
         <div class="rounded border border-1 p-2">
-          <el-table
-            :data="Products"
-            style="width: 100%"
-            height="550"
-          >
+          <el-table :data="Products" style="width: 100%" height="550">
             <template> </template>
             <el-table-column label="Name" width="250">
               <template #default="scope">
@@ -69,34 +65,30 @@
               </template>
             </el-table-column>
 
-            <el-table-column width="200" label="Harga"  sortable>
-              <template #default="scope" >
-                Rp {{ formatCurrency( scope.row.price_list[0].price) }}
+            <el-table-column width="200" label="Harga" sortable>
+              <template #default="scope">
+                Rp {{ formatCurrency(scope.row.price_list[0].price) }}
               </template>
             </el-table-column>
-            <el-table-column width="150" label="Status"  sortable>
-              <template #default="scope" >
+            <el-table-column width="150" label="Status" sortable>
+              <template #default="scope">
                 <span v-if="scope.row.status" class="badge badge-success">
-                      Aktif
-                    </span>
-                    <span v-else class="badge badge-light">
-                      Tidak Aktif
-                    </span>
+                  Aktif
+                </span>
+                <span v-else class="badge badge-light">
+                  Tidak Aktif
+                </span>
               </template>
             </el-table-column>
             <el-table-column width="150px" label="Stock" sortable>
-              <template #default="scope" >
-                  {{ scope.row.stock.stock}} {{scope.row.stock.unit_name}}
+              <template #default="scope">
+                {{ scope.row.stock.stock }} {{ scope.row.stock.unit_name }}
               </template>
             </el-table-column>
             <el-table-column label="Aksi" align="center">
               <template #default="scope">
                 <el-button
-                  @click="
-                    $router.push(
-                      `/product/detail/${scope.row.uuid}`
-                    )
-                  "
+                  @click="$router.push(`/product/detail/${scope.row.uuid}`)"
                   type="primary"
                   size="small"
                   circle
@@ -105,7 +97,7 @@
                 </el-button>
               </template>
             </el-table-column>
-          </el-table> 
+          </el-table>
 
           <div class="d-flex justify-content-end mt-5">
             <button
@@ -131,7 +123,6 @@
               NEXT
             </button>
           </div>
-
         </div>
       </div>
     </div>
@@ -256,7 +247,6 @@ export default defineComponent({
         dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
         dateTo: moment(filterRangeDate.value[1]).format("DD-MM-YYYY"),
         outletID: filterOutlet.value?.toString() || "",
-        
       }).finally(() => (loadingDatatable.value = false));
     };
 
@@ -272,7 +262,6 @@ export default defineComponent({
         outletID: filterOutlet.value?.toString() || "",
       }).finally(() => (loadingDatatable.value = false));
     };
-
 
     onMounted(async () => {
       setCurrentPageBreadcrumbs("Dashboard", "Daftar Produk");

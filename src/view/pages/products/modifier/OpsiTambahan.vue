@@ -2,37 +2,33 @@
   <div class="card">
     <div class="rounded border border-1 p-2">
       <el-table
-        :data="modifier"
+        :data="items"
         style="width: 100%"
         v-loading="loadingDatatable"
         table-layout="fixed"
       >
-        <el-table-column property="name" label="Nama Produk" width="200px">
-        </el-table-column>
-        <el-table-column prop="outlet_name" label="Nama Outlet" width="200px" />
+        <el-table-column prop="name" label="Nama Produk" width="250px" />
+        <el-table-column
+          prop="outlet_name"
+          label="Nama Outlet"
+          width="250px"
+        ></el-table-column>
         <el-table-column prop="is_active" label="Status">
           <template #default="scope">
-            <span v-if="scope.row.is_active" class="badge badge-primary"
-              >Active</span
+            <span
+              v-if="Boolean(scope.row.is_active)"
+              class="badge badge-primary"
+              >Aktif</span
             >
-            <span class="badge badge-secondary" v-else>Tidak Active</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="created_at"
-          label="Tanggal Pembuatan"
-          width="250px"
-        >
-          <template #default="scope">
-            {{ formatDate(scope.row.created_at, "DD MMMM YYYY") }}
+            <span v-else class="badge badge-secondary">Tidak Aktif</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="Aksi" align="center" fixed="right">
+        <el-table-column prop="uuid" label="Aksi" align="center">
           <template #default="scope">
             <div class="d-flex justify-content-center my-3">
               <el-button
-                @click="$router.push(`/outlets/detail/${scope.row.uuid}`)"
+                @click="$router.push(`/employee/${scope.row.uuid}`)"
                 type="primary"
                 size="small"
                 circle
@@ -73,11 +69,10 @@
 </template>
 
 <script lang="ts" setup>
-import { formatDate } from "@/helper";
-import { defineProps, ref, watch, computed } from "vue";
+import { defineProps, ref, watchEffect, computed } from "vue";
 import { getModule } from "vuex-module-decorators";
-import ModifierModule from "@/store/modules/ModifierModule";
-import moment from "moment";
+import OutletModule from "@/store/modules/OutletModule";
+
 const props = defineProps({
   show: {
     type: String,
@@ -89,22 +84,20 @@ const props = defineProps({
   },
 });
 
-const ModifiersState = getModule(ModifierModule);
-const modifier = computed(() => ModifiersState.getModifier);
-const metaPagination = computed(
-  () => ModifiersState.getMetaPaginationModifiers
-);
-const search = ref<string>("");
-const cursor = ref<string | null>("");
-const items = ref<any[]>([]);
-const loadingDatatable = ref(false);
+const outletState = getModule(OutletModule);
 
-const getModifiersAPI = async () => {
+const metaPagination = computed(() => outletState.getterMetaPagiantionEmployee);
+
+const items = ref<any[]>([]);
+const loadingDatatable = ref<boolean>(false);
+const cursor = ref<string>("");
+
+const getEmployees = async () => {
   loadingDatatable.value = true;
   try {
-    const { data } = await ModifiersState.getModifiersAPI({
+    const { data } = await outletState.getProductModifier({
       cursor: cursor.value,
-      search: search.value,
+      userId: props.userId!,
     });
 
     if (data.length) {
@@ -122,20 +115,17 @@ const getModifiersAPI = async () => {
 
 const prevPage = async () => {
   cursor.value = metaPagination.value.prev as string;
-  await getModifiersAPI();
+  await getEmployees();
 };
 
 const nextPage = async () => {
   cursor.value = metaPagination.value.next as string;
-  await getModifiersAPI();
+  await getEmployees();
 };
 
-watch(
-  () => props.show,
-  async (newVal) => {
-    if (newVal == "outlet") {
-      await getModifiersAPI();
-    }
+watchEffect(async () => {
+  if (props.userId && props.show == "employee") {
+    await getEmployees();
   }
-);
+});
 </script>

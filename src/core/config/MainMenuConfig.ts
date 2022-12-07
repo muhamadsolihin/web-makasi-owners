@@ -91,10 +91,10 @@ const MainMenuConfig = [
             heading: 'Kelola Produk',
             route: '/product/list',
           },
-          {
-            heading: 'Opsi Tambahan',
-            route: '/modifier/list',
-          },
+          // {
+          //   heading: 'Opsi Tambahan',
+          //   route: '/modifier/list',
+          // },
         ],
       },
 

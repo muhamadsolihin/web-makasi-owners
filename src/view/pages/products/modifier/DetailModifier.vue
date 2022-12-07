@@ -50,71 +50,7 @@
                 </div>
               </div>
 
-              <!--<div class="row">
-                <div class="col">
-                  <p class="fw-bold">Persediaan Stock :</p>
-                </div>
-                <div class="col">
-                  <div :key="p" v-for="p in Modifier">
-                    <p class="fw-bold">{{ p.stock }} {{ p.unit_name }}</p>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <p class="fw-bold">Kategori :</p>
-                </div>
-                <div class="col">
-                  <p class="fw-bold">
-                    {{ handleNullToString(Modifier.category_name) }}
-                  </p>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <p class="fw-bold">Merk :</p>
-                </div>
-                <div class="col">
-                  <p class="fw-bold">
-                    {{ handleNullToString(Modifier.merk) }}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="row">
-                <div class="col pl-5">
-                  <p class="fw-bold">Status:</p>
-                </div>
-                <div class="col">
-                  <span v-if="Modifier.status" class="badge badge-success">
-                    Aktif
-                  </span>
-                  <span v-else class="badge badge-light">
-                    Tidak Aktif
-                  </span>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col pl-5">
-                  <p class="fw-bold">Harga Modal :</p>
-                </div>
-                <div class="col">
-                  <div :key="o" v-for="o in Modifier">
-                    <p class="fw-bold">{{ o.basic_price }}</p>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <p class="fw-bold">Deskripsi:</p>
-                </div>
-                <div class="col">
-                  <p class="fw-bold">
-                    {{ handleNullToString(Modifier.description) }}
-                  </p>
-                </div>
-              </div>-->
+          
             </div> 
           </div>
         </div>
@@ -122,20 +58,25 @@
     </div>
   </div>
 
-  <div class="row mt-5">
+  <!-- <div class="row mt-5">
     <div class="col">
       <div class="card">
         <div class="card-body">
 
-            <!-- <OpsiTambahan /> -->
+            <OpsiTambahan />
 
 
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
+
+  <div class="mt-5" v-if="Object.keys(modifier).length">
+    <TabMenu :user-id="modifier.id!" />
+  </div>
   <div></div>
+
 </template>
 
 <script lang="ts">
@@ -149,7 +90,7 @@ import moment from "moment";
 import { Actions } from "@/store/enums/store.enums";
 import Loader from "@/view/content/Loader.vue";
 import AuthModule from "@/store/modules/AuthModule";
-// import OpsiTambahan from "./OpsiTambahan.vue";
+import TabMenu from "./TabMenu.vue";
 import { ElMessage, ElNotification } from "element-plus";
 
 import {
@@ -162,7 +103,7 @@ import {
 
 export default defineComponent({
   name: "detail-Modifier",
-  components: {},
+  components: {TabMenu},
   setup() {
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);

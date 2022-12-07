@@ -139,7 +139,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/view/pages/products/modifier/ListModifier.vue"),
       },
       {
-        path: 'modifier/detail/:uuid',
+        path: 'modifier/detail/:uuid/:id/',
         name: 'detail-modifier',
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
         component: () =>

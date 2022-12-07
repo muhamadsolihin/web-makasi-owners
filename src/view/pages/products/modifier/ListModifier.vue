@@ -76,7 +76,7 @@
                   <el-button
                     @click="
                       $router.push(
-                        `/modifier/detail/${scope.row.uuid}`
+                        `/modifier/detail/${scope.row.uuid}/${scope.row.id}`
                       )
                     "
                     type="primary"

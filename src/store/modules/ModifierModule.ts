@@ -56,7 +56,7 @@ export default class ModifierModule extends VuexModule {
   }) {
     return http
       .get(
-        `/skylark/v1/modifier/?cursor=${payload.cursor}&limit=10&search=${payload.search}&user_id=&outlet_id=${payload.outletID}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
+        `/skylark/v1/modifier?cursor=${payload.cursor}&limit=10&search=${payload.search}&user_id=&outlet_id=${payload.outletID}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}`
       )
       .then((res) => {
         if (res.data.status) {
@@ -96,4 +96,34 @@ export default class ModifierModule extends VuexModule {
       })
       .catch((err) => console.log(err));
   }
+
+  // https://devapi.makasipos.com/skylark/v1/modifier/product/:product_id?cursor=&limit&search=&user_id=&outlet_id&date_from=&date_to=
+
+
+  @Action
+  getProductModifier(payload: {
+    cursor: string;
+    productId: number;
+  }): Promise<any> {
+    return http
+      .get(
+        `/skylark/v1/modifier/product/${payload.productId}?cursor=${payload.cursor}&limit&search&user_id=&outlet_id&date_from&date_to`
+        )
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("SET_META_PAGINATION_EMPLOYEE", {
+            prev: res.data.meta.prev_cursor,
+            next: res.data.meta.next_cursor,
+          });
+        } else {
+          this.context.commit("SET_META_PAGINATION_EMPLOYEE", {
+            prev: "",
+            next: "",
+          });
+        }
+        return res.data;
+      })
+      .catch((err) => err);
+  }
+
 }
