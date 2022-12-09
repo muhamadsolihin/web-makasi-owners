@@ -99,13 +99,13 @@ export default class ModifierModule extends VuexModule {
 
 
   @Action
-  getProductModifier(payload: {
+  getProductIdModifier(payload: {
     cursor: string;
-    productId: number;
+    userId: number;
   }): Promise<any> {
     return http
       .get(
-        `/skylark/v1/modifier/product/${payload.productId}?cursor=${payload.cursor}&limit=10`
+        `/skylark/v1/modifier/product/${payload.userId}?cursor=${payload.cursor}&limit=10`
         )
       .then((res) => {
         if (res.data.status) {

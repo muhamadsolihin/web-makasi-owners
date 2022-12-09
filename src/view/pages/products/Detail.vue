@@ -39,16 +39,16 @@
                   </p>
                 </div>
               </div>
-              <div class="row">
+              <!-- <div class="row">
                 <div class="col">
                   <p class="fw-bold">Harga Produk :</p>
                 </div>
                 <div class="col">
-                  <div :key="items" v-for="items in Product.price_list">
-                    <p class="fw-bold">Rp. {{ items.price }}</p>
+                  <div :key="items" v-for="items in Product.price_list[0]">
+                    <p class="fw-bold">Rp. {{ items[0].price }}</p>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
               <div class="row">
                 <div class="col">
@@ -126,9 +126,9 @@
     </div>
   </div>
   <div></div>
-  <!-- <div class="mt-5" v-if="Object.keys(Product).length">
+  <div class="mt-5" v-if="Object.keys(Product).length">
     <TabMenu :user-id="Product.id!" />
-  </div> -->
+  </div>
 </template>
 
 <script lang="ts">
@@ -143,7 +143,7 @@ import { Actions } from "@/store/enums/store.enums";
 import Loader from "@/view/content/Loader.vue";
 import AuthModule from "@/store/modules/AuthModule";
 import { ElMessage, ElNotification } from "element-plus";
-// import TabMenu from "./components/Tabmenu.vue";
+import TabMenu from "./components/Tabmenu.vue";
 
 import {
   handleNullToString,
@@ -155,7 +155,7 @@ import {
 
 export default defineComponent({
   name: "detail-Product",
-  components: {},
+  components: {TabMenu},
   setup() {
     const Employeedetail = ref<string | null>("");
     const loading = ref<boolean>(true);

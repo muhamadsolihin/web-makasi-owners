@@ -8,7 +8,7 @@
         table-layout="fixed"
       >
         <el-table-column prop="name" label="Nama " width="250px" />
-        <el-table-column prop="category_name" label="Kategori " width="250px" />
+        <!-- <el-table-column prop="category_name" label="Kategori " width="250px" /> -->
         <el-table-column
           prop="outlet_name"
           label="Nama Outlet"
@@ -29,7 +29,8 @@
           <template #default="scope">
             <div class="d-flex justify-content-center my-3">
               <el-button
-                @click="$router.push(`/product/detail/${scope.row.uuid}`)"
+                @click="$router.push(`/modifier/detail/${scope.row.uuid}/${scope.row.id}`)"
+                
                 type="primary"
                 size="small"
                 circle
@@ -96,7 +97,7 @@ const cursor = ref<string>("");
 const getModifiers = async () => {
   loadingDatatable.value = true;
   try {
-    const { data } = await ModifiersState.getModifierProduct({
+    const { data } = await ModifiersState.getProductIdModifier({
       cursor: cursor.value,
       userId: props.userId!,
     });
