@@ -7,7 +7,7 @@ import { handleNullToString } from "@/helper";
 /* eslint-disable */
 
 export interface Modifier {
-  name: string;
+list_product: string | null;
 }
 
 @Module({ name: "ModifierModule", dynamic: true, store })
@@ -97,8 +97,6 @@ export default class ModifierModule extends VuexModule {
       .catch((err) => console.log(err));
   }
 
-  // https://devapi.makasipos.com/skylark/v1/modifier/product/:product_id?cursor=&limit&search=&user_id=&outlet_id&date_from=&date_to=
-
 
   @Action
   getProductModifier(payload: {
@@ -107,16 +105,42 @@ export default class ModifierModule extends VuexModule {
   }): Promise<any> {
     return http
       .get(
-        `/skylark/v1/modifier/product/${payload.productId}?cursor=${payload.cursor}&limit&search&user_id=&outlet_id&date_from&date_to`
+        `/skylark/v1/modifier/product/${payload.productId}?cursor=${payload.cursor}&limit=10`
         )
       .then((res) => {
         if (res.data.status) {
-          this.context.commit("SET_META_PAGINATION_EMPLOYEE", {
+          this.context.commit("SET_META_PAGINATION_MODIFIERS", {
             prev: res.data.meta.prev_cursor,
             next: res.data.meta.next_cursor,
           });
         } else {
-          this.context.commit("SET_META_PAGINATION_EMPLOYEE", {
+          this.context.commit("SET_META_PAGINATION_MODIFIERS", {
+            prev: "",
+            next: "",
+          });
+        }
+        return res.data;
+      })
+      .catch((err) => err);
+  }
+
+  @Action
+  getModifierProduct(payload: {
+    cursor: string;
+    userId: number;
+  }): Promise<any> {
+    return http
+      .get(
+        `/skylark/v1/product/modifier/${payload.userId}?cursor=${payload.cursor}&limit`
+        )
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("SET_META_PAGINATION_MODIFIERS", {
+            prev: res.data.meta.prev_cursor,
+            next: res.data.meta.next_cursor,
+          });
+        } else {
+          this.context.commit("SET_META_PAGINATION_MODIFIERS", {
             prev: "",
             next: "",
           });

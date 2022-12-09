@@ -126,6 +126,9 @@
     </div>
   </div>
   <div></div>
+  <!-- <div class="mt-5" v-if="Object.keys(Product).length">
+    <TabMenu :user-id="Product.id!" />
+  </div> -->
 </template>
 
 <script lang="ts">
@@ -140,6 +143,7 @@ import { Actions } from "@/store/enums/store.enums";
 import Loader from "@/view/content/Loader.vue";
 import AuthModule from "@/store/modules/AuthModule";
 import { ElMessage, ElNotification } from "element-plus";
+// import TabMenu from "./components/Tabmenu.vue";
 
 import {
   handleNullToString,

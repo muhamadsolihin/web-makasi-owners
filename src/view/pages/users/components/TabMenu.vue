@@ -12,7 +12,7 @@
         <el-tab-pane label="Outlet" name="outlet">
           <CardOutlet :show="activeTab" :user-id="userId" />
         </el-tab-pane>
-        <el-tab-pane label="Product" name="produk">
+        <el-tab-pane label="Produk" name="produk">
           <CardProducts :show="activeTab" :user-id="userId" />
         </el-tab-pane>
       </el-tabs>

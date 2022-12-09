@@ -126,7 +126,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/view/pages/products/ListProduct.vue"),
       },
       {
-        path: 'product/detail/:uuid',
+        path: 'product/detail/:uuid/:id/',
         name: 'detail-product',
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
         component: () =>
@@ -139,7 +139,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/view/pages/products/modifier/ListModifier.vue"),
       },
       {
-        path: 'modifier/detail/:uuid/:id/',
+        path: 'modifier/detail/:uuid/:id',
         name: 'detail-modifier',
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
         component: () =>

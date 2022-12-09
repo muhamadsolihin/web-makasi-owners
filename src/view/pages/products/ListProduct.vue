@@ -88,7 +88,7 @@
             <el-table-column label="Aksi" align="center">
               <template #default="scope">
                 <el-button
-                  @click="$router.push(`/product/detail/${scope.row.uuid}`)"
+                  @click="$router.push(`/product/detail/${scope.row.uuid}/${scope.row.id}`)"
                   type="primary"
                   size="small"
                   circle

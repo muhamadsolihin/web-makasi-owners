@@ -71,9 +71,9 @@
     </div>
   </div> -->
 
-
+  <!-- {{modifier.list_product}} -->
   <div class="mt-5" v-if="Object.keys(modifier).length">
-    <TabMenu :user-id="modifier.id!" />
+    <TabMenu :user-id="modifier.id" :list-product="modifier.list_product" />
   </div>
   <div></div>
 

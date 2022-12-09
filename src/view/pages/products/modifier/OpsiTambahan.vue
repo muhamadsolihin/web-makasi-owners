@@ -1,131 +1,110 @@
 <template>
-  <div class="card">
-    <div class="rounded border border-1 p-2">
-      <el-table
-        :data="items"
-        style="width: 100%"
-        v-loading="loadingDatatable"
-        table-layout="fixed"
-      >
-        <el-table-column prop="name" label="Nama Produk" width="250px" />
-        <el-table-column
-          prop="outlet_name"
-          label="Nama Outlet"
-          width="250px"
-        ></el-table-column>
-        <el-table-column prop="is_active" label="Status">
-          <template #default="scope">
-            <span
-              v-if="Boolean(scope.row.is_active)"
-              class="badge badge-primary"
-              >Aktif</span
-            >
-            <span v-else class="badge badge-secondary">Tidak Aktif</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="uuid" label="Aksi" align="center">
-          <template #default="scope">
-            <div class="d-flex justify-content-center my-3">
-              <el-button
-                @click="$router.push(`/employee/${scope.row.uuid}`)"
-                type="primary"
-                size="small"
-                circle
-              >
-                <i class="bi bi-eye-fill text-white"></i>
-              </el-button>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
-
-      <div class="d-flex justify-content-end mt-5">
-        <button
-          class="btn btn-sm"
-          @click="prevPage"
-          :disabled="!metaPagination.prev"
-          :class="{
-            'text-primary': metaPagination.prev,
-            'text-secondary': !metaPagination.prev,
-          }"
+  <el-table
+   :data="modifier.list_product"
+    style="width: 100%"
+    v-loading="loadingDatatable"
+    table-layout="fixed"
+  >
+    <el-table-column prop="name"  label="Nama " width="250px">
+    </el-table-column>
+    <el-table-column prop="category_name" label="Kategori " width="250px" />
+    <el-table-column
+      prop="outlet_name"
+      label="Nama Outlet"
+      width="250px"
+    ></el-table-column>
+    <el-table-column prop="is_online" label="Status">
+      <template #default="scope">
+        <span v-if="Boolean(scope.row.is_online)" class="badge badge-primary"
+          >Aktif</span
         >
-          PREV
-        </button>
-        <button
-          class="btn btn-sm"
-          @click="nextPage"
-          :disabled="!metaPagination.next"
-          :class="{
-            'text-primary': metaPagination.next,
-            'text-secondary': !metaPagination.next,
-          }"
-        >
-          NEXT
-        </button>
-      </div>
-    </div>
-  </div>
+        <span v-else class="badge badge-secondary">Tidak Aktif</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column prop="uuid" label="Aksi" align="center">
+      <template #default="scope">
+        <div class="d-flex justify-content-center my-3">
+          <el-button
+            @click="$router.push(`/product/detail/${scope.row.uuid}`)"
+            type="primary"
+            size="small"
+            circle
+          >
+            <i class="bi bi-eye-fill text-white"></i>
+          </el-button>
+        </div>
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
-<script lang="ts" setup>
-import { defineProps, ref, watchEffect, computed } from "vue";
+<script lang="ts">
+import { useStore } from "vuex";
+import { useRoute } from "vue-router";
+import { defineComponent, onMounted, ref, computed, reactive } from "vue";
 import { getModule } from "vuex-module-decorators";
-import OutletModule from "@/store/modules/OutletModule";
+import ModifierModule from "@/store/modules/ModifierModule";
+import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
+import moment from "moment";
+import { Actions } from "@/store/enums/store.enums";
+import Loader from "@/view/content/Loader.vue";
+import AuthModule from "@/store/modules/AuthModule";
+import { ElMessage, ElNotification } from "element-plus";
 
-const props = defineProps({
-  show: {
-    type: String,
-    require: true,
-  },
-  userId: {
-    type: Number,
-    require: true,
-  },
-});
+import {
+  handleNullToString,
+  formatCurrency,
+  formatDate,
+  epochToDateTime,
+  handleNull,
+} from "@/helper";
 
-const outletState = getModule(OutletModule);
+export default defineComponent({
+  name: "detail-Modifier",
+  components: {},
+  setup() {
+    const Employeedetail = ref<string | null>("");
+    const loading = ref<boolean>(true);
+    const AuthState = getModule(AuthModule);
+    const store = useStore();
+    const route = useRoute();
+    const ModifiersState = getModule(ModifierModule);
+    const modifier = computed(() => ModifiersState.getModifier);
+    const Modifiers = computed(() => ModifiersState.getModifiers);
 
-const metaPagination = computed(() => outletState.getterMetaPagiantionEmployee);
+    const subsValue = ref<string | Blob>("");
+    const Value = ref("");
 
-const items = ref<any[]>([]);
-const loadingDatatable = ref<boolean>(false);
-const cursor = ref<string>("");
+    onMounted(() => {
+      setCurrentPageBreadcrumbs("Dashboard", "Detail Opsi Tambahan");
 
-const getEmployees = async () => {
-  loadingDatatable.value = true;
-  try {
-    const { data } = await outletState.getProductModifier({
-      cursor: cursor.value,
-      userId: props.userId!,
+      store.dispatch(Actions.ADD_BODY_CLASSNAME, "page-loading");
+      ModifiersState.getDetailModifier(route.params.uuid)
+        .finally(() =>
+          store.dispatch(Actions.REMOVE_BODY_CLASSNAME, "page-loading")
+        );
     });
 
-    if (data.length) {
-      items.value = data;
-    } else {
-      items.value = [];
-      loadingDatatable.value = false;
-    }
-  } catch (err) {
-    return err;
-  } finally {
-    loadingDatatable.value = false;
-  }
-};
+    return {
+      Employeedetail,
+      loading,
+      Modifiers,
+      modifier,
+      moment,
+      ModifierModule,
+      route,
+      AuthState,
+      store,
+      subsValue,
+      Value,
 
-const prevPage = async () => {
-  cursor.value = metaPagination.value.prev as string;
-  await getEmployees();
-};
-
-const nextPage = async () => {
-  cursor.value = metaPagination.value.next as string;
-  await getEmployees();
-};
-
-watchEffect(async () => {
-  if (props.userId && props.show == "employee") {
-    await getEmployees();
-  }
+      formatDate,
+      handleNull,
+      formatCurrency,
+      epochToDateTime,
+      handleNullToString,
+    };
+  },
 });
 </script>

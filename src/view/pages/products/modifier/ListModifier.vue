@@ -54,7 +54,7 @@
             <el-table
               :data="Modifiers"
               style="width: 100%"
-              height="550"
+              height="600"
             >
               <template> </template>
               <el-table-column prop="name" label="Nama" width="250">
@@ -152,7 +152,7 @@
       const loadingDatatable = ref(false);
       const filterDateRange = ref<string[]>([
         moment()
-          .subtract(1, "months")
+          .subtract(9, "months")
           .format("YYYY-MM-DD"),
         moment().format("YYYY-MM-DD"),
       ]);

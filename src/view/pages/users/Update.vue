@@ -168,10 +168,10 @@
                 - {{ handleNullToString(employee.bank?.bank_account_number) }}
               </p>
             </div>
-            <!-- <div class="col-md-2">
+            <div class="col-md-2">
               <p class="fw-bold">Saldo :</p>
             </div>
-            <div class="col-md-2">
+            <!-- <div class="col-md-2">
               <p class="fw-bold">
                 <el-button
                     @click="
