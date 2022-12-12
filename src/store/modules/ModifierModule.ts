@@ -7,7 +7,9 @@ import { handleNullToString } from "@/helper";
 /* eslint-disable */
 
 export interface Modifier {
-list_product: string | null;
+  outlet_id: string | null;
+  outlet_name: string | null;
+  list_product: string | null;
 }
 
 @Module({ name: "ModifierModule", dynamic: true, store })
@@ -97,7 +99,6 @@ export default class ModifierModule extends VuexModule {
       .catch((err) => console.log(err));
   }
 
-
   @Action
   getProductIdModifier(payload: {
     cursor: string;
@@ -106,7 +107,7 @@ export default class ModifierModule extends VuexModule {
     return http
       .get(
         `/skylark/v1/modifier/product/${payload.userId}?cursor=${payload.cursor}&limit=10`
-        )
+      )
       .then((res) => {
         if (res.data.status) {
           this.context.commit("SET_META_PAGINATION_MODIFIERS", {
@@ -132,7 +133,7 @@ export default class ModifierModule extends VuexModule {
     return http
       .get(
         `/skylark/v1/product/modifier/${payload.userId}?cursor=${payload.cursor}&limit`
-        )
+      )
       .then((res) => {
         if (res.data.status) {
           this.context.commit("SET_META_PAGINATION_MODIFIERS", {
@@ -149,5 +150,4 @@ export default class ModifierModule extends VuexModule {
       })
       .catch((err) => err);
   }
-
 }

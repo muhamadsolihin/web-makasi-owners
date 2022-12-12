@@ -165,10 +165,11 @@ import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb
 import { formatCurrency } from "@/helper";
 
 const filterRangeDate = ref<any[]>([
-  moment()
-    .subtract(7, "days")
-    .format("YYYY-MM-DD"),
-  moment().format("YYYY-MM-DD"),
+  // moment()
+  //   .subtract(7, "days")
+  //   .format("YYYY-MM-DD"),
+  // moment().format("YYYY-MM-DD"),
+  moment().set({ year: 2022, month: 1 }),
 ]);
 
 const changeFilterDateRange = async () => {

@@ -7,7 +7,7 @@
         >
           <!-- begin::filter date -->
           <el-date-picker
-            v-model="filterRangeDate"
+            v-model="filterDateRange"
             @change="fetchTransaction"
             start-placeholder="Start date"
             end-placeholder="End date"
@@ -232,7 +232,7 @@ export default defineComponent({
     const loadingDatatable = ref(false);
     const filterDateRange = ref<string[]>([
       moment()
-        .subtract(1, "months")
+        .subtract(1, "years")
         .format("YYYY-MM-DD"),
       moment().format("YYYY-MM-DD"),
     ]);
@@ -285,18 +285,11 @@ export default defineComponent({
       return statusPaid;
     };
 
-    const filterRangeDate = ref<any[]>([
-      moment()
-        .subtract(7, "days")
-        .format("YYYY-MM-DD"),
-      moment().format("YYYY-MM-DD"),
-      moment().set({'year': 2022, 'month': 5}),
-    ]);
 
     const fetchTransaction = () => {
       TransaksiState.getTransactionsAPI({
-        dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
-        dateTo: moment(filterRangeDate.value[1]).format("DD-MM-YYYY"),
+        dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
+        dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
         perPage: perPage.value,
         outletId: filterOutlet.value?.toString() || "",
         cursor: cursor.value,
@@ -334,8 +327,8 @@ export default defineComponent({
       loadingDatatable.value = true;
       try {
         const { data } = await TransaksiState.getTransactionsAPI({
-          dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
-          dateTo: moment(filterRangeDate.value[1]).format("DD-MM-YYYY"),
+          dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
+          dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
           perPage: perPage.value,
           outletId: filterOutlet.value?.toString() || "",
           cursor: cursor.value,
@@ -359,7 +352,6 @@ export default defineComponent({
       Transactions,
       loadingDatatable,
       filterDateRange,
-      filterRangeDate,
       filterOutlet,
       search,
       FilterOutlet,

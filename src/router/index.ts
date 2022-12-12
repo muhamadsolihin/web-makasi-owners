@@ -171,6 +171,25 @@ const routes: Array<RouteRecordRaw> = [
           import('@/view/pages/transaction/TransactionDetail.vue'),
       },
 
+
+      {
+        path: "customer/list/",
+        name: "List-Customer",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/customer/ListCustomer.vue"),
+      },
+      {
+        path: 'customer/detail/:uuid',
+        name: 'detail-customer',
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () =>
+          import('@/view/pages/customer/DetailCustomer.vue'),
+      },
+
+
+
+
+
       // {
       //   path: "outlets/outlet/omset",
       //   meta: { asideEnabled: true, asidePrimaryDisabled: true},

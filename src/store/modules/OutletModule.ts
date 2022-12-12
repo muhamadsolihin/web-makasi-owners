@@ -51,6 +51,8 @@ export default class OutletModule extends VuexModule {
     return this.metaPaginationTransactionCashReceipt;
   }
 
+
+
   get getFilterOutlet() {
     let newObject: any[] = [];
     newObject = Object.assign([], this.outlets);
@@ -58,6 +60,7 @@ export default class OutletModule extends VuexModule {
     if (newObject.findIndex(e => e.id === '') == -1) {
       newObject.unshift({
         id: '',
+        name: 'Semua Outlet',
         address: '',
         uuid: '',
       });
@@ -65,7 +68,6 @@ export default class OutletModule extends VuexModule {
 
     return newObject.filter(item => item.is_active == 1);
   }
-
 
   get getterFilterTransactionOutlet() {
     return function(items: any[]) {

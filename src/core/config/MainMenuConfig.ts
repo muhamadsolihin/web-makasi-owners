@@ -46,6 +46,15 @@ const MainMenuConfig = [
         // ]
       },
 
+      // {
+      //   heading: "Pelanggan",
+      //   icon: require("@/assets/icons/aside/customer.svg"),
+      //   route: "/customer/list/",
+      // },
+
+
+
+
       {
         heading: "Outlet",
         icon: require("@/assets/icons/aside/outlet.svg"),
@@ -84,7 +93,7 @@ const MainMenuConfig = [
 
       {
         sectionTitle: 'Produk',
-        icon: require('@/assets/icons/aside/produk.svg'),
+        icon: require('@/assets/icons/aside/outlet.svg'),
         route: '/product',
         sub: [
           {

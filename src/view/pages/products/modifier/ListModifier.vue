@@ -7,7 +7,7 @@
         >
           <!-- begin::filter date -->
           <el-date-picker
-            v-model="filterRangeDate"
+            v-model="filterDateRange"
             @change="fetchModifier"
             start-placeholder="Start date"
             end-placeholder="End date"
@@ -147,7 +147,7 @@ export default defineComponent({
     const loadingDatatable = ref(false);
     const filterDateRange = ref<string[]>([
       moment()
-        .subtract(9, "months")
+        .subtract(1, "years")
         .format("YYYY-MM-DD"),
       moment().format("YYYY-MM-DD"),
     ]);
@@ -159,31 +159,32 @@ export default defineComponent({
     const outletOptions = ref<Outlet[]>([]);
     const ModifiersState = getModule(ProductsModule);
     const outletState = getModule(OutletModule);
-    const outlets = computed(() => outletState.getterOutlets);
+    const outlets = computed(() => outletState.getFilterOutlet);
     const FilterOutlet = computed(() => ModifiersState.getModifiers);
     const Modifiers = computed(() => ModifiersState.getModifiers);
     const priceList = computed(() => ModifiersState.getModifiers);
 
-    const filterOutlets = computed(() => outletState.getFilterOutlet);
+    const filterOutlets = computed(() => outletState.getterOutlets);
 
     // const items = ref<any[]>([]);
     const metaPagination = computed(
       () => ModifiersState.getMetaPaginationModifiers
     );
-    const filterRangeDate = ref<any[]>([
-      // moment()
-      //   .subtract(7, "days")
-      //   .format("YYYY-MM-DD"),
-      // moment().format("YYYY-MM-DD"),
-      moment().set({ year: 2022, month: 1 }),
-    ]);
+
+    // const filterRangeDate = ref<any[]>([
+    //   // moment()
+    //   //   .subtract(7, "days")
+    //   //   .format("YYYY-MM-DD"),
+    //   // moment().format("YYYY-MM-DD"),
+    //   moment().set({ year: 2022, month: 1 }),
+    // ]);
 
     const fetchModifier = () => {
       ModifiersState.getModifierAPI({
         cursor: cursor.value,
         search: search.value,
-        dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
-        dateTo: moment(filterRangeDate.value[1]).format("DD-MM-YYYY"),
+        dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
+        dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
         outletID: filterOutlet.value?.toString() || "",
       })
         .then(() => {
@@ -234,8 +235,8 @@ export default defineComponent({
       ModifiersState.getModifierAPI({
         cursor: cursor.value,
         search: search.value,
-        dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
-        dateTo: moment(filterRangeDate.value[1]).format("DD-MM-YYYY"),
+        dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
+        dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
         outletID: filterOutlet.value?.toString() || "",
       }).finally(() => (loadingDatatable.value = false));
     };
@@ -247,11 +248,12 @@ export default defineComponent({
       ModifiersState.getModifierAPI({
         cursor: cursor.value,
         search: search.value,
-        dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
-        dateTo: moment(filterRangeDate.value[1]).format("DD-MM-YYYY"),
+        dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
+        dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
         outletID: filterOutlet.value?.toString() || "",
       }).finally(() => (loadingDatatable.value = false));
     };
+
 
     onMounted(async () => {
       setCurrentPageBreadcrumbs("Dashboard", "Daftar Opsi Tambahan");
@@ -264,11 +266,12 @@ export default defineComponent({
       Modifiers,
       loadingDatatable,
       filterDateRange,
-      filterRangeDate,
+      filterOutlets,
       filterOutlet,
       search,
       FilterOutlet,
       cursor,
+      outlets,
       clearable,
       priceList,
       metaPagination,

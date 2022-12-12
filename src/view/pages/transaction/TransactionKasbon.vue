@@ -7,7 +7,7 @@
         >
           <!-- begin::filter date -->
           <el-date-picker
-            v-model="filterRangeDate"
+            v-model="filterDateRange"
             @change="fetchTransaction"
             start-placeholder="Start date"
             end-placeholder="End date"
@@ -230,7 +230,7 @@ export default defineComponent({
     const loadingDatatable = ref(false);
     const filterDateRange = ref<string[]>([
       moment()
-        .subtract(1, "months")
+        .subtract(1, "years")
         .format("YYYY-MM-DD"),
       moment().format("YYYY-MM-DD"),
       
@@ -285,20 +285,12 @@ export default defineComponent({
       return statusPaid;
     };
 
-    const filterRangeDate = ref<any[]>([
-      // moment()
-      //   .subtract(7, "days")
-      //   .format("YYYY-MM-DD"),
-      // moment().format("YYYY-MM-DD"),
-      moment().set({'year': 2021, 'month': 1}),
-    ]);
-
     const nextPage = async () => {
       loadingDatatable.value = true;
       try {
         const { data } = await TransaksiState.getTransactionsKasbonAPI({
-          dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
-          dateTo: moment(filterRangeDate.value[1]).format("DD-MM-YYYY"),
+          dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
+          dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
           perPage: perPage.value,
           outletId: filterOutlet.value?.toString() || "",
           cursor: cursor.value,
@@ -313,8 +305,8 @@ export default defineComponent({
 
     const fetchTransaction = () => {
       TransaksiState.getTransactionsKasbonAPI({
-        dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
-        dateTo: moment(filterRangeDate.value[1]).format("DD-MM-YYYY"),
+        dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
+        dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
         perPage: perPage.value,
         outletId: filterOutlet.value?.toString() || "",
         cursor: cursor.value,
@@ -359,7 +351,6 @@ export default defineComponent({
       Transactions,
       loadingDatatable,
       filterDateRange,
-      filterRangeDate,
       filterOutlet,
       search,
       FilterOutlet,
