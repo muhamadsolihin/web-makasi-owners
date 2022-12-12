@@ -181,6 +181,20 @@
             </el-table-column>
           </el-table>
         </div>
+
+        <div class="d-flex justify-content-center mt-5">
+          <button
+            class="btn btn-sm"
+            @click="nextPage"
+            :disabled="!metaPagination.next"
+            :class="{
+              'text-primary': metaPagination.next,
+              'text-secondary': !metaPagination.next,
+            }"
+          >
+            SEE MORE
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -193,6 +207,7 @@ import {
   ref,
   onMounted,
   computed,
+  watch,
   onBeforeUnmount,
 } from "vue";
 
@@ -275,6 +290,7 @@ export default defineComponent({
         .subtract(7, "days")
         .format("YYYY-MM-DD"),
       moment().format("YYYY-MM-DD"),
+      moment().set({'year': 2022, 'month': 5}),
     ]);
 
     const fetchTransaction = () => {
@@ -285,22 +301,9 @@ export default defineComponent({
         outletId: filterOutlet.value?.toString() || "",
         cursor: cursor.value,
         search: search.value,
-      })
-        .then(() => {
-          if (
-            Transactions.value.length == 0 &&
-            metaPagination.value.next_cursor != undefined &&
-            metaPagination.value.next_cursor != null
-          ) {
-            cursor.value = metaPagination.value.next_cursor;
-            setTimeout(() => {
-              fetchTransaction();
-            }, 1000);
-          }
-        })
-        .finally(() => {
-          loadingDatatable.value = false;
-        });
+      }).finally(() => {
+        loadingDatatable.value = false;
+      });
     };
 
     const changeOutlet = () => {
@@ -327,9 +330,27 @@ export default defineComponent({
       await fetchTransaction();
     };
 
-    onMounted(async () => {
+    const nextPage = async () => {
+      loadingDatatable.value = true;
+      try {
+        const { data } = await TransaksiState.getTransactionsAPI({
+          dateFrom: moment(filterRangeDate.value[0]).format("DD-MM-YYYY"),
+          dateTo: moment(filterRangeDate.value[1]).format("DD-MM-YYYY"),
+          perPage: perPage.value,
+          outletId: filterOutlet.value?.toString() || "",
+          cursor: cursor.value,
+          search: search.value,
+        });
+      } catch (err) {
+        return err;
+      } finally {
+        loadingDatatable.value = false;
+      }
+    };
+
+    onMounted(() => {
       setCurrentPageBreadcrumbs("Dashboard", "Daftar Transaksi");
-      await fetchTransaction();
+      fetchTransaction();
 
       loadingDatatable.value = true;
     });
@@ -347,6 +368,7 @@ export default defineComponent({
       metaPagination,
       outletOptions,
 
+      nextPage,
       fetchTransaction,
       epochToDateTime,
       formatCurrency,

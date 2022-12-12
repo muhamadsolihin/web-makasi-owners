@@ -51,7 +51,7 @@
         </div>
 
         <div class="rounded border border-1 p-2">
-          <el-table :data="Products" style="width: 100%" height="550">
+          <el-table :data="Products" style="width: 100%" height="650">
             <template> </template>
             <el-table-column label="Name" width="250">
               <template #default="scope">
@@ -182,10 +182,11 @@ export default defineComponent({
       () => ProductsState.getMetaPaginationProducts
     );
     const filterRangeDate = ref<any[]>([
-      moment()
-        .subtract(7, "days")
-        .format("YYYY-MM-DD"),
-      moment().format("YYYY-MM-DD"),
+      // moment()
+      //   .subtract(7, "days")
+      //   .format("YYYY-MM-DD"),
+      // moment().format("YYYY-MM-DD"),
+      moment().set({'year': 2022, 'month': 1}),
     ]);
 
     const fetchProducts = () => {

@@ -51,6 +51,22 @@ export default class OutletModule extends VuexModule {
     return this.metaPaginationTransactionCashReceipt;
   }
 
+  get getFilterOutlet() {
+    let newObject: any[] = [];
+    newObject = Object.assign([], this.outlets);
+
+    if (newObject.findIndex(e => e.id === '') == -1) {
+      newObject.unshift({
+        id: '',
+        address: '',
+        uuid: '',
+      });
+    }
+
+    return newObject.filter(item => item.is_active == 1);
+  }
+
+
   get getterFilterTransactionOutlet() {
     return function(items: any[]) {
       const txList = items.filter((tx) => {
