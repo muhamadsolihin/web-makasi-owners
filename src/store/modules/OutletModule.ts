@@ -7,7 +7,6 @@ import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 
 const CORE_URL_API = "/cockatoo";
 
-  
 @Module({ name: "OutletModule", dynamic: true, store })
 export default class OutletModule extends VuexModule {
   outlets: List[] = [];
@@ -51,22 +50,20 @@ export default class OutletModule extends VuexModule {
     return this.metaPaginationTransactionCashReceipt;
   }
 
-
-
   get getFilterOutlet() {
     let newObject: any[] = [];
     newObject = Object.assign([], this.outlets);
 
-    if (newObject.findIndex(e => e.id === '') == -1) {
+    if (newObject.findIndex((e) => e.id === "") == -1) {
       newObject.unshift({
-        id: '',
-        name: 'Semua Outlet',
-        address: '',
-        uuid: '',
+        id: "",
+        name: "Semua Outlet",
+        address: "",
+        uuid: "",
       });
     }
 
-    return newObject.filter(item => item.is_active == 1);
+    return newObject.filter((item) => item.is_active == 1);
   }
 
   get getterFilterTransactionOutlet() {
@@ -148,25 +145,21 @@ export default class OutletModule extends VuexModule {
       .catch((err) => err);
   }
 
-
   @Action
   getOutletsTransactions(payload) {
     return http
       .get(
         `/kiwi/v1/?cursor=${payload.cursor}&perpage=${payload.perPage}&outlet_id=${payload.outletId}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}&is_kasbon&is_online_order`
-    
       )
-      .then(res => {
+      .then((res) => {
         if (res.data.status) {
-          this.context.commit('SET_OUTLETS', res.data.data);
-          this.context.commit('SET_META_PAGINATION', res.data.meta);
+          this.context.commit("SET_OUTLETS", res.data.data);
+          this.context.commit("SET_META_PAGINATION", res.data.meta);
         }
         return res.data;
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
-
-
 
   @Action
   getDetailOutlet(payload: string): Promise<any> {
@@ -209,16 +202,12 @@ export default class OutletModule extends VuexModule {
       .catch((err) => err);
   }
 
-
   @Action
-  getProductUser(payload: {
-    cursor: string;
-    userId: number;
-  }): Promise<any> {
+  getProductUser(payload: { cursor: string; userId: number }): Promise<any> {
     return http
       .get(
         `/skylark/v1/new_product?cursor=${payload.cursor}&limit=&user_id=${payload.userId}&outlet_id&search&from&to`
-        )
+      )
       .then((res) => {
         if (res.data.status) {
           this.context.commit("SET_META_PAGINATION_EMPLOYEE", {
@@ -235,7 +224,6 @@ export default class OutletModule extends VuexModule {
       })
       .catch((err) => err);
   }
-
 
   @Action
   getProductModifier(payload: {
@@ -245,8 +233,7 @@ export default class OutletModule extends VuexModule {
     return http
       .get(
         `/skylark/v1/modifier/product/${payload.userId}?cursor=${payload.cursor}&limit&search&user_id=&outlet_id&date_from&date_to`
-        
-        )
+      )
       .then((res) => {
         if (res.data.status) {
           this.context.commit("SET_META_PAGINATION_EMPLOYEE", {
@@ -263,9 +250,6 @@ export default class OutletModule extends VuexModule {
       })
       .catch((err) => err);
   }
-
-
-
 
   @Action
   getHistoryTransactionOutlet(payload: {
