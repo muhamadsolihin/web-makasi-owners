@@ -199,7 +199,7 @@ const loadingDatatable = ref<boolean>(false);
 const cursor = ref<string>("");
 const filterDateRange = ref<string[]>([
   moment()
-    .subtract(1, "months")
+    .subtract(1, "years")
     .format("YYYY-MM-DD"),
   moment().format("YYYY-MM-DD"),
 ]);

@@ -7,7 +7,7 @@
         >
           <!-- begin::filter date -->
           <el-date-picker
-            v-model="filterRangeDate"
+            v-model="filterDateRange"
             @change="fetchTransaction"
             start-placeholder="Start date"
             end-placeholder="End date"
@@ -51,9 +51,12 @@
         </div>
 
         <div class="rounded border border-1 p-2">
-          <el-table :data="Transactions" 
-          v-loading="loadingDatatable"
-          style="width: 100%" height="550">
+          <el-table
+            :data="Transactions"
+            v-loading="loadingDatatable"
+            style="width: 100%"
+            height="550"
+          >
             <el-table-column prop="trx_id" label="No Transaksi" width="150" />
             <el-table-column
               width="200"
@@ -178,6 +181,20 @@
             </el-table-column>
           </el-table>
         </div>
+
+        <div class="d-flex justify-content-center mt-5">
+          <button
+            class="btn btn-sm"
+            @click="nextPage"
+            :disabled="!metaPagination.next"
+            :class="{
+              'text-primary': metaPagination.next,
+              'text-secondary': !metaPagination.next,
+            }"
+          >
+            SEE MORE
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -185,16 +202,28 @@
 
 <script lang="ts">
 import moment from "moment";
-import { defineComponent, ref, onMounted, computed, onBeforeUnmount, } from "vue";
+import {
+  defineComponent,
+  ref,
+  onMounted,
+  computed,
+  watch,
+  onBeforeUnmount,
+} from "vue";
 
 import { getModule } from "vuex-module-decorators";
 import TransaksiModule from "@/store/modules/TransaksiModule";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
-import { Outlet, OutletListRes } from '@/types/outlet/Outlet.interface';
-import OutletModule from '@/store/modules/OutletModule';
-import { DrawerComponent } from '@/assets/ts/components/_DrawerOptions';
-import { handleNull, epochToDateTime, formatCurrency, formatDate,
-  convertEpochToDate, } from "@/helper";
+import { Outlet, OutletListRes } from "@/types/outlet/Outlet.interface";
+import OutletModule from "@/store/modules/OutletModule";
+import { DrawerComponent } from "@/assets/ts/components/_DrawerOptions";
+import {
+  handleNull,
+  epochToDateTime,
+  formatCurrency,
+  formatDate,
+  convertEpochToDate,
+} from "@/helper";
 
 export default defineComponent({
   name: "Hirtori-Transaksi",
@@ -203,7 +232,7 @@ export default defineComponent({
     const loadingDatatable = ref(false);
     const filterDateRange = ref<string[]>([
       moment()
-        .subtract(1, "months")
+        .subtract(1, "years")
         .format("YYYY-MM-DD"),
       moment().format("YYYY-MM-DD"),
     ]);
@@ -227,27 +256,27 @@ export default defineComponent({
 
       switch (status) {
         case 0:
-          statusPaid = ['badge-light-dark', 'Belum Lunas'];
+          statusPaid = ["badge-light-dark", "Belum Lunas"];
           break;
         case 1:
           if (orderStatus == 8) {
-            statusPaid = ['badge-light-danger', 'Batal'];
+            statusPaid = ["badge-light-danger", "Batal"];
           } else if (orderStatus == 9) {
-            statusPaid = ['badge-light-danger', 'Batal Sebagian'];
+            statusPaid = ["badge-light-danger", "Batal Sebagian"];
           } else if (orderStatus == 3) {
-            statusPaid = ['badge-light-danger', 'Batal'];
+            statusPaid = ["badge-light-danger", "Batal"];
           } else {
-            statusPaid = ['badge-light-success', 'Lunas'];
+            statusPaid = ["badge-light-success", "Lunas"];
           }
           break;
         case 2:
-          statusPaid = ['badge-light-warning', 'Tertunda'];
+          statusPaid = ["badge-light-warning", "Tertunda"];
           break;
         case 3:
-          statusPaid = ['badge-light-danger', 'Batal'];
+          statusPaid = ["badge-light-danger", "Batal"];
           break;
         case 4:
-          statusPaid = ['badge-light-info', 'Kasbon'];
+          statusPaid = ["badge-light-info", "Kasbon"];
           break;
         default:
           break;
@@ -256,49 +285,23 @@ export default defineComponent({
       return statusPaid;
     };
 
-    const filterRangeDate = ref<any[]>([
-      moment()
-        .subtract(7, 'days')
-        .format('YYYY-MM-DD'),
-      moment().format('YYYY-MM-DD'),
-    ]);
-
-
-
-
-
 
     const fetchTransaction = () => {
       TransaksiState.getTransactionsAPI({
-        dateFrom: moment(filterRangeDate.value[0]).format('DD-MM-YYYY'),
-        dateTo: moment(filterRangeDate.value[1]).format('DD-MM-YYYY'),
+        dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
+        dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
         perPage: perPage.value,
-        outletId: filterOutlet.value?.toString() || '',
+        outletId: filterOutlet.value?.toString() || "",
         cursor: cursor.value,
         search: search.value,
-      })
-        .then(() => {
-          if (
-            Transactions.value.length == 0 &&
-            metaPagination.value.next_cursor != undefined &&
-            metaPagination.value.next_cursor != null
-          ) {
-            cursor.value = metaPagination.value.next_cursor;
-            setTimeout(() => {
-              fetchTransaction();
-            }, 1000);
-          }
-        })
-        .finally(() => {
-          loadingDatatable.value = false;
-        });
+      }).finally(() => {
+        loadingDatatable.value = false;
+      });
     };
-
 
     const changeOutlet = () => {
       loadingDatatable.value = true;
-      cursor.value = '',
-      fetchTransaction();
+      (cursor.value = ""), fetchTransaction();
     };
 
     const textSearch = () => {
@@ -307,13 +310,12 @@ export default defineComponent({
     };
 
     const clearSearch = () => {
-      search.value = '';
-      cursor.value = '';
+      search.value = "";
+      cursor.value = "";
       clearable.value = false;
       loadingDatatable.value = true;
       fetchTransaction();
     };
-
 
     const searchData = async () => {
       loadingDatatable.value = true;
@@ -321,21 +323,35 @@ export default defineComponent({
       await fetchTransaction();
     };
 
-    onMounted(async () => {
+    const nextPage = async () => {
+      loadingDatatable.value = true;
+      try {
+        const { data } = await TransaksiState.getTransactionsAPI({
+          dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
+          dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
+          perPage: perPage.value,
+          outletId: filterOutlet.value?.toString() || "",
+          cursor: cursor.value,
+          search: search.value,
+        });
+      } catch (err) {
+        return err;
+      } finally {
+        loadingDatatable.value = false;
+      }
+    };
+
+    onMounted(() => {
       setCurrentPageBreadcrumbs("Dashboard", "Daftar Transaksi");
-      await fetchTransaction();
+      fetchTransaction();
 
       loadingDatatable.value = true;
-
-
-      });
-
+    });
 
     return {
       Transactions,
       loadingDatatable,
       filterDateRange,
-      filterRangeDate,
       filterOutlet,
       search,
       FilterOutlet,
@@ -344,7 +360,7 @@ export default defineComponent({
       metaPagination,
       outletOptions,
 
-
+      nextPage,
       fetchTransaction,
       epochToDateTime,
       formatCurrency,

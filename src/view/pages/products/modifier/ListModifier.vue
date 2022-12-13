@@ -8,7 +8,7 @@
           <!-- begin::filter date -->
           <el-date-picker
             v-model="filterDateRange"
-            @change="fetchProducts"
+            @change="fetchModifier"
             start-placeholder="Start date"
             end-placeholder="End date"
             value-format="YYYY-MM-DD"
@@ -45,50 +45,36 @@
               Search
             </button>
             <!-- <button class="btn btn-sm btn-info ms-2" @click="exportData">
-              Export
-            </button> -->
+                Export
+              </button> -->
           </div>
         </div>
 
         <div class="rounded border border-1 p-2">
-          <el-table :data="Products" style="width: 100%" height="650">
+          <el-table :data="Modifiers" style="width: 100%" height="600">
             <template> </template>
-            <el-table-column label="Name" width="250">
-              <template #default="scope">
-                {{ scope.row.name }}
-              </template>
+            <el-table-column prop="name" label="Nama" width="250">
             </el-table-column>
 
-            <el-table-column width="250" label="Nama Toko" sortable>
+            <el-table-column width="250" label="Nama Outlet" sortable>
               <template #default="scope">
                 {{ scope.row.outlet_name }}
               </template>
             </el-table-column>
 
-            <el-table-column width="200" label="Harga" sortable>
+            <el-table-column width="150" label="Tanggal" sortable>
               <template #default="scope">
-                Rp {{ formatCurrency(scope.row.price_list[0].price) }}
-              </template>
-            </el-table-column>
-            <el-table-column width="150" label="Status" sortable>
-              <template #default="scope">
-                <span v-if="scope.row.status" class="badge badge-success">
-                  Aktif
-                </span>
-                <span v-else class="badge badge-light">
-                  Tidak Aktif
-                </span>
-              </template>
-            </el-table-column>
-            <el-table-column width="150px" label="Stock" sortable>
-              <template #default="scope">
-                {{ scope.row.stock.stock }} {{ scope.row.stock.unit_name }}
+                {{ epochToDateTime(scope.row.unix_time) }}
               </template>
             </el-table-column>
             <el-table-column label="Aksi" align="center">
               <template #default="scope">
                 <el-button
-                  @click="$router.push(`/product/detail/${scope.row.uuid}/${scope.row.id}`)"
+                  @click="
+                    $router.push(
+                      `/modifier/detail/${scope.row.uuid}/${scope.row.id}`
+                    )
+                  "
                   type="primary"
                   size="small"
                   circle
@@ -140,7 +126,7 @@ import {
 } from "vue";
 
 import { getModule } from "vuex-module-decorators";
-import ProductsModule from "@/store/modules/ProductsModule";
+import ProductsModule from "@/store/modules/ModifierModule";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
 import { Outlet, OutletListRes } from "@/types/outlet/Outlet.interface";
 import OutletModule from "@/store/modules/OutletModule";
@@ -171,20 +157,30 @@ export default defineComponent({
     const perPage = ref<number>(10);
     const clearable = ref<boolean>(false);
     const outletOptions = ref<Outlet[]>([]);
-    const ProductsState = getModule(ProductsModule);
+    const ModifiersState = getModule(ProductsModule);
     const outletState = getModule(OutletModule);
-    const outlets = computed(() => outletState.getterOutlets);
-    const FilterOutlet = computed(() => ProductsState.getProducts);
-    const Products = computed(() => ProductsState.getProducts);
-    const priceList = computed(() => ProductsState.getProducts);
+    const outlets = computed(() => outletState.getFilterOutlet);
+    const FilterOutlet = computed(() => ModifiersState.getModifiers);
+    const Modifiers = computed(() => ModifiersState.getModifiers);
+    const priceList = computed(() => ModifiersState.getModifiers);
+
+    const filterOutlets = computed(() => outletState.getterOutlets);
+
     // const items = ref<any[]>([]);
     const metaPagination = computed(
-      () => ProductsState.getMetaPaginationProducts
+      () => ModifiersState.getMetaPaginationModifiers
     );
 
+    // const filterRangeDate = ref<any[]>([
+    //   // moment()
+    //   //   .subtract(7, "days")
+    //   //   .format("YYYY-MM-DD"),
+    //   // moment().format("YYYY-MM-DD"),
+    //   moment().set({ year: 2022, month: 1 }),
+    // ]);
 
-    const fetchProducts = () => {
-      ProductsState.getProductsAPI({
+    const fetchModifier = () => {
+      ModifiersState.getModifierAPI({
         cursor: cursor.value,
         search: search.value,
         dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
@@ -193,13 +189,13 @@ export default defineComponent({
       })
         .then(() => {
           if (
-            Products.value.length == 0 &&
+            Modifiers.value.length == 0 &&
             metaPagination.value.next != undefined &&
             metaPagination.value.next != null
           ) {
             cursor.value = metaPagination.value.next;
             setTimeout(() => {
-              fetchProducts();
+              fetchModifier();
             }, 1000);
           }
         })
@@ -210,7 +206,7 @@ export default defineComponent({
 
     const changeOutlet = () => {
       loadingDatatable.value = true;
-      (cursor.value = ""), fetchProducts();
+      (cursor.value = ""), fetchModifier();
     };
 
     const textSearch = () => {
@@ -223,20 +219,20 @@ export default defineComponent({
       cursor.value = "";
       clearable.value = false;
       loadingDatatable.value = true;
-      fetchProducts();
+      fetchModifier();
     };
 
     const searchData = async () => {
       loadingDatatable.value = true;
       cursor.value = "";
-      await fetchProducts();
+      await fetchModifier();
     };
 
     const prevPage = () => {
       loadingDatatable.value = true;
       cursor.value = metaPagination.value.prev;
-      fetchProducts();
-      ProductsState.getProductsAPI({
+      fetchModifier();
+      ModifiersState.getModifierAPI({
         cursor: cursor.value,
         search: search.value,
         dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
@@ -248,8 +244,8 @@ export default defineComponent({
     const nextPage = () => {
       loadingDatatable.value = true;
       cursor.value = metaPagination.value.next;
-      fetchProducts();
-      ProductsState.getProductsAPI({
+      fetchModifier();
+      ModifiersState.getModifierAPI({
         cursor: cursor.value,
         search: search.value,
         dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
@@ -258,27 +254,30 @@ export default defineComponent({
       }).finally(() => (loadingDatatable.value = false));
     };
 
+
     onMounted(async () => {
-      setCurrentPageBreadcrumbs("Dashboard", "Daftar Produk");
-      await fetchProducts();
+      setCurrentPageBreadcrumbs("Dashboard", "Daftar Opsi Tambahan");
+      await fetchModifier();
 
       loadingDatatable.value = true;
     });
 
     return {
-      Products,
+      Modifiers,
       loadingDatatable,
       filterDateRange,
+      filterOutlets,
       filterOutlet,
       search,
       FilterOutlet,
       cursor,
+      outlets,
       clearable,
       priceList,
       metaPagination,
       outletOptions,
       // getProductsAPI,
-      fetchProducts,
+      fetchModifier,
       prevPage,
       nextPage,
       epochToDateTime,

@@ -126,11 +126,31 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/view/pages/products/ListProduct.vue"),
       },
       {
-        path: "product/detail/",
-        name: "Detail-produk",
+        path: 'product/detail/:uuid/:id/',
+        name: 'detail-product',
         meta: { asideEnabled: true, asidePrimaryDisabled: true },
-        component: () => import("@/view/pages/products/DetailProducts.vue"),
+        component: () =>
+          import('@/view/pages/products/Detail.vue'),
       },
+      {
+        path: "modifier/list/",
+        name: "list-modifier",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/products/modifier/ListModifier.vue"),
+      },
+      {
+        path: 'modifier/detail/:uuid/:id',
+        name: 'detail-modifier',
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () =>
+          import('@/view/pages/products/modifier/DetailModifier.vue'),
+      },
+
+
+
+
+
+
       {
         path: "transaction/list/",
         name: "List-Transaksi",
@@ -150,6 +170,25 @@ const routes: Array<RouteRecordRaw> = [
         component: () =>
           import('@/view/pages/transaction/TransactionDetail.vue'),
       },
+
+
+      {
+        path: "customer/list/",
+        name: "List-Customer",
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () => import("@/view/pages/customer/ListCustomer.vue"),
+      },
+      {
+        path: 'customer/detail/:uuid',
+        name: 'detail-customer',
+        meta: { asideEnabled: true, asidePrimaryDisabled: true },
+        component: () =>
+          import('@/view/pages/customer/DetailCustomer.vue'),
+      },
+
+
+
+
 
       // {
       //   path: "outlets/outlet/omset",

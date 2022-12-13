@@ -6,15 +6,16 @@
         class="demo-tabs tabs-pills fill justified"
         style="width: 100%;"
       >
-        <el-tab-pane label="Karyawan" name="employee">
-          <CardEmployee :show="activeTab" :user-id="userId" />
+        <el-tab-pane label=" Opsi Tambahan" name="modifier">
+          <OpsiTambahan :show="activeTab"  :list-product="productId"  />
         </el-tab-pane>
-        <el-tab-pane label="Outlet" name="outlet">
-          <CardOutlet :show="activeTab" :user-id="userId" />
+        <el-tab-pane label="Produk" name="Produk">
+          <CardModifier :show="activeTab" :user-id="userId" />
         </el-tab-pane>
-        <el-tab-pane label="Produk" name="produk">
-          <CardProducts :show="activeTab" :user-id="userId" />
-        </el-tab-pane>
+
+        <!-- <el-tab-pane label="Product" name="produk">
+            <CardProducts :show="activeTab" :user-id="userId" />
+          </el-tab-pane> -->
       </el-tabs>
     </div>
   </div>
@@ -22,11 +23,15 @@
 <script lang="ts" setup>
 import { defineProps, ref } from "vue";
 
-import CardEmployee from "./CardEmployee.vue";
-import CardOutlet from "./CardOutlet.vue";
-import CardProducts from "./CardProduct.vue";
+import OpsiTambahan from "./OpsiTambahan.vue";
+import CardModifier from "./CardModifier.vue";
+import { string } from "yup/lib/locale";
 
 const props = defineProps({
+  productId: {
+    type: Number,
+    require: true,
+  },
   userId: {
     type: Number,
     require: true,
@@ -35,9 +40,10 @@ const props = defineProps({
     type: Number,
     require: true,
   },
+
 });
 
-const activeTab = ref("employee");
+const activeTab = ref("modifier");
 </script>
 <style>
 .demo-tabs > .el-tabs__content {

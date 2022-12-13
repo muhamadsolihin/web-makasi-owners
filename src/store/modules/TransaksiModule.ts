@@ -5,22 +5,26 @@ import { Transaction } from "@/types/transaction/Transaction.interface";
 
 /* eslint-disable */
 
+export interface MetaPagination {
+  next: string | null;
+  prev: string | null;
+}
+
 @Module({ name: "TransaksiModule", dynamic: true, store })
 export default class TransactionModule extends VuexModule {
   transactions: Transaction[] = [];
   transaction: Transaction = {} as Transaction;
-  metaPagination: { next_cursor: string | null; prev_cursor: string | null } = {
-    next_cursor: null,
-    prev_cursor: null,
-  };
+  metaPagination: MetaPagination = {} as MetaPagination;
+  getMetaPaginationTransaction: MetaPagination = {} as MetaPagination;
+  getMetaPaginationKasbon: MetaPagination = {} as MetaPagination;
   kasbons: Transaction[] = [];
-  metaPaginationKasbon: {
-    next_cursor: string | null;
-    prev_cursor: string | null;
-  } = {
-    next_cursor: null,
-    prev_cursor: null,
-  };
+  // metaPaginationKasbon: {
+  //   next_cursor: string | null;
+  //   prev_cursor: string | null;
+  // } = {
+  //   next_cursor: null,
+  //   prev_cursor: null,
+  // };
 
   get getTransactions() {
     let txList = this.transactions.filter((tx) => {
@@ -33,7 +37,11 @@ export default class TransactionModule extends VuexModule {
     return txList; // Condition: Show only if not online order or if online order tx must be finished or dine in
   }
 
-  get getMetaPaginationTransaction() {
+  get getterMetaPaginationTransaction(): MetaPagination {
+    return this.metaPagination;
+  }
+
+  get getterMetaPaginationKasbon(): MetaPagination {
     return this.metaPagination;
   }
 
@@ -45,9 +53,9 @@ export default class TransactionModule extends VuexModule {
     return this.kasbons;
   }
 
-  get getMetaPaginationKasbon() {
-    return this.metaPaginationKasbon;
-  }
+  // get getMetaPaginationKasbon() {
+  //   return this.metaPaginationKasbon;
+  // }
 
   @Mutation
   SET_TRANSACTIONS(payload) {
@@ -60,9 +68,8 @@ export default class TransactionModule extends VuexModule {
   }
 
   @Mutation
-  SET_META_PAGINATION_TRANSACTION(payload) {
-    this.metaPagination.prev_cursor = payload.prev_cursor;
-    this.metaPagination.next_cursor = payload.next_cursor;
+  SET_META_PAGINATION_TRANSACTION(payload: MetaPagination) {
+    this.getMetaPaginationTransaction = payload;
   }
 
   @Mutation
@@ -81,9 +88,8 @@ export default class TransactionModule extends VuexModule {
   }
 
   @Mutation
-  SET_META_PAGINATION_KASBON(payload) {
-    this.metaPaginationKasbon.prev_cursor = payload.prev_cursor;
-    this.metaPaginationKasbon.next_cursor = payload.next_cursor;
+  SET_META_PAGINATION_KASBON(payload: MetaPagination) {
+    this.getMetaPaginationKasbon = payload;
   }
 
   @Action
@@ -125,7 +131,7 @@ export default class TransactionModule extends VuexModule {
       .then((res) => {
         if (res.data.status) {
           this.context.commit("SET_TRANSACTIONS", res.data.data);
-          this.context.commit("SET_META_PAGINATION_TRANSACTION", res.data.meta);
+          this.context.commit("SET_META_PAGINATION_KASBON", res.data.meta);
         }
         return res.data;
       })

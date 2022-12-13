@@ -46,6 +46,15 @@ const MainMenuConfig = [
         // ]
       },
 
+      // {
+      //   heading: "Pelanggan",
+      //   icon: require("@/assets/icons/aside/customer.svg"),
+      //   route: "/customer/list/",
+      // },
+
+
+
+
       {
         heading: "Outlet",
         icon: require("@/assets/icons/aside/outlet.svg"),
@@ -82,17 +91,21 @@ const MainMenuConfig = [
         route: "/voucher",
       },
 
-      // {
-      //   sectionTitle: 'Produk',
-      //   icon: require('@/assets/icons/aside/produk.svg'),
-      //   route: '/product',
-      //   sub: [
-      //     {
-      //       heading: 'Kelola Produk',
-      //       route: '/product/list',
-      //     },
-      //   ],
-      // },
+      {
+        sectionTitle: 'Produk',
+        icon: require('@/assets/icons/aside/outlet.svg'),
+        route: '/product',
+        sub: [
+          {
+            heading: 'Kelola Produk',
+            route: '/product/list',
+          },
+          {
+            heading: 'Opsi Tambahan',
+            route: '/modifier/list',
+          },
+        ],
+      },
 
       // {
       //   heading: "Customer",
