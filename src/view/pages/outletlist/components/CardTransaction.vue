@@ -265,6 +265,7 @@ const changeFilterDateRange = async () => {
 
 const nextPage = async () => {
   loadingDatatable.value = true;
+  cursor.value = metaPagination.value.next || "";
   try {
     const { data } = await outletState.getHistoryTransactionOutlet({
       cursor: cursor.value,
