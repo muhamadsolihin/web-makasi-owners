@@ -18,7 +18,7 @@
           />
           <!-- end::filter date -->
           <el-select
-            v-model="filterOutlet"
+            v-model="selectOutlet"
             placeholder="Select"
             @change="changeOutlet"
             class="mb-3"
@@ -26,11 +26,11 @@
             filterable
           >
             <el-option
-              v-for="o in FilterOutlet"
-              :key="o"
-              :value="o.outlet_id"
+              v-for="item in FilterOutlet"
               placeholder="select"
-              :label="o.outlet_name"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             />
           </el-select>
           <div class="d-flex align-items-center mb-3 ms-3">
@@ -45,8 +45,8 @@
               Search
             </button>
             <!-- <button class="btn btn-sm btn-info ms-2" @click="exportData">
-                Export
-              </button> -->
+              Export
+            </button> -->
           </div>
         </div>
 
@@ -55,9 +55,19 @@
             :data="Transactions"
             v-loading="loadingDatatable"
             style="width: 100%"
-            height="550"
+            table-layout="fixed"
           >
             <el-table-column prop="trx_id" label="No Transaksi" width="150" />
+            <el-table-column
+              width="150px"
+              prop="outlet_name"
+              label="Outlet"
+              sortable
+            >
+              <template #default="prop">
+                {{ prop.row.outlet_name }}
+              </template>
+            </el-table-column>
             <el-table-column
               width="200"
               prop="sum_item"
@@ -150,16 +160,6 @@
                 }}
               </template>
             </el-table-column>
-            <el-table-column
-              width="150px"
-              prop="outlet_name"
-              label="Outlet"
-              sortable
-            >
-              <template #default="prop">
-                {{ prop.row.outlet_name }}
-              </template>
-            </el-table-column>
 
             <el-table-column label="Aksi" align="center">
               <template #default="scope">
@@ -181,6 +181,7 @@
             </el-table-column>
           </el-table>
         </div>
+
         <div class="d-flex justify-content-center mt-5">
           <button
             class="btn btn-sm"
@@ -206,13 +207,14 @@ import {
   ref,
   onMounted,
   computed,
+  watch,
   onBeforeUnmount,
 } from "vue";
 
 import { getModule } from "vuex-module-decorators";
 import TransaksiModule from "@/store/modules/TransaksiModule";
 import { setCurrentPageBreadcrumbs } from "@/core/helpers/breadcrumbs/breadcrumb";
-import { Outlet, OutletListRes } from "@/types/outlet/Outlet.interface";
+import { List, ListOutlet } from "@/types/outlet/List.interface";
 import OutletModule from "@/store/modules/OutletModule";
 import { DrawerComponent } from "@/assets/ts/components/_DrawerOptions";
 import {
@@ -230,26 +232,36 @@ export default defineComponent({
     const loadingDatatable = ref(false);
     const filterDateRange = ref<string[]>([
       moment()
-        .subtract(1, "years")
+        .subtract(1, "weeks")
         .format("YYYY-MM-DD"),
       moment().format("YYYY-MM-DD"),
-      
     ]);
-    
-    const search = ref<string>("");
-    const cursor = ref<string>("");
-    const filterOutlet = ref<number>();
+    const search = ref<string | null>("");
+    const cursor = ref<string | null>("");
+    const selectOutlet = ref<number>();
     const perPage = ref<number>(10);
     const clearable = ref<boolean>(false);
-    const outletOptions = ref<Outlet[]>([]);
+    // const outletOptions = ref<List[]>([]);
     const TransaksiState = getModule(TransaksiModule);
     const outletState = getModule(OutletModule);
-    const outlets = computed(() => outletState.getterOutlets);
-    const FilterOutlet = computed(() => TransaksiState.getTransactions);
-    const Transactions = computed(() => TransaksiState.getTransactions);
+    const outlets = computed(() => outletState.getFilterOutlet);
+    // const FilterOutlet = computed(() => outletState.getFilterOutlet);
+    const FilterOutlet = ref<List[]>([]);
+
+    // const Transactions = computed(() => TransaksiState.getTransactions);
+    const Transactions = ref<any[]>([]);
     const metaPagination = computed(
-      () => TransaksiState.getMetaPaginationKasbon
+      () => TransaksiState.getMetaPaginationTransaction
     );
+
+    interface Transactions {
+      sum_item: number;
+      status_paid_name: string;
+      order_manual: number;
+      final_price: string;
+      created_at: string;
+      outlet_name: string;
+    }
 
     const showStatusPaid = (status: number, orderStatus: number) => {
       let statusPaid: string[] = [];
@@ -285,17 +297,17 @@ export default defineComponent({
       return statusPaid;
     };
 
-    const nextPage = async () => {
-      loadingDatatable.value = true;
+    const fetchTransaction = async () => {
       try {
         const { data } = await TransaksiState.getTransactionsKasbonAPI({
           dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
           dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
-          perPage: perPage.value,
-          outletId: filterOutlet.value?.toString() || "",
+          outletId: selectOutlet.value?.toString() || '',
           cursor: cursor.value,
           search: search.value,
+          perPage: perPage.value,
         });
+        Transactions.value = TransaksiState.getTransactions(data);
       } catch (err) {
         return err;
       } finally {
@@ -303,22 +315,25 @@ export default defineComponent({
       }
     };
 
-    const fetchTransaction = () => {
+
+    const nextPage = () => {
+      loadingDatatable.value = true;
+      cursor.value = metaPagination.value.next;
+      fetchTransaction();
       TransaksiState.getTransactionsKasbonAPI({
         dateFrom: moment(filterDateRange.value[0]).format("DD-MM-YYYY"),
         dateTo: moment(filterDateRange.value[1]).format("DD-MM-YYYY"),
-        perPage: perPage.value,
-        outletId: filterOutlet.value?.toString() || "",
+        outletId: selectOutlet.value?.toString() || "",
         cursor: cursor.value,
         search: search.value,
-      }).finally(() => {
-        loadingDatatable.value = false;
-      });
+        perPage: perPage.value,
+      }).finally(() => (loadingDatatable.value = false));
     };
 
-    const changeOutlet = () => {
+    const changeOutlet = async () => {
       loadingDatatable.value = true;
-      (cursor.value = ""), fetchTransaction();
+      (cursor.value = ""), 
+      await fetchTransaction();
     };
 
     const textSearch = () => {
@@ -326,12 +341,12 @@ export default defineComponent({
       else clearable.value = false;
     };
 
-    const clearSearch = () => {
+    const clearSearch = async () => {
       search.value = "";
       cursor.value = "";
       clearable.value = false;
       loadingDatatable.value = true;
-      fetchTransaction();
+      await fetchTransaction();
     };
 
     const searchData = async () => {
@@ -341,24 +356,37 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      setCurrentPageBreadcrumbs("Dashboard", "Daftar Transaksi Kasbon");
+      setCurrentPageBreadcrumbs("Dashboard", "Daftar Transaksi");
       fetchTransaction();
 
-      loadingDatatable.value = true;
+      outletState
+        .getOutletsTransaksi({
+          search: search.value,
+        })
+        .then((res: ListOutlet) => {
+          if (res.status) {
+            FilterOutlet.value = res.data || [];
+            selectOutlet.value = FilterOutlet.value.length
+              ? (FilterOutlet.value[''].id as any)
+              : "";
+            TransaksiState.SET_TRANSACTIONS([]);
+            fetchTransaction();
+          }
+        });
     });
 
     return {
       Transactions,
       loadingDatatable,
       filterDateRange,
-      filterOutlet,
+      selectOutlet,
       search,
       FilterOutlet,
       cursor,
       clearable,
       metaPagination,
-      outletOptions,
-
+      // outletOptions,
+      outletState,
       nextPage,
       fetchTransaction,
       epochToDateTime,

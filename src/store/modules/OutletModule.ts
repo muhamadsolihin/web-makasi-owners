@@ -57,10 +57,11 @@ export default class OutletModule extends VuexModule {
     let newObject: any[] = [];
     newObject = Object.assign([], this.outlets);
 
-    if (newObject.findIndex(e => e.id === '') == -1) {
+    if (newObject.findIndex(e => e.id === '') == -2) {
       newObject.unshift({
         id: '',
-        name: 'Semua Outlet',
+        name: '',
+        label: 'Pilih Outlet',
         address: '',
         uuid: '',
       });
@@ -129,10 +130,10 @@ export default class OutletModule extends VuexModule {
     search: string;
     from: string;
     to: string;
-  }) {
+  })  {
     return http
       .get(
-        `${CORE_URL_API}/v1/outlet/?user_id=${payload.userId || ""}&limit=${
+        `${CORE_URL_API}/v1/outlet/?user_id=${payload.userId || ""}&perpage=${
           payload.perPage
         }&cursor=${payload.cursor}&search=${payload.search}&from=${
           payload.from
@@ -292,6 +293,27 @@ export default class OutletModule extends VuexModule {
             prev: "",
             next: "",
           });
+        }
+        return res.data;
+      })
+      .catch((err) => err);
+  }
+
+  
+  @Action
+  getOutletsTransaksi(payload: {
+  search:string | null;
+  userId?: number;
+  }) 
+   {
+    return http
+      .get(
+        `${CORE_URL_API}/v1/outlet/?user_id=${payload.userId || ""}&perpage=&cursor=&search=${payload.search}&from=&to=`
+      )
+      .then((res) => {
+        if (res.data.status) {
+          this.context.commit("SET_OUTLETS", res.data.data);
+          // this.context.commit("SET_META_PAGINATION", res.data.meta);
         }
         return res.data;
       })
