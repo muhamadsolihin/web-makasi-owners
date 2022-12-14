@@ -54,14 +54,6 @@ export default class OutletModule extends VuexModule {
     let newObject: any[] = [];
     newObject = Object.assign([], this.outlets);
 
-<<<<<<< HEAD
-    if (newObject.findIndex((e) => e.id === "") == -1) {
-      newObject.unshift({
-        id: "",
-        name: "Semua Outlet",
-        address: "",
-        uuid: "",
-=======
     if (newObject.findIndex(e => e.id === '') == -2) {
       newObject.unshift({
         id: '',
@@ -69,7 +61,6 @@ export default class OutletModule extends VuexModule {
         label: 'Pilih Outlet',
         address: '',
         uuid: '',
->>>>>>> solihin
       });
     }
 

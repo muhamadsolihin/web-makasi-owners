@@ -46,11 +46,11 @@ const MainMenuConfig = [
         // ]
       },
 
-      {
-        heading: "Pelanggan",
-        icon: require("@/assets/icons/aside/customer.svg"),
-        route: "/customer/list/",
-      },
+      // {
+      //   heading: "Pelanggan",
+      //   icon: require("@/assets/icons/aside/customer.svg"),
+      //   route: "/customer/list/",
+      // },
 
 
 
