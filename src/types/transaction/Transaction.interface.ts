@@ -15,7 +15,7 @@ export interface Transaction {
   order_status_text: string;
   total_price: number;
   total_basic_price: number;
-  final_price: number;
+  final_price: string ;
   qris_code: number;
   alias_name: string;
   description_text: string;

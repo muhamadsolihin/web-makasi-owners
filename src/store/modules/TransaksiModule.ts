@@ -14,19 +14,14 @@ export interface MetaPagination {
 export default class TransactionModule extends VuexModule {
   transactions: Transaction[] = [];
   transaction: Transaction = {} as Transaction;
-  metaPagination: MetaPagination = {} as MetaPagination;
-  getMetaPaginationTransaction: MetaPagination = {} as MetaPagination;
-  getMetaPaginationKasbon: MetaPagination = {} as MetaPagination;
   kasbons: Transaction[] = [];
-  // metaPaginationKasbon: {
-  //   next_cursor: string | null;
-  //   prev_cursor: string | null;
-  // } = {
-  //   next_cursor: null,
-  //   prev_cursor: null,
-  // };
+  // metaPagination: MetaPagination = {} as MetaPagination;
+  metaPagination: { next: string | null;} = {
+    next: null,
+    // prev: null,
+  };
 
-  get getTransactions() {
+  get getTransactionss() {
     let txList = this.transactions.filter((tx) => {
       var isDineIn = tx.order_status != 3 && tx.delivery_method == 2; // Condition: Not canceled and method is dine in
       var isFinished = tx.order_status == 5;
@@ -37,11 +32,20 @@ export default class TransactionModule extends VuexModule {
     return txList; // Condition: Show only if not online order or if online order tx must be finished or dine in
   }
 
-  get getterMetaPaginationTransaction(): MetaPagination {
-    return this.metaPagination;
+  get getTransactions() {
+    return function(items: any[]) {
+      const txList = items.filter((tx) => {
+        const isDineIn = tx.order_status != 3 && tx.delivery_method == 2; // Condition: Not canceled and method is dine in
+        const isFinished = tx.order_status == 5;
+        const isOnlineOrder = tx.is_online_order == 1;
+        return !isOnlineOrder || (isOnlineOrder && (isFinished || isDineIn));
+      });
+      return txList;
+    };
   }
 
-  get getterMetaPaginationKasbon(): MetaPagination {
+  
+  get getMetaPaginationTransaction() {
     return this.metaPagination;
   }
 
@@ -53,9 +57,9 @@ export default class TransactionModule extends VuexModule {
     return this.kasbons;
   }
 
-  // get getMetaPaginationKasbon() {
-  //   return this.metaPaginationKasbon;
-  // }
+  get getMetaPaginationKasbon() {
+    return this.metaPagination;
+  }
 
   @Mutation
   SET_TRANSACTIONS(payload) {
@@ -68,10 +72,10 @@ export default class TransactionModule extends VuexModule {
   }
 
   @Mutation
-  SET_META_PAGINATION_TRANSACTION(payload: MetaPagination) {
-    this.getMetaPaginationTransaction = payload;
+  SET_META_PAGINATION_TRANSACTION(payload) {
+    // this.metaPagination.prev = payload.prev;
+    this.metaPagination.next = payload.next;
   }
-
   @Mutation
   SET_TRANSACTION(payload) {
     this.transaction = payload;
@@ -88,22 +92,21 @@ export default class TransactionModule extends VuexModule {
   }
 
   @Mutation
-  SET_META_PAGINATION_KASBON(payload: MetaPagination) {
-    this.getMetaPaginationKasbon = payload;
+  SET_META_PAGINATION_KASBON(payload) {
+    this.metaPagination.next = payload.next;
   }
 
   @Action
   getTransactionsAPI(payload: {
-    perPage: number;
-    search: string;
+    search: string | null;
     outletId: string;
-    cursor: string;
+    cursor: string | null;
     dateFrom: string;
     dateTo: string;
   }) {
     return http
       .get(
-        `/kiwi/v1/?cursor=${payload.cursor}&search=${payload.search}&perpage=${payload.perPage}&outlet_id=${payload.outletId}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}&is_kasbon=&is_online_order`
+        `/kiwi/v1/?cursor=${payload.cursor}&search=${payload.search}&perpage=10&outlet_id=${payload.outletId}&date_from=${payload.dateFrom}&date_to=${payload.dateTo}&is_kasbon=&is_online_order`
       )
       .then((res) => {
         if (res.data.status) {
@@ -118,9 +121,9 @@ export default class TransactionModule extends VuexModule {
   @Action
   getTransactionsKasbonAPI(payload: {
     perPage: number;
-    search: string;
+    search: string | null ;
     outletId: string;
-    cursor: string;
+    cursor: string | null;
     dateFrom: string;
     dateTo: string;
   }) {

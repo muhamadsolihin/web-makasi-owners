@@ -128,7 +128,7 @@ export default defineComponent({
     ]);
     const search = ref<string | null>("");
     const cursor = ref<string | null>("");
-    const perPage = ref<number>(15);
+    const perPage = ref<number>(10);
     const clearable = ref<boolean>(false);
 
     const outletState = getModule(OutletModule);

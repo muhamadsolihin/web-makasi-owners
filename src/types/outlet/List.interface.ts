@@ -1,3 +1,10 @@
+export interface ListOutlet {
+  id: number;
+  name: string;
+  status: boolean;
+  data?: List[];
+}
+
 export interface List {
   id: number;
   uuid: string;
@@ -10,6 +17,7 @@ export interface List {
   description: string;
   village_name: string;
   village_id: number;
+  is_center: string;
   category: number;
   type: number;
   created_at: string;

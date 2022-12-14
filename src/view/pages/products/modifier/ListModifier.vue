@@ -171,13 +171,6 @@ export default defineComponent({
       () => ModifiersState.getMetaPaginationModifiers
     );
 
-    // const filterRangeDate = ref<any[]>([
-    //   // moment()
-    //   //   .subtract(7, "days")
-    //   //   .format("YYYY-MM-DD"),
-    //   // moment().format("YYYY-MM-DD"),
-    //   moment().set({ year: 2022, month: 1 }),
-    // ]);
 
     const fetchModifier = () => {
       ModifiersState.getModifierAPI({
