@@ -208,6 +208,7 @@
     <div
       v-if="displayAsideSecondary"
       class="aside-secondary d-flex flex-row-fluid bg-white"
+      style="border-right: 1px solid #E6ECF5"
     >
       <!--begin::Workspace-->
       <div

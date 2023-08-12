@@ -2,7 +2,7 @@
   <div class="row justify-content-center bg-transparent">
     <div class="col">
       <GoogleMap
-        api-key="AIzaSyAC1LXjnlql-0uZ3D8J9jLF9PO1_LF0nxA"
+        api-key=""
         style="width: 100%; height: 300px; border-radius: 20px;"
         :center="center"
         :zoom="15"

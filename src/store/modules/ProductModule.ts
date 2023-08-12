@@ -352,4 +352,26 @@ export default class ProductModule extends VuexModule {
       })
       .catch(err => console.log(err));
   }
+
+
+  
+  @Action
+  ReportProduct(payload: {
+    dateFrom: string;
+    dateTo: string;
+    outletId: string;
+  }): Promise<any> {
+    return http
+      .get(
+        `/hawk/v1/get-product-detail?from=&to=&outlet_id=${payload.outletId}&category=`
+      )
+      .then(res => {
+        if (res.data.status) {
+          this.context.commit('SET_PRODUCTS', res.data.data);
+          this.context.commit('SET_META_PAGINATION', res.data.meta);
+        }
+      })
+      .catch(err => console.log(err));
+  }
+
 }

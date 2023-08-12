@@ -107,6 +107,12 @@ const MainMenuConfig = [
         ],
       },
 
+      {
+        heading: "Laporan",
+        icon: require("@/assets/icons/aside/report.svg"),
+        route: "/report",
+      },
+
       // {
       //   heading: "Customer",
       //   icon: require('@/assets/icons/aside/customer.svg'),
